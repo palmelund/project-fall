@@ -99,3 +99,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+#pycharm/intellij
+.idea
+
+#Sensitive data, and key files that should NEVER get pushed to github.
+server/database/connect_str.py
