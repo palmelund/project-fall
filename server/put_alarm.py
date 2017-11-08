@@ -15,9 +15,9 @@ def lambda_handler(event, context):
     alarm = json.loads(event["alarm"])
 
     if response == 1:
-        cursor.execute("UPDATE alarm SET status = -1, responder = " + contact.id + "")
+        cursor.execute("UPDATE alarm SET status = -1, responder = " + contact.id + " WHERE id = " + alarm.id + "")
     else:
-        cursor.execute("UPDATE alarm SET status = status + 1;")
+        cursor.execute("UPDATE alarm SET status = status + 1 WHERE id = " + alarm.id + ";")
 
     conn.commit()
     cursor.close()
