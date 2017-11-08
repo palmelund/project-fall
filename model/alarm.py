@@ -1,5 +1,4 @@
-class Alarm(User):
-    'A specialized user, representing a contact'
+class Alarm():
 
     def __init__(self, citizen, status):
         self.status = status
