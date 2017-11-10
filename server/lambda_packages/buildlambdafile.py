@@ -12,6 +12,7 @@ for file_folder_list in file_folder_lists:
     # We create a folder, in which we put everything to upload with the lambda
     # Remember that the folder name is the last name in the list
     folder_name = file_folder_list[-1]
+    print("Current lambda folder: " + folder_name)
 
     # If folder already exist, remove them
     if path.exists(folder_name):
@@ -29,13 +30,16 @@ for file_folder_list in file_folder_lists:
 
     # connect_str is a private file containing connectivity info for the database
     # This file should only be present locally on the computer packing the files
-    copyfile("lambda_package_resources/connect_str.py", folder_name + "/" + "connect_str.py")
+    copyfile("../database/connect_str.py", folder_name + "/" + "connect_str.py")
 
     # Copy the respond method. This is used to properly construct the response messages
-    copyfile("lambda_package_resources/respond.py", folder_name + "/" + "respond.py")
+    copyfile("../respond.py", folder_name + "/" + "respond.py")
 
     # Since AWS doesn't provide a library for interacting with PostgreSQL, we have to provide it ourselves
-    copytree("lambda_package_resources/psycopg2", folder_name + "/" + "psycopg2")
+    copytree("psycopg2", folder_name + "/" + "psycopg2")
+
+    # Since some lambdas depend on the models, we also pack that library
+    copytree("../../model", folder_name + "/" + "model")
 
     # Finally zip the output folder. The zip file can then be uploaded to the lambda function
     make_archive(folder_name, "zip", folder_name)
