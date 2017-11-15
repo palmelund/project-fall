@@ -1,0 +1,86 @@
+:root {
+    --back-color: #FAFAFA;
+    --shadow-box: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+body {
+    background-color: var(--back-color);
+}
+
+form {
+    margin-bottom: 0;
+}
+
+.fixed-list {
+    list-style-type: none;
+    margin-bottom: 0;
+}
+
+li, li:last-child {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #D1D1D1;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+li:hover {
+    background: #EEEEEE;
+    cursor: pointer;
+}
+
+table {
+    margin-bottom: 0;
+    table-layout: fixed;
+    /*height: auto;*/
+}
+
+tbody {
+    overflow: scroll;
+}
+
+td {
+    text-align: center;
+    /*word-wrap: break-word;*/
+}
+
+td:last-child {
+    /*border-bottom: 0;*/
+}
+
+#wrapper {
+    margin: 10px;
+}
+
+.box, .box-no-shadow {
+    border: 1px solid #D1D1D1;
+    box-shadow: var(--shadow-box);
+    border-radius: 4px;
+    padding: 10px;
+    background-color: white;
+}
+
+.box-no-shadow {
+    box-shadow: none;
+}
+
+.login {
+    background-color: white;
+    margin: auto;
+    margin-top: 100px;
+    width: 50%;
+    padding: 20px;
+}
+
+.add-citizen {
+    background-color: white;
+}
+
+#citizen-list {
+    display: flex;
+    height: 100%;
+}
