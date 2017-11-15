@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Citizen admin panel</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div id="wrapper">
+    <div id="add-new-citizen" class="box three columns">
+        <form id="citizen-form" class="add-citizen">
+            <h5 style="text-align: center;">Tilføj ny borger</h5>
+            <input id="name" class="u-full-width" type="text" name="name" value="" placeholder="Fulde navn">
+            <input id="email" class="u-full-width" type="email" name="email" value="" placeholder="Email">
+            <input id="username" class="u-full-width" type="text" name="username" value="" placeholder="Brugernavn">
+            <div class="row">
+                <input id="address" class="four columns u-full-width" type="text" name="address" value="" placeholder="Addresse">
+                <input id="city" class="four columns u-full-width" type="text" name="city" value="" placeholder="By">
+                <input id="post-code" class="four columns u-full-width" type="number" name="post-code" value="" placeholder="Post nr.">
+            </div>
+            <input type="button" class="button-primary u-full-width" value="Tilføj" onclick="addNewCitizen()">
+        </form>
+    </div>
+    <div id="citizen-list" class="box three columns" style="padding: 0; height: 97vh">
+        <ul class="u-full-width fixed-list" style="overflow-y: scroll;">
+            <li>fru jensen</li>
+            <li>fru jensen</li>
+            <li>fru jensen</li>
+            <li>fru jensen</li>
+            <li>fru jensen</li>
+            <li>fru jensen</li>
+            <li>fru jensen</li>
+            <li>fru jensen</li>
+            <li>fru jensen</li>
+            <li>fru jensen</li>
+            <li>fru jensen</li>
+            <li>fru jensen</li>
+            <li>fru jensen</li>
+        </ul>
+    </div>
+    <div id="citizen-info" class="box six columns" style="">
+        <h5 style="text-align: center;">Fru jensen</h5>
+        <div style="border-bottom: 1px solid #D1D1D1; margin-bottom: 20px;"></div>
+        <div class="six columns" style="margin-left: 0">
+            <p>Brugernavn: </p>
+            <p>Email: </p>
+            <address>
+                Addresse: <br>
+                By: <br>
+                Post nr.: <br>
+            </address>
+        </div>
+        <div class="six columns box-no-shadow" style="padding: 0; height: 83.5vh; overflow-y: scroll;">
+            <table class="u-full-width" style="">
+                <tbody>
+                <tr>
+                    <td>contact</td>
+                    <td>12 34 56 89</td>
+                </tr>
+                <tr>
+                    <td>contact</td>
+                    <td>12 34 56 89</td>
+                </tr>
+                <tr>
+                    <td>contact</td>
+                    <td>12 34 56 89</td>
+                </tr>
+                <tr>
+                    <td>contact</td>
+                    <td>12 34 56 89</td>
+                </tr>
+                    <tr>
+                        <td>contact</td>
+                        <td>12 34 56 89</td>
+                    </tr>
+                    <tr>
+                        <td>contact</td>
+                        <td>12 34 56 89</td>
+                    </tr>
+                    <tr>
+                        <td>contact</td>
+                        <td>12 34 56 89</td>
+                    </tr>
+                    <tr>
+                        <td>contact</td>
+                        <td>12 34 56 89</td>
+                    </tr>
+                    <tr>
+                        <td>contact</td>
+                        <td>12 34 56 89</td>
+                    </tr>
+                    <tr>
+                        <td>contact</td>
+                        <td>12 34 56 89</td>
+                    </tr>
+                    <tr>
+                        <td>contact</td>
+                        <td>12 34 56 89</td>
+                    </tr>
+                    <tr>
+                        <td>contact</td>
+                        <td>12 34 56 89</td>
+                    </tr>
+                    <tr>
+                        <td>contact</td>
+                        <td>12 34 56 89</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <template id="template-citizen-info">
+    </template>
+</div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="js/JsTemplates.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
