@@ -10,7 +10,7 @@ try:
 
     # Database setup
     cursor.execute(
-        "CREATE TABLE users (id SERIAL PRIMARY KEY, username varchar(50), password varchar(50), salt varchar(50), name varchar(255), email varchar(255), role userrole);")
+        "CREATE TABLE users (id SERIAL PRIMARY KEY, username varchar(50), password varchar(200), salt varchar(50), name varchar(255), email varchar(255), role userrole);")
 
     cursor.execute("CREATE TABLE contact (userID int REFERENCES users(id) PRIMARY KEY, phone varchar(55));");
     cursor.execute(
