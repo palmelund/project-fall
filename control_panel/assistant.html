@@ -33,8 +33,7 @@
             <li onclick="renderCitizenInfo('12345678')">fru jensen</li>
         </ul>
     </div>
-    <div id="citizen-info" class="box six columns" style="">
-    </div>
+    <div id="citizen-info" class="box six columns" style=""></div>
 
     <template id="template-citizen-info">
         <h5 style="text-align: center;">{{ citizenName }}</h5>
@@ -47,9 +46,7 @@
                 By: {{ city }}<br>
                 Post nr.: {{ postalCode}}<br>
             </address>
-
             <div class="separator"></div>
-
             <input class="u-full-width" type="text" placeholder="Søg efter nr.">
             <div class="box-no-shadow search-result-box">
                 <table class="u-full-width search-result-list">
@@ -60,10 +57,6 @@
                         <!--<td><div onclick="addNewContact('hansen', '12345678')" class="search-add-btn">Tilføj</div></td>-->
                         <td><div onclick="addNewContact('hansen', '12345678')" class="search-add-btn">Tilføj <i class="fa fa-plus-square"></i></div></td>
                     </tr>
-                    <!--<tr>-->
-                    <!--<td id="person1">some result</td>-->
-                    <!--<td class="search-add-btn">Add <i class="fa fa-plus-square"></i></td>-->
-                    <!--</tr>-->
                     </tbody>
                 </table>
             </div>
@@ -74,8 +67,6 @@
                 </tbody>
             </table>
         </div>
-
-
     </template>
 
     <template id="template-search-result-row">
@@ -88,7 +79,7 @@
     <template id="template-contact-row">
         <tr>
             <td>{{ name }}</td>
-            <td>{{ phone}}</td>
+            <td>{{ phone }}</td>
         </tr>
     </template>
 </div>
