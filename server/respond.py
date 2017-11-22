@@ -9,3 +9,13 @@ def respond(err, res=None):
             'Content-Type': 'application/json',
         },
     }
+
+
+def build_response(statuscode, message):
+    return {
+        'statusCode': '\'' + statuscode + '\'',
+        'body': json.dumps(message),
+        'headers': {
+            'Content-Type': 'application/json',
+        },
+    }

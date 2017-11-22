@@ -108,3 +108,15 @@ server/database/connect_str.py
 
 #vsocde
 .vscode/
+
+#Lambda
+server/lambda_packages/*
+!server/lambda_packages/buildlambdafile.py
+
+#Server
+server/sns/sns_credentials.py
+
+#Test files
+tester
+server/bototest.py
+server/sns/sns_test.py
