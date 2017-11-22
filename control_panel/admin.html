@@ -5,10 +5,24 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/skeleton.css">
     <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div class="container">
-        <div class="row">
+        <div id="add-new-citizen-admin" class="box" style="margin-top: 100px">
+            <form id="citizen-admin-form" class="add-citizen-admin">
+                <h5 style="text-align: center;">Tilføj ny borger administrator</h5>
+                <input id="name" class="u-full-width" type="text" name="name" value="" placeholder="Fulde navn">
+                <input id="email" class="u-full-width" type="email" name="email" value="" placeholder="Email">
+                <input id="username" class="u-full-width" type="text" name="username" value="" placeholder="Brugernavn">
+                <div class="row">
+                    <input id="address" class="four columns u-full-width" type="text" name="address" value="" placeholder="Addresse">
+                    <input id="city" class="four columns u-full-width" type="text" name="city" value="" placeholder="By">
+                    <input id="post-code" class="four columns u-full-width" type="number" name="post-code" value="" placeholder="Post nr.">
+                </div>
+                <input type="button" class="button-primary u-full-width" value="Tilføj" onclick="addNewCitizen()">
+            </form>
         </div>
     </div>
 </body>
