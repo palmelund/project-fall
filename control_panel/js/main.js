@@ -1,5 +1,5 @@
 function getNewCitizenData(){
-    var obj = new Object();
+    let obj = new Object();
 
     obj.name = $('#name').val();
     obj.email = $('#email').val();
@@ -11,9 +11,10 @@ function getNewCitizenData(){
     $("#citizen-form")[0].reset();
     return JSON.stringify(obj);
 }
+
 function addNewCitizen(){
     $.ajax({
-        url: "/fisk/fisk",
+        url: '/fisk/fisk',
         type: 'POST',
         data: {data: getNewCitizenData()},
         success: function(respose){
@@ -25,5 +26,81 @@ function addNewCitizen(){
     });
 }
 
-// contactTable = document.getElementById('citizen-info-contact-table');
-// contactTable.style.height = document.getElementById('citizen-info').clientHeight;
+function getContactList () {
+    let box = document.getElementById('contact-list');
+}
+
+function addNewContact (name, phone) {
+    let contactList = document.getElementById('contact-table');
+    let template = JsT.loadById('template-contact-row');
+
+    contactList.innerHTML += template.render({
+        name: name,
+        phone: phone
+    });
+}
+
+function searchForCitizen (phone) {
+    let searchNr = document.getElementById("").value;
+
+    $.ajax({
+        url: 'search/url',
+        type: 'GET',
+        data: {data: phone},
+        success: function (response){
+            let tableOut = document.getElementById('search-result');
+            let template = JsT.loadById('template-search-result-row');
+
+            response.foreach(function (name, phoneNr) {
+                tableOut.innerHTML += template.render({
+                    name: name,
+                    phone: phoneNr
+                });
+            });
+
+        },
+        error: function (response){
+            console.log('no citizen found');
+        }
+    });
+}
+
+function renderCitizenInfo (phone) {
+    // let infoBox = document.getElementById('citizen-info');
+    // let template = JsT.loadById('template-citizen-info');
+
+    $.ajax({
+        url: 'get/url',
+        type: 'GET',
+        data: {data: phone},
+        success: function (response){
+            let infoBox= document.getElementById('citizen-info');
+            let template = JsT.loadById('template-citizen-info');
+
+            infoBox.innerHTML = template.render({
+                citizenName: 'hanne',
+                username: 'hanne123',
+                email: 'hanne@blah.com',
+                address: 'ølborgvej 13',
+                city: 'ølborg',
+                postalCode: '9220'
+            });
+        },
+        error: function (response){
+            console.log('no citizen found');
+
+            let infoBox= document.getElementById('citizen-info');
+            let template = JsT.loadById('template-citizen-info');
+
+            infoBox.innerHTML = template.render({
+                citizenName: 'hanne',
+                username: 'hanne123',
+                email: 'hanne@blah.com',
+                address: 'ølborgvej 13',
+                city: 'ølborg',
+                postalCode: '9220'
+            });
+        }
+    });
+
+}
