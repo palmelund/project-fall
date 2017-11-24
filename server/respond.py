@@ -19,3 +19,14 @@ def build_response(statuscode, message):
             'Content-Type': 'application/json',
         },
     }
+
+
+def build_response_no_ser(statuscode, message):
+    return {
+        'statusCode': '\'' + statuscode + '\'',
+        'body': message,
+        'headers': {
+            'Content-Type': 'application/json',
+        },
+    }
+

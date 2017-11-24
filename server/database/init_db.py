@@ -12,18 +12,24 @@ try:
     cursor.execute(
         "CREATE TABLE users (id SERIAL PRIMARY KEY, username varchar(50), password varchar(200), salt varchar(50), name varchar(255), email varchar(255), role userrole);")
 
-    cursor.execute("CREATE TABLE contact (userID int REFERENCES users(id) PRIMARY KEY, phone varchar(55));");
     cursor.execute(
-        "CREATE TABLE citizen (userID int REFERENCES users(id) PRIMARY KEY, address varchar(255), city varchar(255), postnr varchar(55), managedBy int REFERENCES users(id));");
-
-    cursor.execute("CREATE TABLE device (id SERIAL PRIMARY KEY, type devicetype);");
+        "CREATE TABLE contact (userID int REFERENCES users(id) PRIMARY KEY, phone varchar(55));")
     cursor.execute(
-        "CREATE TABLE hasa (userID int REFERENCES users(id), deviceID int REFERENCES device(id), PRIMARY KEY(userID, deviceID));");
+        "CREATE TABLE citizen (userID int REFERENCES users(id) PRIMARY KEY, address varchar(255), city varchar(255), postnr varchar(55), managedBy int REFERENCES users(id));")
     cursor.execute(
-        "CREATE TABLE associateswith (citizenID int REFERENCES citizen(userID), contactID int REFERENCES contact(userID), PRIMARY KEY(citizenID, contactID));");
-
+        "CREATE TABLE device (id SERIAL PRIMARY KEY, type devicetype);")
     cursor.execute(
-        "CREATE TABLE alarm (id SERIAL PRIMARY KEY, status int, activatedBy int REFERENCES citizen(userID))");
+        "CREATE TABLE hasa (userID int REFERENCES users(id), deviceID int REFERENCES device(id), PRIMARY KEY(userID, deviceID));")
+    cursor.execute(
+        "CREATE TABLE associateswith (citizenID int REFERENCES citizen(userID), contactID int REFERENCES contact(userID), PRIMARY KEY(citizenID, contactID));")
+    cursor.execute(
+        "CREATE TABLE alarm (id SERIAL PRIMARY KEY, status int, activatedBy int REFERENCES citizen(userID))")
+    cursor.execute(
+        "CREATE TABLE citizenadmin (userid INT PRIMARY KEY REFERENCES users(id));"
+    )
+    cursor.execute(
+        "CREATE TABLE manages (adminid INTEGER REFERENCES citizenadmin(userid), citizenid INTEGER REFERENCES citizen(userid), PRIMARY KEY (adminid, citizenid));"
+    )
 
     conn.commit()
     cursor.close()

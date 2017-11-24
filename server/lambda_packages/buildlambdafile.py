@@ -6,7 +6,13 @@ from shutil import copyfile, copytree, make_archive, rmtree
 # When requiring more than one file not part of the standard packed library, include them in the list.
 # The name of the output directory and zip file should be the last element in the list.
 # The first file in each list must be the main file
-file_folder_lists = [["activate_alarm.py", "activate_alarm"], ["put_alarm.py", "update_alarm"], ["login.py", "usermanager.py", "login"], ["create_user.py", "usermanager.py", "create_user"]]
+file_folder_lists = [
+    ["activate_alarm.py", "activate_alarm"],
+    ["put_alarm.py", "update_alarm"],
+    ["login.py", "usermanager.py", "login"],
+    ["create_user.py", "usermanager.py", "create_user"],
+    ["control_panel_add_citizen.py", "usermanager.py", "control_panel_add_citizen"]
+]
 
 for file_folder_list in file_folder_lists:
     # We create a folder, in which we put everything to upload with the lambda
