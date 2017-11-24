@@ -120,3 +120,5 @@ server/sns/sns_credentials.py
 tester
 server/bototest.py
 server/sns/sns_test.py
+
+server/\.DS_Store
