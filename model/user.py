@@ -1,11 +1,10 @@
 class User:
     'Generalization of different user types'
 
-    def __init__(self, id, name, email, username):
+    def __init__(self, id, name, email):
         self.id = id
         self.name = name
         self.email = email
-        self. username = username
 
 
 class CitizenAdmin(User):
@@ -19,18 +18,20 @@ class CitizenAdmin(User):
 class Citizen(User):
     'A specialized user, representing a contact'
 
-    def __init__(self, id, name, email, username, contacts, devices, settings):
-        super().__init__(id, name, email, username)
+    def __init__(self, id, name, email, contacts, devices, address, city, postnr):
+        super().__init__(id, name, email)
         self.contacts = contacts
         self.devices = devices
-        self.settings = settings
+        self.address = address
+        self.city = city
+        self. postnr = postnr
 
 
 class Contact(User):
     'A specialized user, representing a contact'
 
-    def __init__(self, id, name, email, username, phone, devices):
-        super().__init__(id, name, email, username)
+    def __init__(self, id, name, email, phone, devices):
+        super().__init__(id, name, email)
         self.phone = phone
         self.devices = devices
 
@@ -38,5 +39,5 @@ class Contact(User):
 class UserAdmin(User):
     'A specialized user, representing a contact'
 
-    def __init__(self, id, name, email, username):
-        super().__init__(id, name, email, username)
+    def __init__(self, id, name, email):
+        super().__init__(id, name, email)
