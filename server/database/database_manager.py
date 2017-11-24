@@ -34,6 +34,7 @@ def get_citizen_contacts(citizenID):
 
     return contacts
 
+
 def get_user_devices(userID):
     devices = ()
 
