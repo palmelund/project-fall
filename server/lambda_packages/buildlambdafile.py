@@ -59,5 +59,6 @@ for file_folder_list in file_folder_lists:
     # Finally zip the output folder. The zip file can then be uploaded to the lambda function
     make_archive(folder_name, "zip", folder_name)
 
-
+    # Cleanup
+    rmtree(folder_name)
 

@@ -22,7 +22,7 @@ def deserialize(load):
         for device in load['devices']:
             contacts.append(**device)
 
-        return Contact(load['id'], load['name'], load['email'], load['phone'])
+        return Contact(load['id'], load['name'], load['email'], load['phone'], devices)
     # Citizen Admin
     elif len(load) == 4:
         return 1
@@ -66,6 +66,9 @@ class Citizen(User):
         self.address = address
         self.city = city
         self. postnr = postnr
+
+    #@staticmethod
+    #def Create(self, id, name, email, contacts, devices, address, city, postnr):
 
 
 class Contact(User):

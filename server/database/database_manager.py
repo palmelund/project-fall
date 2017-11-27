@@ -2,7 +2,8 @@ from connect_str import connect_str
 from model.user import *
 from model import user
 import psycopg2
-
+import hashlib
+import uuid
 
 def get_alarm(citizenID):
     conn = psycopg2.connect(connect_str)
@@ -151,3 +152,105 @@ def get_user_devices(userID):
         devices.append(Device(device[0], device[1]))
 
     return devices
+
+
+def add_user(username, email, password, name, role):
+    # TODO: Avoid duplicate database entries
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    salt = get_salt()
+    hashed_password = hash_password(password, salt)
+
+    try:
+        cursor.execute("SELECT * FROM users WHERE username = %s OR email = %s", (username, email))
+        exist = cursor.fetchone()
+
+        if exist:
+            return None
+
+        cursor.execute("INSERT INTO users VALUES (DEFAULT, %s, %s, %s, %s, %s, %s);", (username, hashed_password, salt, name, email, role))
+        cursor.execute("SELECT * FROM users WHERE username = %s", [username])
+        user = cursor.fetchone()
+    except Exception:
+        return None
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    if not user:
+        return None
+    else:
+        return get_user(user[0])
+
+
+def add_citizen(userid, address, city, postnr, managedby):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("INSERT INTO citizen VALUES (%s, %s, %s, %s, %s)", (userid, address, city, postnr, managedby))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return get_citizen(userid)
+
+
+def add_citizen_admin(userid):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("INSERT INTO citizenadmin VALUES (%s)", [userid])
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return get_citizen_admin(userid)
+
+
+def add_admin(userid):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    # TODO
+    #cursor.execute("INSERT INTO ")
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return get_user_admin(userid)
+
+
+def login(email, password):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM users WHERE email = %s", [email])
+    user = cursor.fetchone()
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    if not user:
+        return None
+
+    if check_password(password, user[2], user[3]):
+        return user
+    else:
+        return None
+
+
+def get_salt():
+    return uuid.uuid4().hex
+
+
+def hash_password(password, salt):
+    return hashlib.sha512((password + salt).encode('utf-8')).hexdigest()
+
+
+def check_password(password, hashed_password, salt):
+    return hashed_password == hash_password(password, salt)
