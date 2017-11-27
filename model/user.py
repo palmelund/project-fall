@@ -1,4 +1,34 @@
 from database import database_manager
+import json
+
+
+def deserialize(load):
+    # Citizen
+    if len(load) == 8:
+        contacts = []
+        devices = []
+
+        for contact in load['contacts']:
+            contacts.append(deserialize(contact))
+
+        for device in load['devices']:
+            contacts.append(**device)
+
+        return Citizen(load['id'], load['name'], load['email'], contacts, devices, load['address'], load['city'], load['postnr'])
+    # Contact
+    elif len(load) == 5:
+        devices = []
+
+        for device in load['devices']:
+            contacts.append(**device)
+
+        return Contact(load['id'], load['name'], load['email'], load['phone'])
+    # Citizen Admin
+    elif len(load) == 4:
+        return 1
+    # User Admin
+    elif len(load) == 3:
+        return 1
 
 
 class User:
@@ -21,8 +51,8 @@ class User:
 class CitizenAdmin(User):
     'A specialized user, representing a contact'
 
-    def __init__(self, id, name, email, username, citizens):
-        super().__init__(id, name, email, username)
+    def __init__(self, id, name, email, citizens):
+        super().__init__(id, name, email)
         self.citizens = citizens
 
 

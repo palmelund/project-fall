@@ -136,7 +136,7 @@ def get_all_citizens():
 
 
 def get_citizen_contacts(citizenID):
-    contacts = ()
+    contacts = []
 
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
