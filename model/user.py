@@ -44,6 +44,9 @@ class User:
         self.name = name
         self.email = email
 
+    def serialize(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
+
     @staticmethod
     def attempt_login(mail, password):
         return 1

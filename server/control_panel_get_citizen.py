@@ -8,4 +8,4 @@ def lambda_handler(event, context):
 
     dump = json.dumps(user.User.get(event['citizenid']), default=lambda o: o.__dict__)
     print(json.loads(dump))
-    return build_response_no_ser("200", json.dumps(user.User.get(event['citizenid']), default=lambda o: o.__dict__))
+    return build_response_no_ser("200", user.User.get(event['citizenid']).serialize())

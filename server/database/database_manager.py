@@ -9,7 +9,7 @@ def set_alarm(alarm):
     cursor = conn.cursor()
 
     cursor.execute("DELETE FROM alarm WHERE activatedby = %s", [alarm.activatedby])
-    cursor.execute("INSERT INTO alarm VALUES (%s, %s, %s)", [alarm.status, alarm.activatedby, alarm.responder])
+    cursor.execute("INSERT INTO alarm VALUES (%s, %s, %s)", [alarm.status, alarm.activatedby.id, alarm.responder.id])
 
     conn.commit()
     cursor.close()

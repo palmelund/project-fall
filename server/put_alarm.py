@@ -1,4 +1,3 @@
-import psycopg2
 from connect_str import connect_str
 from respond import respond, build_response_no_par
 

@@ -1,56 +1,25 @@
 from connect_str import connect_str
 from respond import respond, build_response
 from sns import sns_interface
-import psycopg2
+from model.alarm import *
+from model.user import *
 import time
 
 
 def lambda_handler(event, context):
-    # Create an alarm
-    conn = psycopg2.connect(connect_str)
-    cursor = conn.cursor()
+    try:
+        citizen = user.Citizen.deserialize(event["citizen"])
+    except Exception as ex:
+        return build_response_no_par("400", "Missing arguments!")
 
-    cursor.execute("INSERT INTO alarm VALUES (DEFAULT, %s, %s, NULL )", (0, event['userid']))
-    conn.commit()
+    if not citizen:
+        return build_response_no_par("400", "Missing arguments!")
 
-    cursor.execute("SELECT contactid FROM associateswith WHERE citizenid = %s", event['userid'])
-    res = cursor.fetchone()
+    _alarm = Alarm(0, citizen, None)
+    _alarm.put()
 
-    if res == ():
-        return build_response(400, "No contacts found for citizen")
-        # TODO: Error, what do we do if there are no contacts?
+    for x in range[0, 30]:
+        temp_alarm = alarm.get(citizen.id)
 
-    status = ()
-
-    for contact in res:
-        # TODO: Make contact with contact!
-        # TODO: What is an older contact answer after we have moved on?
-
-        for t in range(0, 6):
-            time.sleep(1)
-            cursor.execute("SELECT * FROM alarm WHERE activatedby = %s", event['userid'])
-            status = cursor.fetchone()
-
-            # If someone has reacted on the alarm, stop asking for help.
-            if status[1] == -1:
-                break
-                # If someone has reacted on the alarm, stop asking for help.
-
-        if status[1] == -1:
-            break
-
-    if status[1] == -1:
-        ""
-        # TODO: Let citizen know help is on the way
-    else:
-        ""
-        # TODO: What do we do if noone responds?
-
-    # TODO: Remove finished alarm
-    cursor.execute("DELETE FROM alarm WHERE activatedby = %s;", event['userid'])
-
-    conn.commit()
-    cursor.close()
-    conn.close()
-
-    return respond(None, "Created Alarm")
+        if temp_alarm.responder:
+            return build_response_no_ser("200", citizen.serialize())
