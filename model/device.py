@@ -1,6 +1,7 @@
 from enum import Enum
 from database import database_manager
 
+
 class DeviceType(Enum):
     App = "App"
     PersonalAssistance = "PersonalAssistance"
