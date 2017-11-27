@@ -1,5 +1,6 @@
 from connect_str import connect_str
 from model.user import *
+from respond import respond
 from model import user
 import psycopg2
 import hashlib
@@ -9,8 +10,8 @@ def set_alarm(alarm):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("DELETE FROM alarm WHERE activatedby = %s", [alarm.activatedby])
-    cursor.execute("INSERT INTO alarm VALUES (%s, %s, %s)", [alarm.status, alarm.activatedby, alarm.responder])
+    cursor.execute("DELETE FROM alarm WHERE activatedby = %s", [alarm.activatedby.id])
+    cursor.execute("INSERT INTO alarm VALUES (%s, %s, %s)", [alarm.status, alarm.activatedby.id, alarm.responder.id])
 
     conn.commit()
     cursor.close()

@@ -1,19 +1,20 @@
 from database import database_manager
 from model.user import *
+from model import user
 
 class Alarm:
 
     def __init__(self, status, activatedby, responder):
         self.status = status
-        self.citizen = citizen
         self.activatedby = activatedby
+        self.responder = responder
 
     @staticmethod
     def get(citizenID):
         return database_manager.get_alarm(citizenID)
 
-    def set():
-        if not responder:
+    def set(self):
+        if not self.responder:
             self.status = self.status + 1
 
         database_manager.set_alarm(self)
