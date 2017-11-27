@@ -27,7 +27,7 @@ def get_user(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT type FROM users WHERE user.id = %s", id)
+    cursor.execute("SELECT role FROM users WHERE users.id = %s", id)
     userType = cursor.fetchone()
 
     if userType == "citizen":

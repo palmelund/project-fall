@@ -45,7 +45,7 @@ for file_folder_list in file_folder_lists:
     copyfile("../database/connect_str.py", folder_name + "/" + "connect_str.py")
 
     #DatabaseManager
-    copyfile("../database/DatabaseManager.py", folder_name + "/" + "DatabaseManager.py")
+    copytree("../database", folder_name + "/" + "database")
 
     # Copy the respond method. This is used to properly construct the response messages
     copyfile("../respond.py", folder_name + "/" + "respond.py")

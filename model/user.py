@@ -9,13 +9,13 @@ class User:
         self.name = name
         self.email = email
 
-        @staticmethod
-        def attempt_login(mail, password):
-            return 1
+    @staticmethod
+    def attempt_login(mail, password):
+        return 1
 
-        @staticmethod
-        def get(userID):
-            return database_manager.get_user(userID)
+    @staticmethod
+    def get(userID):
+        return database_manager.get_user(userID)
 
 
 class CitizenAdmin(User):
