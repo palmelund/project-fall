@@ -75,6 +75,9 @@ class Citizen(User):
         self.city = city
         self. postnr = postnr
 
+    #@staticmethod
+    #def Create(self, id, name, email, contacts, devices, address, city, postnr):
+
 
 class Contact(User):
     'A specialized user, representing a contact'

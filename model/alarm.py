@@ -1,5 +1,6 @@
 from database import database_manager
 from model.user import *
+from model import user
 
 
 class Alarm:
@@ -14,7 +15,7 @@ class Alarm:
         return database_manager.get_alarm(citizenID)
 
     def set(self):
-        if not responder:
+        if not self.responder:
             self.status = self.status + 1
 
         database_manager.set_alarm(self)

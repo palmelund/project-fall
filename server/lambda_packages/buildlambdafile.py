@@ -9,9 +9,9 @@ from shutil import copyfile, copytree, make_archive, rmtree
 file_folder_lists = [
     ["activate_alarm.py", "activate_alarm"],
     ["put_alarm.py", "update_alarm"],
-    ["login.py", "usermanager.py", "login"],
-    ["create_user.py", "usermanager.py", "create_user"],
-    ["control_panel_add_citizen.py", "usermanager.py", "control_panel_add_citizen"],
+    ["login.py", "login"],
+    ["create_user.py", "create_user"],
+    ["control_panel_add_citizen.py", "control_panel_add_citizen"],
     ["control_panel_add_contact.py", "control_panel_add_contact"],
     ["control_panel_get_citizen.py", "control_panel_get_citizen"],
     ["control_panel_get_citizens.py", "control_panel_get_citizens"],
@@ -59,5 +59,6 @@ for file_folder_list in file_folder_lists:
     # Finally zip the output folder. The zip file can then be uploaded to the lambda function
     make_archive(folder_name, "zip", folder_name)
 
-
+    # Cleanup
+    rmtree(folder_name)
 
