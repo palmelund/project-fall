@@ -29,7 +29,7 @@ try:
     cursor.execute(
         "CREATE TABLE associateswith (citizenID int REFERENCES citizen(userID), contactID int REFERENCES contact(userID), PRIMARY KEY(citizenID, contactID));")
     cursor.execute(
-        "CREATE TABLE alarm (id SERIAL PRIMARY KEY, status int, activatedBy int REFERENCES citizen(userID))")
+        "CREATE TABLE alarm (status int, activatedby int PRIMARY KEY REFERENCES citizen(userID)), responder int REFERENCES contact(userID)")
     cursor.execute(
         "CREATE TABLE citizenadmin (userid INT PRIMARY KEY REFERENCES users(id));"
     )

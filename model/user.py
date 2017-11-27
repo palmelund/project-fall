@@ -1,3 +1,6 @@
+from database import database_manager
+
+
 class User:
     'Generalization of different user types'
 
@@ -5,6 +8,14 @@ class User:
         self.id = id
         self.name = name
         self.email = email
+
+        @staticmethod
+        def attempt_login(mail, password):
+            return 1
+
+        @staticmethod
+        def get(userID):
+            return database_manager.get_user(userID)
 
 
 class CitizenAdmin(User):
