@@ -1,19 +1,18 @@
-import psycopg2
-from connect_str import connect_str
-from respond import respond, build_response_no_par
-from model.json_parser import parse_alarm, parse_contact
+from respond import respond, build_response_no_ser
+import json
+from model.alarm import deserialize
 
 
 def lambda_handler(event, context):
-
     try:
-        alarm = parse_alarm(event["alarm"])
+        alm = deserialize(json.loads(event["alarm"]))
     except Exception as ex:
-        return build_response_no_par("400", "Missing arguments!")
+        print (str(ex))
+        return build_response_no_ser("400", "Missing arguments 1!")
 
-    if not alarm:
-        return build_response_no_par("400", "Missing arguments!")
+    if not alm:
+        return build_response_no_ser("400", "Missing arguments 2!")
 
-    alarm.set()
+    alm.set()
 
     return respond(None)

@@ -1,5 +1,5 @@
 from usermanager import add_user
-from respond import build_response_no_par
+from respond import build_response_no_ser
 
 
 def lambda_handler(event, context):
@@ -10,10 +10,10 @@ def lambda_handler(event, context):
         name = event['name']
         role = event['role']
     except Exception as ex:
-        return build_response_no_par("400", "Missing arguments!")
+        return build_response_no_ser("400", "Missing arguments!")
 
     if all(x is not None for x in [username, email, password, name, role]):
-        return build_response_no_par("400", "Missing arguments!")
+        return build_response_no_ser("400", "Missing arguments!")
 
     user = add_user(username, email, password, name, role)
 
