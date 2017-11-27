@@ -10,19 +10,16 @@
 </head>
 <body>
 <div class="container">
-    <form class="login" action="" method="post">
+    <form id="login">
         <h5 style="text-align: center">Login</h5>
-        <div class="row">
-            <div class="six columns">
-                <input class="u-full-width" type="text" name="username" value="" placeholder="Username">
-            </div>
-            <div class="six columns">
-                <input class="u-full-width" type="password" name="password" value="" placeholder="Password">
-            </div>
-        </div>
-        <input class="button-primary u-full-width" type="submit" value="Submit">
+        <input class="u-full-width" type="email" name="email" value="" placeholder="Email" tabindex="1">
+        <input class="u-full-width" type="password" name="password" value="" placeholder="Kodeord" tabindex="2">
+        <!--<input type="button" name="submit" value="submit" placeholder="Log ind" onclick="login()" tabindex="3">-->
+        <div class="btn-submit" onclick="login()" tabindex="3">Log ind</div>
     </form>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
