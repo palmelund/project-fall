@@ -9,7 +9,7 @@ def get_all_citizens():
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM user, citizen WHERE user.id = citizen.userID")
+    cursor.execute("SELECT * FROM users, citizen WHERE users.id = citizen.userID")
     citizensRaw = cursor.fetchall()
 
     for citizen in citizensRaw:

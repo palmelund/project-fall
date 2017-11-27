@@ -1,5 +1,6 @@
 from connect_str import connect_str
 from respond import respond, build_response
+from sns import sns_interface
 import psycopg2
 import time
 

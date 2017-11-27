@@ -11,7 +11,8 @@ file_folder_lists = [
     ["put_alarm.py", "update_alarm"],
     ["login.py", "usermanager.py", "login"],
     ["create_user.py", "usermanager.py", "create_user"],
-    ["control_panel_add_citizen.py", "usermanager.py", "control_panel_add_citizen"]
+    ["control_panel_add_citizen.py", "usermanager.py", "control_panel_add_citizen"],
+    ["control_panel_get_citizens.py", "control_panel_get_citizens"]
 ]
 
 for file_folder_list in file_folder_lists:
@@ -37,6 +38,9 @@ for file_folder_list in file_folder_lists:
     # connect_str is a private file containing connectivity info for the database
     # This file should only be present locally on the computer packing the files
     copyfile("../database/connect_str.py", folder_name + "/" + "connect_str.py")
+
+    #DatabaseManager
+    copyfile("../database/DatabaseManager.py", folder_name + "/" + "DatabaseManager.py")
 
     # Copy the respond method. This is used to properly construct the response messages
     copyfile("../respond.py", folder_name + "/" + "respond.py")
