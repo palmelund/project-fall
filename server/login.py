@@ -1,4 +1,5 @@
 from usermanager import login
+from model import user
 from respond import respond, build_response, build_response_no_ser
 
 
@@ -7,6 +8,9 @@ def lambda_handler(event, context):
         email = event['email']
         password = event['password']
     except:
+        return build_response(str(400), {"id": -1})
+
+    if all (x is not None for x in [email, password]):
         return build_response(str(400), {"id": -1})
 
     user = login(email, password)
