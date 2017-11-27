@@ -7,7 +7,6 @@ class DeviceType(Enum):
 
 
 class Device:
-    'A specialized user, representing a contact'
 
     def __init__(self, id, type):
         self.type = type
