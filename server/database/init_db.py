@@ -23,7 +23,7 @@ try:
     cursor.execute("CREATE TABLE device (id SERIAL PRIMARY KEY, type devicetype);")
 
     cursor.execute(
-        "CREATE TABLE device (id SERIAL PRIMARY KEY, type devicetype);")
+        "CREATE TABLE device (id SERIAL PRIMARY KEY, type devicetype, content text);")
     cursor.execute(
         "CREATE TABLE hasa (userID int REFERENCES users(id), deviceID int REFERENCES device(id), PRIMARY KEY(userID, deviceID));")
     cursor.execute(

@@ -2,7 +2,6 @@ from connect_str import connect_str
 from model.user import *
 from model import user
 import psycopg2
-from pprint import pprint
 
 
 def get_alarm(citizenID):
@@ -22,20 +21,15 @@ def get_device(id):
     cursor.execute("SELECT users.id, users.name, users.email FROM users WHERE users.id = %s", id)
     caRaw = cursor.fetchone()
 
-    return UserAdmin(caRaw[0], caRaw[1], caRaw[2], caRaw[3])
+    return user.UserAdmin(caRaw[0], caRaw[1], caRaw[2], caRaw[3])
 
 
 def get_user(id):
-    print("Get user")
-
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
     cursor.execute("SELECT role FROM users WHERE users.id = %s", id)
     userType = cursor.fetchone()[0]
-
-    pprint(userType)
-
     if userType == "citizen":
         return get_citizen(id)
     elif userType == "contact":
@@ -44,8 +38,6 @@ def get_user(id):
         return get_citizen_admin(id)
     elif userType == "UserAdmin":
         return get_user_admin(id)
-    else:
-        print("How?")
 
 
 def get_user_admin(id):
@@ -55,7 +47,7 @@ def get_user_admin(id):
     cursor.execute("SELECT users.id, users.name, users.email FROM users WHERE users.id = %s", id)
     caRaw = cursor.fetchone()
 
-    return UserAdmin(caRaw[0], caRaw[1], caRaw[2], caRaw[3])
+    return user.UserAdmin(caRaw[0], caRaw[1], caRaw[2], caRaw[3])
 
 
 def get_citizen_admin(id):
@@ -67,11 +59,11 @@ def get_citizen_admin(id):
 
     citizens = get_citizen_admins_citizens(id)
 
-    return CitizenAdmin(caRaw[0], caRaw[1], caRaw[2], caRaw[3], citizens)
+    return user.CitizenAdmin(caRaw[0], caRaw[1], caRaw[2], caRaw[3], citizens)
 
 
 def get_citizen_admins_citizens(admin_id):
-    citizens = ()
+    citizens = []
 
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
@@ -82,7 +74,7 @@ def get_citizen_admins_citizens(admin_id):
     for citizen in citizensRaw:
         contacts = get_citizen_contacts(citizen[0])
         devices = get_user_devices(citizen[0])
-        citizens.append(Citizen(citizen[0], citizen[1], citizen[2], contacts, devices, citizen[3], citizen[4], citizen[5]))
+        citizens.append(user.Citizen(citizen[0], citizen[1], citizen[2], contacts, devices, citizen[3], citizen[4], citizen[5]))
 
     return citizens
 
@@ -96,7 +88,7 @@ def get_contact(id):
 
     devices = get_user_devices(contactRaw[0])
 
-    return Contact(contactRaw[0], contactRaw[1], contactRaw[2], contactRaw[4], devices)
+    return user.Contact(contactRaw[0], contactRaw[1], contactRaw[2], contactRaw[4], devices)
 
 
 def get_citizen(id):
@@ -106,19 +98,13 @@ def get_citizen(id):
     cursor.execute("SELECT id, name, email, address, city, postnr FROM users, citizen WHERE users.id = citizen.userID AND users.id = %s", id)
     citizenRaw = cursor.fetchone()
 
-    print("Printing")
-    pprint(citizenRaw)
-
     contacts = get_citizen_contacts(citizenRaw[0])
     devices = get_user_devices(citizenRaw[0])
-
-    pprint(citizenRaw)
-
     return user.Citizen(citizenRaw[0], citizenRaw[1], citizenRaw[2], contacts, devices, citizenRaw[3], citizenRaw[4], citizenRaw[5])
 
 
 def get_all_citizens():
-    allCitizens = ()
+    allCitizens = []
 
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
@@ -130,7 +116,7 @@ def get_all_citizens():
         contacts = get_citizen_contacts(citizen[0])
         devices = get_user_devices(citizen[0])
 
-        allCitizens.append(Citizen(citizen[0], citizen[1], citizen[2], contacts, devices, citizen[3], citizen[4], citizen[5]))
+        allCitizens.append(user.Citizen(citizen[0], citizen[1], citizen[2], contacts, devices, citizen[3], citizen[4], citizen[5]))
 
     return allCitizens
 
@@ -147,13 +133,13 @@ def get_citizen_contacts(citizenID):
     for contact in contactsRaw:
         devices = get_user_devices(contact[0])
 
-        contacts.append(Contact(contact[0], contact[1], contact[2], contact[4], devices))
+        contacts.append(user.Contact(contact[0], contact[1], contact[2], contact[3], devices))
 
     return contacts
 
 
 def get_user_devices(userID):
-    devices = ()
+    devices = []
 
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
