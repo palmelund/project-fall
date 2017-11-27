@@ -1,24 +1,19 @@
-import psycopg2
-from connect_str import connect_str
-from respond import respond
-from model.json_parser import parse_alarm, parse_contact
+from respond import respond, build_response_no_ser
+import json
+from model.alarm import *
+from model import alarm
 
 
 def lambda_handler(event, context):
-    conn = psycopg2.connect(connect_str)
-    cursor = conn.cursor()
+    try:
+        alm = alarm.deserialize(json.loads(event["alarm"]))
+    except Exception as ex:
+        print (str(ex))
+        return build_response_no_ser("400", "Missing arguments 1!")
 
-    response = event["response"]
-    contact = parse_contact(event["contact"])
-    alarm = parse_alarm(event["alarm"])
+    if not alm:
+        return build_response_no_ser("400", "Missing arguments 2!")
 
-    if response == 1:
-        cursor.execute("UPDATE alarm SET status = -1, responder = %s WHERE id = %s;", (contact.id, alarm.id))
-    else:
-        cursor.execute("UPDATE alarm SET status = status + 1 WHERE id = %s;", [alarm.id])
-
-    conn.commit()
-    cursor.close()
-    conn.close()
+    alm.set()
 
     return respond(None)

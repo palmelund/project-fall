@@ -9,10 +9,15 @@ from shutil import copyfile, copytree, make_archive, rmtree
 file_folder_lists = [
     ["activate_alarm.py", "activate_alarm"],
     ["put_alarm.py", "update_alarm"],
-    ["login.py", "usermanager.py", "login"],
-    ["create_user.py", "usermanager.py", "create_user"],
-    ["control_panel_add_citizen.py", "usermanager.py", "control_panel_add_citizen"],
-    ["control_panel_get_citizens.py", "control_panel_get_citizens"]
+    ["login.py", "login"],
+    ["create_user.py", "create_user"],
+    ["control_panel_add_citizen.py", "control_panel_add_citizen"],
+    ["control_panel_add_contact.py", "control_panel_add_contact"],
+    ["control_panel_get_citizen.py", "control_panel_get_citizen"],
+    ["control_panel_get_citizens.py", "control_panel_get_citizens"],
+    ["control_panel_get_contact.py", "control_panel_get_contact"],
+    ["control_panel_get_contacts.py", "control_panel_get_contacts"],
+    ["control_panel_search_contact.py", "control_panel_search_contacts"]
 ]
 
 for file_folder_list in file_folder_lists:
@@ -40,7 +45,7 @@ for file_folder_list in file_folder_lists:
     copyfile("../database/connect_str.py", folder_name + "/" + "connect_str.py")
 
     #DatabaseManager
-    copyfile("../database/DatabaseManager.py", folder_name + "/" + "DatabaseManager.py")
+    copytree("../database", folder_name + "/" + "database")
 
     # Copy the respond method. This is used to properly construct the response messages
     copyfile("../respond.py", folder_name + "/" + "respond.py")
@@ -54,5 +59,6 @@ for file_folder_list in file_folder_lists:
     # Finally zip the output folder. The zip file can then be uploaded to the lambda function
     make_archive(folder_name, "zip", folder_name)
 
-
+    # Cleanup
+    rmtree(folder_name)
 

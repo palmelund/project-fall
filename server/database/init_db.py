@@ -5,7 +5,7 @@ try:
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("CREATE TYPE userrole AS ENUM ('contact', 'citizenAdmin', 'citizen')")
+    cursor.execute("CREATE TYPE userrole AS ENUM ('contact', 'citizenAdmin', 'citizen', 'userAdmin')")
     cursor.execute("CREATE TYPE devicetype AS ENUM ('app', 'smartAssistance')")
 
     # Database setup
@@ -23,13 +23,13 @@ try:
     cursor.execute("CREATE TABLE device (id SERIAL PRIMARY KEY, type devicetype);")
 
     cursor.execute(
-        "CREATE TABLE device (id SERIAL PRIMARY KEY, type devicetype);")
+        "CREATE TABLE device (id SERIAL PRIMARY KEY, type devicetype, content text);")
     cursor.execute(
         "CREATE TABLE hasa (userID int REFERENCES users(id), deviceID int REFERENCES device(id), PRIMARY KEY(userID, deviceID));")
     cursor.execute(
         "CREATE TABLE associateswith (citizenID int REFERENCES citizen(userID), contactID int REFERENCES contact(userID), PRIMARY KEY(citizenID, contactID));")
     cursor.execute(
-        "CREATE TABLE alarm (id SERIAL PRIMARY KEY, status int, activatedBy int REFERENCES citizen(userID))")
+        "CREATE TABLE alarm (status int, activatedby int PRIMARY KEY REFERENCES citizen(userID)), responder int REFERENCES contact(userID)")
     cursor.execute(
         "CREATE TABLE citizenadmin (userid INT PRIMARY KEY REFERENCES users(id));"
     )
