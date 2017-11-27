@@ -1,7 +1,6 @@
 import psycopg2
 from connect_str import connect_str
 from respond import respond, build_response_no_par
-from model.json_parser import parse_alarm, parse_contact
 
 
 def lambda_handler(event, context):

@@ -1,5 +1,5 @@
 from database import database_manager
-
+from model.user import *
 
 class Alarm:
 
@@ -9,8 +9,8 @@ class Alarm:
         self.activatedby = activatedby
 
     @staticmethod
-    def get(alarm_id):
-        return database_manager.get_alarm(alarm_id)
+    def get(citizenID):
+        return database_manager.get_alarm(citizenID)
 
     def set():
         if not responder:
@@ -20,4 +20,4 @@ class Alarm:
 
 
 def deserialize(mapping):
-    return Alarm(mapping["id"], mapping["citizen"], mapping["status"])
+    return Alarm(mapping["status"], user.deserialize(mapping["activatedby"]), user.deserialize(mapping["responder"]))
