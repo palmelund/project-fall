@@ -8,5 +8,6 @@ class DeviceType(Enum):
 
 class Device:
 
-    def __init__(self, type):
+    def __init__(self, id, type):
         self.type = type
+        self.id = id

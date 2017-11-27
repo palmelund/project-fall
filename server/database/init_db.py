@@ -12,10 +12,16 @@ try:
     cursor.execute(
         "CREATE TABLE users (id SERIAL PRIMARY KEY, username varchar(50), password varchar(200), salt varchar(50), name varchar(255), email varchar(255), role userrole);")
 
+    cursor.execute("CREATE TABLE contact (userID int REFERENCES users(id) PRIMARY KEY, phone varchar(55));")
+
     cursor.execute(
         "CREATE TABLE contact (userID int REFERENCES users(id) PRIMARY KEY, phone varchar(55));")
     cursor.execute(
         "CREATE TABLE citizen (userID int REFERENCES users(id) PRIMARY KEY, address varchar(255), city varchar(255), postnr varchar(55), managedBy int REFERENCES users(id));")
+
+    # Device
+    cursor.execute("CREATE TABLE device (id SERIAL PRIMARY KEY, type devicetype);")
+
     cursor.execute(
         "CREATE TABLE device (id SERIAL PRIMARY KEY, type devicetype);")
     cursor.execute(
