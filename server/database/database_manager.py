@@ -1,6 +1,8 @@
 from connect_str import connect_str
 from model.user import *
+from model import user
 import psycopg2
+from pprint import pprint
 
 
 def get_alarm(citizenID):
@@ -24,11 +26,15 @@ def get_device(id):
 
 
 def get_user(id):
+    print("Get user")
+
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
     cursor.execute("SELECT role FROM users WHERE users.id = %s", id)
-    userType = cursor.fetchone()
+    userType = cursor.fetchone()[0]
+
+    pprint(userType)
 
     if userType == "citizen":
         return get_citizen(id)
@@ -38,6 +44,8 @@ def get_user(id):
         return get_citizen_admin(id)
     elif userType == "UserAdmin":
         return get_user_admin(id)
+    else:
+        print("How?")
 
 
 def get_user_admin(id):
@@ -95,13 +103,18 @@ def get_citizen(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT id, name, email, address, city, postnr FROM users, citizen WHERE users.id = citizen.userID AND user.id = %s", id)
-    citizenRaw = cursor.fetchall()
+    cursor.execute("SELECT id, name, email, address, city, postnr FROM users, citizen WHERE users.id = citizen.userID AND users.id = %s", id)
+    citizenRaw = cursor.fetchone()
+
+    print("Printing")
+    pprint(citizenRaw)
 
     contacts = get_citizen_contacts(citizenRaw[0])
     devices = get_user_devices(citizenRaw[0])
 
-    return Citizen(citizenRaw[0], citizenRaw[1], citizenRaw[2], contacts, devices, citizenRaw[3], citizenRaw[4], citizenRaw[5])
+    pprint(citizenRaw)
+
+    return user.Citizen(citizenRaw[0], citizenRaw[1], citizenRaw[2], contacts, devices, citizenRaw[3], citizenRaw[4], citizenRaw[5])
 
 
 def get_all_citizens():
@@ -127,7 +140,7 @@ def get_citizen_contacts(citizenID):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT users.id, users.name, user.email, contact.phone FROM users, contact, associateswith WHERE users.id = contact.userID AND associateswith.citizenID = %s AND associateswith.contactID = users.id", citizenID)
+    cursor.execute("SELECT users.id, users.name, users.email, contact.phone FROM users, contact, associateswith WHERE users.id = contact.userID AND associateswith.citizenID = %s AND associateswith.contactID = users.id", [citizenID])
     contactsRaw = cursor.fetchall()
 
     for contact in contactsRaw:
@@ -144,7 +157,7 @@ def get_user_devices(userID):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT device.id, device.type FROM device, hasa WHERE device.id = hasa.deviceID AND hasa.userID = %s", userID)
+    cursor.execute("SELECT device.id, device.type FROM device, hasa WHERE device.id = hasa.deviceID AND hasa.userID = %s", [userID])
     devicesRaw = cursor.fetchall()
 
     for device in devicesRaw:
