@@ -16,3 +16,7 @@ class Device:
     @staticmethod
     def get(deviceID):
         return database_manager.get_device(deviceID)
+
+
+def deserialize(mapping):
+    return Device(mapping["id"], mapping["type"])
