@@ -27,7 +27,7 @@ def get_user(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT type FROM users WHERE user.id = %s", id)
+    cursor.execute("SELECT role FROM users WHERE users.id = %s", id)
     userType = cursor.fetchone()
 
     if userType == "citizen":
@@ -95,7 +95,7 @@ def get_citizen(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT id, name, email, address, city, postnr FROM users, citizen WHERE users.id = citizen.userID")
+    cursor.execute("SELECT id, name, email, address, city, postnr FROM users, citizen WHERE users.id = citizen.userID AND user.id = %s", id)
     citizenRaw = cursor.fetchall()
 
     contacts = get_citizen_contacts(citizenRaw[0])

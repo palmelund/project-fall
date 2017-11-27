@@ -5,7 +5,7 @@ try:
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("CREATE TYPE userrole AS ENUM ('contact', 'citizenAdmin', 'citizen')")
+    cursor.execute("CREATE TYPE userrole AS ENUM ('contact', 'citizenAdmin', 'citizen', 'userAdmin')")
     cursor.execute("CREATE TYPE devicetype AS ENUM ('app', 'smartAssistance')")
 
     # Database setup
