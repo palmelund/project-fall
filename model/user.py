@@ -25,10 +25,15 @@ def deserialize(load):
         return Contact(load['id'], load['name'], load['email'], load['phone'], devices)
     # Citizen Admin
     elif len(load) == 4:
-        return 1
+        citizens = []
+
+        for citizen in load['citizens']:
+            citizens.append(deserialize(citizen))
+
+        return CitizenAdmin(id, load['name'], load['email'], citizens)
     # User Admin
     elif len(load) == 3:
-        return 1
+        return UserAdmin(**load)
 
 
 class User:
