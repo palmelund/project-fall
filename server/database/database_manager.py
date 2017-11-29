@@ -6,6 +6,7 @@ import psycopg2
 import hashlib
 import uuid
 
+
 def set_alarm(alarm):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
@@ -277,7 +278,7 @@ def add_admin(userid):
     cursor = conn.cursor()
 
     # TODO
-    #cursor.execute("INSERT INTO ")
+    # cursor.execute("INSERT INTO ")
 
     conn.commit()
     cursor.close()
