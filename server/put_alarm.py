@@ -8,11 +8,11 @@ def lambda_handler(event, context):
     try:
         alm = alarm.deserialize(json.loads(event["alarm"]))
     except Exception as ex:
-        print(str(ex))
-        return build_response_no_ser("400", "Missing arguments 1!")
+        print (str(ex))
+        return build_response_no_ser("400", "Missing arguments!")
 
     if not alm:
-        return build_response_no_ser("400", "Missing arguments 2!")
+        return build_response_no_ser("400", "Missing arguments!")
 
     alm.set()
 
