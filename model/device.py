@@ -10,7 +10,7 @@ class DeviceType(Enum):
 class Device:
 
     def __init__(self, id, type):
-        self.type = type
+        self.type = DeviceType(type)
         self.id = id
 
     @staticmethod
