@@ -11,17 +11,21 @@
 <body>
     <div class="container">
             <div id="add-new-citizen-admin" style="margin-top: 100px">
-            <form id="citizen-admin-form" class="add-citizen-admin">
-                <h5 style="text-align: center;">Tilføj ny borger administrator</h5>
+            <form id="citizen-admin-form" class="">
+                <h5 style="text-align: center;">Tilføj bruger</h5>
                 <input id="name" class="u-full-width" type="text" name="name" value="" placeholder="Fulde navn">
                 <input id="email" class="u-full-width" type="email" name="email" value="" placeholder="Email">
-                <input id="username" class="u-full-width" type="text" name="username" value="" placeholder="Brugernavn">
+                <select class="u-full-width">
+                    <option value="citizen-admin">Bruger admin</option>
+                    <option value="contact">Kontakt</option>
+                    <option value="citizen">Borger</option>
+                </select>
                 <div class="row">
-                    <input id="address" class="four columns u-full-width" type="text" name="address" value="" placeholder="Addresse">
-                    <input id="city" class="four columns u-full-width" type="text" name="city" value="" placeholder="By">
-                    <input id="post-code" class="four columns u-full-width" type="number" name="post-code" value="" placeholder="Post nr.">
+                    <input id="address" class="four columns" type="text" name="address" value="" placeholder="Addresse">
+                    <input id="city" class="four columns" type="text" name="city" value="" placeholder="By">
+                    <input id="post-code" class="four columns" type="number" name="post-code" value="" placeholder="Post nr.">
                 </div>
-                <input type="button" class="button-primary u-full-width" value="Tilføj" onclick="addNewCitizen()">
+                <div class="btn-submit u-full-width" onclick="addNewCitizen()">Tilføj</div>
             </form>
         </div>
     </div>
