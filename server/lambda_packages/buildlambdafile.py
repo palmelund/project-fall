@@ -17,7 +17,9 @@ file_folder_lists = [
     ["control_panel_get_citizens.py", "control_panel_get_citizens"],
     ["control_panel_get_contact.py", "control_panel_get_contact"],
     ["control_panel_get_contacts.py", "control_panel_get_contacts"],
-    ["control_panel_search_contact.py", "control_panel_search_contacts"]
+    ["control_panel_search_contact.py", "control_panel_search_contacts"],
+
+    ["alarm_create.py", "alarm_create"]
 ]
 
 for file_folder_list in file_folder_lists:

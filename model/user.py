@@ -3,15 +3,10 @@ import json
 
 
 def deserialize(load):
-
-    print(len(load))
-
     # Citizen
     if len(load) == 8:
         contacts = []
         devices = []
-
-        print(load)
 
         for contact in load['contacts']:
             contacts.append(deserialize(contact))

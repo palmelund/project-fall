@@ -1,6 +1,6 @@
 from connect_str import connect_str
 from model.user import *
-from model.alarm import Alarm
+from model import alarm
 from respond import respond
 from model import user
 import psycopg2
@@ -8,18 +8,18 @@ import hashlib
 import uuid
 
 
-def set_alarm(alarm):
+def set_alarm(alm):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("DELETE FROM alarm WHERE activatedby = %s", [alarm.activatedby.id])
+    cursor.execute("DELETE FROM alarm WHERE activatedby = %s", [alm.activatedby.id])
 
-    if not alarm.responder:
+    if not alm.responder:
         resp = None
     else:
-        resp = alarm.responder.id
+        resp = alm.responder.id
 
-    cursor.execute("INSERT INTO alarm VALUES (%s, %s, %s)", [alarm.status, alarm.activatedby.id, resp])
+    cursor.execute("INSERT INTO alarm VALUES (%s, %s, %s)", [alm.status, alm.activatedby.id, resp])
 
     conn.commit()
     cursor.close()
@@ -33,13 +33,13 @@ def get_alarm(citizenID):
     cursor = conn.cursor()
 
     cursor.execute("SELECT alarm.status, alarm.responder FROM alarm WHERE activatedby = %s", [citizenID])
-    alarm = cursor.fetchone()
+    alm = cursor.fetchone()
 
     conn.commit()
     cursor.close()
     conn.close()
 
-    return Alarm(alarm[0], get_citizen(citizenID), get_contact(alarm[1]))
+    return alarm.Alarm(alm[0], get_citizen(citizenID), get_contact(alm[1]))
 
 
 def get_device(id):
