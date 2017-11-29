@@ -1,13 +1,15 @@
 from model import alarm
-from model.user import deserialize
+from model.user import deserialize, User
 from respond import build_response_no_ser
 from sns import sns_interface
 import json
-
+from pprint import pprint
+import boto3
 
 def lambda_handler(event, context):
     try:
         citizen = deserialize(json.loads(event["citizen"]))
+        citizen = User.get(citizen.id)
     except Exception as ex:
         return build_response_no_ser("400", "Missing arguments 1!")
 
@@ -31,9 +33,9 @@ def lambda_handler(event, context):
         for d in c.devices:
             content = json.loads(d.content)
             if content["messagetype"] == "call":
-                numbers.add(c.number)
+                numbers.add(c.phone)
 
     return build_response_no_ser("200", {
-        "responstype": "createdalarm",
+        "responstype": "createalarm",
         "numberlist": json.dumps(list(numbers))
     })

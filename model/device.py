@@ -1,5 +1,6 @@
 from enum import Enum
 from database import database_manager
+import json
 
 
 class DeviceType(Enum):
@@ -13,6 +14,9 @@ class Device:
         self.type = type
         self.id = id
         self.content = content
+
+    def serialize(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
 
     @staticmethod
     def get(deviceID):
