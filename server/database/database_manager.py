@@ -57,6 +57,20 @@ def get_device(id):
     return user.UserAdmin(caRaw[0], caRaw[1], caRaw[2], caRaw[3])
 
 
+def set_device(device, user):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("INSERT INTO device VALUES (DEFAULT, %s, %s) RETURNING id", [device.type, device.content])
+    device_id = cursor.fetchone()[0]
+
+    cursor.execute("INSERT INTO hasa VALUES (%s, %s)", [user.id, device_id])
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
 def get_user(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()

@@ -1,7 +1,9 @@
 from model import alarm
+from model import device
 from model.user import deserialize, User
 from respond import build_response_no_ser
 from sns import sns_interface
+import urllib.request
 import json
 from pprint import pprint
 import boto3
@@ -25,6 +27,11 @@ def lambda_handler(event, context):
 
     # sms contacts
     sns_interface.send_all(citizen.contacts, "message")
+
+    # Send IFTTT event
+    for d in citizen.devices:
+        if d.type == device.DeviceType.IFTTT:
+            urllib.request.urlopen("https://maker.ifttt.com/trigger/fall_detected/with/key/" + json.loads(d.content)["key"]).read()
 
     # Get phone numbers:
     numbers = set([])
