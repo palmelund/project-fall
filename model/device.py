@@ -9,9 +9,10 @@ class DeviceType(Enum):
 
 class Device:
 
-    def __init__(self, id, type):
+    def __init__(self, id, type, content):
         self.type = type
         self.id = id
+        self.content = content
 
     @staticmethod
     def get(deviceID):
@@ -19,4 +20,4 @@ class Device:
 
 
 def deserialize(mapping):
-    return Device(mapping["id"], mapping["type"])
+    return Device(mapping["id"], mapping["type"], mapping["content"])

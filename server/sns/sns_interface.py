@@ -1,5 +1,6 @@
 import boto3
-from sns_credentials import *
+#from sns_credentials import region_name, aws_access_key_id, aws_secret_access_key, arn_endpoint
+from sns.sns_credentials import region_name, aws_access_key_id, aws_secret_access_key, arn_endpoint
 
 # Get connection
 sns_client = boto3.client(

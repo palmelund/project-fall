@@ -1,5 +1,6 @@
 from connect_str import connect_str
 from model.user import *
+from model.alarm import Alarm
 from respond import respond
 from model import user
 import psycopg2
@@ -12,7 +13,13 @@ def set_alarm(alarm):
     cursor = conn.cursor()
 
     cursor.execute("DELETE FROM alarm WHERE activatedby = %s", [alarm.activatedby.id])
-    cursor.execute("INSERT INTO alarm VALUES (%s, %s, %s)", [alarm.status, alarm.activatedby.id, alarm.responder.id])
+
+    if not alarm.responder:
+        resp = None
+    else:
+        resp = alarm.responder.id
+
+    cursor.execute("INSERT INTO alarm VALUES (%s, %s, %s)", [alarm.status, alarm.activatedby.id, resp])
 
     conn.commit()
     cursor.close()
@@ -25,7 +32,7 @@ def get_alarm(citizenID):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT alarm.status, alarm.responder FROM alarm WHERE activatedby = %s", citizenID)
+    cursor.execute("SELECT alarm.status, alarm.responder FROM alarm WHERE activatedby = %s", [citizenID])
     alarm = cursor.fetchone()
 
     conn.commit()

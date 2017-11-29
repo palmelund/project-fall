@@ -56,6 +56,9 @@ for file_folder_list in file_folder_lists:
     # Since some lambdas depend on the models, we also pack that library
     copytree("../../model", folder_name + "/" + "model")
 
+    # Some lambdas require SNS support, so we also copy that
+    copytree("../sns", folder_name + "/" + "sns")
+
     # Finally zip the output folder. The zip file can then be uploaded to the lambda function
     make_archive(folder_name, "zip", folder_name)
 
