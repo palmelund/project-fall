@@ -1,5 +1,6 @@
 import boto3
-from sns.sns_credentials import region_name, aws_access_key_id, aws_secret_access_key, arn_endpoint
+from sns.sns_credentials import region_name, aws_access_key_id, aws_secret_access_key
+from endpoints import arn_sns_android_endpoint
 import json
 from pprint import pprint
 
@@ -14,7 +15,7 @@ def create_endpoint(token):
     )
 
     return sns_client.create_platform_endpoint(
-        PlatformApplicationArn=arn_endpoint,
+        PlatformApplicationArn=arn_sns_android_endpoint,
         Token=token
 )
 
@@ -30,7 +31,7 @@ def update_endpoint(endpoint_arn, new_token):
 
     # TODO: This is untested
     return sns_client.set_endpoint_attributes(
-        EndpointArn=endpoint_arn,
+        EndpointArn=arn_sns_android_endpoint,
         Token=new_token
     )
 
@@ -44,8 +45,10 @@ def push_message(endpoint_arn, message):
         aws_secret_access_key=aws_secret_access_key
     )
 
+    return
+
     return sns_client.publish(
-        PlatformApplicationArn=endpoint_arn,
+        PlatformApplicationArn=arn_sns_android_endpoint,
         MessageStructure='string',
         Message=message
     )
@@ -64,16 +67,12 @@ def send_sms(number, message):
         aws_secret_access_key=aws_secret_access_key
     )
 
-    print(region_name)
-    print(aws_access_key_id)
-    print(aws_secret_access_key)
+    return
 
-    res = sns_client.publish(
+    return sns_client.publish(
         PhoneNumber=str(number),
         Message=str(message)
     )
-    print(res)
-    return res
 
 
 def push_all(contacts, message):
@@ -88,7 +87,8 @@ def push_all(contacts, message):
                 if content["type"] == "android":
                     print("Arn: " + content["arn"])
                     print("Message: " + message)
-                    push_message(content["arn"], message)
+                    print("Sending push message")
+                    #push_message(content["arn"], message)
 
 
 def send_all(contacts, message):
@@ -104,6 +104,7 @@ def send_all(contacts, message):
                 print(c.phone)
                 number = c.phone
         if number:
-            send_sms(number, message)
+            print("Sending SMS")
+            #send_sms(number, message)
         else:
             print("???")

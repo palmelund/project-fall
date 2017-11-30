@@ -43,6 +43,17 @@ def get_alarm(citizenID):
     return alarm.Alarm(alm[0], get_citizen(citizenID), get_contact(alm[1]))
 
 
+def remove_alarm(citizenid):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM alarm WHERE activatedby = %s", [citizenid])
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
 def get_device(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
@@ -61,7 +72,7 @@ def set_device(device, user):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO device VALUES (DEFAULT, %s, %s) RETURNING id", [device.type, device.content])
+    cursor.execute("INSERT INTO device VALUES (DEFAULT, %s, %s) RETURNING id", [device.content])
     device_id = cursor.fetchone()[0]
 
     cursor.execute("INSERT INTO hasa VALUES (%s, %s)", [user.id, device_id])
@@ -225,11 +236,11 @@ def get_user_devices(userID):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT device.id, device.type, device.content FROM device, hasa WHERE device.id = hasa.deviceID AND hasa.userID = %s", [userID])
+    cursor.execute("SELECT device.id, device.content FROM device, hasa WHERE device.id = hasa.deviceID AND hasa.userID = %s", [userID])
     devicesRaw = cursor.fetchall()
 
     for device in devicesRaw:
-        devices.append(Device(device[0], device[1], device[2]))
+        devices.append(Device(device[0], device[1]))
 
     conn.commit()
     cursor.close()
