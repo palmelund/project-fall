@@ -1,4 +1,5 @@
-from model.device import deserialize, Device
+from model.device import deserialize
+from model import device
 from respond import build_response
 from json_serializer import JsonSerializer
 import json
@@ -14,7 +15,7 @@ def lambda_handler(event, context):
             return build_response("400", {"status": "error"})
 
         if content["devicetype"] == "alexa":
-            dvc = Device.get_from_object(content)
+            dvc = device.Device.get_from_object(content)
 
             return build_response("200", json.dumps(dvc.working_serializer(), cls=JsonSerializer))
 
