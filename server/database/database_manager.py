@@ -64,6 +64,20 @@ def update_device(device):
     cursor.close()
     conn.close()
 
+def get_device_from_id(deviceid):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT device.id, device.content FROM device JOIN devicemap ON devicemap.deviceid = device.id WHERE devicemap.id = %s", [deviceid])
+    dvc = cursor.fetchone()
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return Device(dvc[0], dvc[1])
+
+# TODO: Doesn't make sense
 def get_device(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()

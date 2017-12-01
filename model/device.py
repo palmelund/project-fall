@@ -26,6 +26,10 @@ class Device:
     def get(deviceID):
         return database_manager.get_device(deviceID)
 
+    @staticmethod
+    def get_from_object(obj):
+        return database_manager.get_device_from_id(obj["userid"])
+
     def put(self, user):
         database_manager.set_device(self, user)
 

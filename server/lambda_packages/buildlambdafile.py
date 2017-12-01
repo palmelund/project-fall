@@ -22,7 +22,15 @@ file_folder_lists = [
     ["alarm_activate.py", "alarm_activate"],
     ["alarm_create.py", "alarm_create"],
     ["alarm_respond.py", "alarm_respond"],
-    ["alarm_destroy.py", "alarm_destroy"]
+    ["alarm_destroy.py", "alarm_destroy"],
+
+    ["notification_endpoint_create.py", "notification_endpoint_create"],
+    ["notification_endpoint_store.py", "notification_endpoint_store"],
+    ["notification_endpoint_update.py", "notification_endpoint_update"],
+
+    ["alexa_help.py", "lib:requests", "alexa_help"],
+
+    ["device_get_user.py", "device_user"]
 ]
 
 for file_folder_list in file_folder_lists:
@@ -42,8 +50,8 @@ for file_folder_list in file_folder_lists:
     copyfile("../" + file_folder_list[0], folder_name + "/" + "lambda_function.py")
 
     # Copy other specified files to the output directory
-    for file_name in file_folder_list[:-1]:
-        copyfile("../" + file_name, folder_name + "/" + file_name)
+    # for file_name in file_folder_list[:-1]:
+    #    copyfile("../" + file_name, folder_name + "/" + file_name)
 
     # connect_str is a private file containing connectivity info for the database
     # This file should only be present locally on the computer packing the files
@@ -69,6 +77,15 @@ for file_folder_list in file_folder_lists:
 
     # Include ARN endpoints
     copyfile("../endpoints.py", folder_name + "/" + "endpoints.py")
+
+    if "lib:requests" in file_folder_list:
+
+        # Copy files related to requests library
+        copytree("../../certifi", folder_name + "/" + "certifi")
+        copytree("../../chardet", folder_name + "/" + "chardet")
+        copytree("../../idna", folder_name + "/" + "idna")
+        copytree("../../requests", folder_name + "/" + "requests")
+        copytree("../../urllib3", folder_name + "/" + "urllib3")
 
     # Finally zip the output folder. The zip file can then be uploaded to the lambda function
     make_archive(folder_name, "zip", folder_name)
