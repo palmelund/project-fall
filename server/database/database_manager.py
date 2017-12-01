@@ -54,6 +54,16 @@ def remove_alarm(citizenid):
     conn.close()
 
 
+def update_device(device):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("UPDATE device SET content = %s WHERE id = %s", [device.content, device.id])
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
 def get_device(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
@@ -72,7 +82,7 @@ def set_device(device, user):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO device VALUES (DEFAULT, %s, %s) RETURNING id", [device.content])
+    cursor.execute("INSERT INTO device VALUES (DEFAULT, %s, %s) RETURNING id", [user.id, device.content])
     device_id = cursor.fetchone()[0]
 
     cursor.execute("INSERT INTO hasa VALUES (%s, %s)", [user.id, device_id])

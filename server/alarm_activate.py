@@ -1,5 +1,5 @@
 from model.alarm import deserialize
-from model import device, user
+from model import user
 from model.user import Citizen
 import boto3
 import json
@@ -15,7 +15,7 @@ def lambda_handler(event, context):
     try:
         ctz: Citizen = user.deserialize(json.loads(event["citizen"]))
     except Exception as ex:
-        build_response_no_ser("400", {"status": "error"})
+        return build_response_no_ser("400", {"status": "error"})
 
     # Create alarm
     # To create an alarm, we need database access, so it has to happen on another VPC enabled lambda.
@@ -35,14 +35,14 @@ def lambda_handler(event, context):
 
         data = response["Payload"].read().decode()
     except Exception as ex:
-        build_response_no_ser("400", {"status": "error"})
+        return build_response_no_ser("400", {"status": "error"})
 
     # Get the alarm
     try:
         load = json.loads(json.loads(data))
         alm = deserialize(load)
     except Exception as ex:
-        build_response_no_ser("400", {"status": "error"})
+        return build_response_no_ser("400", {"status": "error"})
 
     # Send notifications
     for c in alm.activatedby.contacts:

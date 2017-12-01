@@ -29,6 +29,10 @@ class Device:
     def put(self, user):
         database_manager.set_device(self, user)
 
+    def update(self, user):
+        database_manager.update_device(self, user)
+
+
     def working_serializer(self):
         return self.__dict__
 
