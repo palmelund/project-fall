@@ -1,7 +1,7 @@
 from connect_str import connect_str
 from model.user import *
 from model import alarm
-from model.device import Device
+from model import device
 from respond import respond
 from model import user
 import psycopg2
@@ -64,6 +64,20 @@ def update_device(device):
     cursor.close()
     conn.close()
 
+def get_device_from_id(deviceid):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT device.id, device.content FROM device JOIN devicemap ON devicemap.deviceid = device.id WHERE devicemap.id = %s", [deviceid])
+    dvc = cursor.fetchone()
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return device.Device(dvc[0], dvc[1])
+
+# TODO: Doesn't make sense
 def get_device(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
@@ -250,7 +264,7 @@ def get_user_devices(userID):
     devicesRaw = cursor.fetchall()
 
     for device in devicesRaw:
-        devices.append(Device(device[0], device[1]))
+        devices.append(device.Device(device[0], device[1]))
 
     conn.commit()
     cursor.close()
