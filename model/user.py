@@ -1,6 +1,6 @@
 from database import database_manager
 import json
-from model.device import Device
+from model import device
 
 
 def deserialize(load):
@@ -13,7 +13,7 @@ def deserialize(load):
             contacts.append(deserialize(contact))
 
         for device in load['devices']:
-            devices.append(Device(**device))
+            devices.append(device.Device(**device))
 
         return Citizen(load['id'], load['name'], load['email'], contacts, devices, load['address'], load['city'], load['postnr'])
     # Contact
@@ -22,7 +22,7 @@ def deserialize(load):
         contacts = []
 
         for device in load['devices']:
-            devices.append(Device(**device))
+            devices.append(device.Device(**device))
 
         return Contact(load['id'], load['name'], load['email'], load['phone'], devices)
     # Citizen Admin

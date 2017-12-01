@@ -1,7 +1,8 @@
 from __future__ import print_function
-from model.device import Device
+from model import device
 import requests
 import json
+from json_serializer import JsonSerializer
 
 
 # --------------- Helpers that build all of the responses ----------------------
@@ -47,16 +48,16 @@ def confirm_help(userid):
     should_end_session = True
     json_string = json.dumps({"devicetype": "alexa", "messagetype": "input", "userid": userid})
 
-    temp_device = Device(-1, json_string)
+    temp_device = device.Device(-1, json_string)
 
     alarm_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/alarm"
     citizen_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/device/user"
 
-    headers_citizen = {"device": temp_device.serialize()}
-    citizen = requests.get(citizen_uri, headers=headers_citizen)
-
-    headers_alarm = {"citizen": citizen.serialize}
-    requests.post(alarm_uri, headers=headers_alarm)
+    #headers_citizen = {"device": json.dumps(temp_device.working_serializer(), cls=JsonSerializer)}
+    ctz_json = requests.get(citizen_uri).text#, headers=headers_citizen).text
+    print("Citizen? " + ctz_json)
+    headers_alarm = {"citizen": ctz_json}
+    print("FEJL: " + requests.post(alarm_uri).text)#, headers=headers_alarm).text)
 
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
