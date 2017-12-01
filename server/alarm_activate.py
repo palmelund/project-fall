@@ -68,8 +68,9 @@ def notify(citizen, contact):
     for d in contact.devices:
         if d.content:
             content = json.loads(d.content)
-            if content["messagetype"] == "sms":
-                send_sms(content["number"], message_builder(citizen))
-            elif content["messagetype"] == "notification":
+            if content["messagetype"] == "notification":
                 push_message(content["arn"], message_builder(citizen))
                 # If it is neither, do nothing
+            # elif content["messagetype"] == "sms":
+                # Disabled sms since we pay per sms when sending outside US.
+                # send_sms(content["number"], message_builder(citizen))
