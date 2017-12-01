@@ -54,8 +54,8 @@ def lambda_handler(event, context):
         if content["messagetype"] == "ifttt":
             urllib.request.urlopen(
                 "https://maker.ifttt.com/trigger/fall_detected/with/key/" + json.loads(d.content)["key"]).read()
+            break
 
-    # Return
     return build_response_no_ser("200", alm.serialize())
 
 

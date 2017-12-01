@@ -45,8 +45,6 @@ def push_message(endpoint_arn, message):
         aws_secret_access_key=aws_secret_access_key
     )
 
-    return
-
     return sns_client.publish(
         PlatformApplicationArn=arn_sns_android_endpoint,
         MessageStructure='string',
