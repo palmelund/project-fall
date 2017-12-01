@@ -1,5 +1,7 @@
-
 from __future__ import print_function
+from model.device import Device
+import requests
+import json
 
 
 # --------------- Helpers that build all of the responses ----------------------
@@ -43,6 +45,19 @@ def confirm_help(userid):
     # that is not understood, they will be prompted again with this text.
     reprompt_text = "Please verify if you need help."
     should_end_session = True
+    json_string = json.dumps({"devicetype": "alexa", "messagetype": "input", "userid": userid})
+
+    temp_device = Device(-1, json_string)
+
+    alarm_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/alarm"
+    citizen_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/device/user"
+
+    headers_citizen = {"device": temp_device.serialize()}
+    citizen = requests.get(citizen_uri, headers=headers_citizen)
+
+    headers_alarm = {"citizen": citizen.serialize}
+    requests.post(alarm_uri, headers=headers_alarm)
+
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
