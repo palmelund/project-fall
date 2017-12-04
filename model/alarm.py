@@ -20,6 +20,14 @@ class Alarm:
 
         database_manager.set_alarm(self)
 
+    def serialize(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
+
+    def working_serializer(self):
+        return self.__dict__
 
 def deserialize(mapping):
-    return Alarm(mapping["status"], user.deserialize(mapping["activatedby"]), user.deserialize(mapping["responder"]))
+    if mapping["responder"]:
+        return Alarm(mapping["status"], user.deserialize(mapping["activatedby"]), user.deserialize(mapping["responder"]))
+    else:
+        return Alarm(mapping["status"], user.deserialize(mapping["activatedby"]), None)

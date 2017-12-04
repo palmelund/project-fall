@@ -6,7 +6,7 @@ try:
     cursor = conn.cursor()
 
     cursor.execute("CREATE TYPE userrole AS ENUM ('contact', 'citizenAdmin', 'citizen', 'userAdmin')")
-    cursor.execute("CREATE TYPE devicetype AS ENUM ('app', 'smartAssistance')")
+    cursor.execute("CREATE TYPE devicetype AS ENUM ('app', 'smartassistance', 'ifttt')")
 
     # Database setup
     cursor.execute(
@@ -20,16 +20,16 @@ try:
         "CREATE TABLE citizen (userID int REFERENCES users(id) PRIMARY KEY, address varchar(255), city varchar(255), postnr varchar(55), managedBy int REFERENCES users(id));")
 
     # Device
-    cursor.execute("CREATE TABLE device (id SERIAL PRIMARY KEY, type devicetype);")
-
     cursor.execute(
-        "CREATE TABLE device (id SERIAL PRIMARY KEY, type devicetype, content text);")
+        "CREATE TABLE devicemap (id text PRIMARY KEY, deviceid int REFERENCES device(id));")
+    cursor.execute(
+        "CREATE TABLE device (id SERIAL PRIMARY KEY, content text);")
     cursor.execute(
         "CREATE TABLE hasa (userID int REFERENCES users(id), deviceID int REFERENCES device(id), PRIMARY KEY(userID, deviceID));")
     cursor.execute(
         "CREATE TABLE associateswith (citizenID int REFERENCES citizen(userID), contactID int REFERENCES contact(userID), PRIMARY KEY(citizenID, contactID));")
     cursor.execute(
-        "CREATE TABLE alarm (status int, activatedby int PRIMARY KEY REFERENCES citizen(userID)), responder int REFERENCES contact(userID)")
+        "CREATE TABLE alarm (status int, start int, activatedby int PRIMARY KEY REFERENCES citizen(userID)), responder int REFERENCES contact(userID)")
     cursor.execute(
         "CREATE TABLE citizenadmin (userid INT PRIMARY KEY REFERENCES users(id));"
     )

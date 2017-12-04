@@ -122,3 +122,14 @@ server/bototest.py
 server/sns/sns_test.py
 
 server/\.DS_Store
+
+# Python requests lib
+# To install run: pip install requests -t <path-to-project>
+certifi*
+chardet*
+idna*
+requests*
+urllib3*
+
+# Endpoints
+server/endpoints.py

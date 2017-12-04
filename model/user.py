@@ -1,5 +1,6 @@
 from database import database_manager
 import json
+from model import device
 
 
 def deserialize(load):
@@ -12,15 +13,16 @@ def deserialize(load):
             contacts.append(deserialize(contact))
 
         for device in load['devices']:
-            contacts.append(**device)
+            devices.append(device.Device(**device))
 
         return Citizen(load['id'], load['name'], load['email'], contacts, devices, load['address'], load['city'], load['postnr'])
     # Contact
     elif len(load) == 5:
         devices = []
+        contacts = []
 
         for device in load['devices']:
-            contacts.append(**device)
+            devices.append(device.Device(**device))
 
         return Contact(load['id'], load['name'], load['email'], load['phone'], devices)
     # Citizen Admin
@@ -46,6 +48,9 @@ class User:
 
     def serialize(self):
         return json.dumps(self, default=lambda o: o.__dict__)
+
+    def working_serializer(self):
+        return self.__dict__
 
     @staticmethod
     def attempt_login(mail, password):

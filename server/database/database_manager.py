@@ -1,5 +1,7 @@
 from connect_str import connect_str
 from model.user import *
+from model import alarm
+from model import device
 from respond import respond
 from model import user
 import psycopg2
@@ -7,12 +9,18 @@ import hashlib
 import uuid
 
 
-def set_alarm(alarm):
+def set_alarm(alm):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("DELETE FROM alarm WHERE activatedby = %s", [alarm.activatedby.id])
-    cursor.execute("INSERT INTO alarm VALUES (%s, %s, %s)", [alarm.status, alarm.activatedby.id, alarm.responder.id])
+    cursor.execute("DELETE FROM alarm WHERE activatedby = %s", [alm.activatedby.id])
+
+    if not alm.responder:
+        resp = None
+    else:
+        resp = alm.responder.id
+
+    cursor.execute("INSERT INTO alarm VALUES (%s, %s, %s)", [alm.status, alm.activatedby.id, resp])
 
     conn.commit()
     cursor.close()
@@ -25,21 +33,56 @@ def get_alarm(citizenID):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT alarm.status, alarm.responder FROM alarm WHERE activatedby = %s", citizenID)
-    alarm = cursor.fetchone()
+    cursor.execute("SELECT alarm.status, alarm.responder FROM alarm WHERE activatedby = %s", [citizenID])
+    alm = cursor.fetchone()
 
     conn.commit()
     cursor.close()
     conn.close()
 
-    return Alarm(alarm[0], get_citizen(citizenID), get_contact(alarm[1]))
+    return alarm.Alarm(alm[0], get_citizen(citizenID), get_contact(alm[1]))
 
 
+def remove_alarm(citizenid):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM alarm WHERE activatedby = %s", [citizenid])
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def update_device(device):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("UPDATE device SET content = %s WHERE id = %s", [device.content, device.id])
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+def get_device_from_id(deviceid):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT device.id, device.content FROM device JOIN devicemap ON devicemap.deviceid = device.id WHERE devicemap.id = %s", [deviceid])
+    dvc = cursor.fetchone()
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return device.Device(dvc[0], dvc[1])
+
+# TODO: Doesn't make sense
 def get_device(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT users.id, users.name, users.email FROM users WHERE users.id = %s", id)
+    cursor.execute("SELECT users.id, users.name, users.email FROM users WHERE users.id = %s", [id])
     caRaw = cursor.fetchone()
 
     conn.commit()
@@ -49,11 +92,25 @@ def get_device(id):
     return user.UserAdmin(caRaw[0], caRaw[1], caRaw[2], caRaw[3])
 
 
+def set_device(device, user):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("INSERT INTO device VALUES (DEFAULT, %s, %s) RETURNING id", [user.id, device.content])
+    device_id = cursor.fetchone()[0]
+
+    cursor.execute("INSERT INTO hasa VALUES (%s, %s)", [user.id, device_id])
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
 def get_user(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT role FROM users WHERE users.id = %s", id)
+    cursor.execute("SELECT role FROM users WHERE users.id = %s", [id])
     userType = cursor.fetchone()[0]
 
     conn.commit()
@@ -74,7 +131,7 @@ def get_user_admin(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT users.id, users.name, users.email FROM users WHERE users.id = %s", id)
+    cursor.execute("SELECT users.id, users.name, users.email FROM users WHERE users.id = %s", [id])
     caRaw = cursor.fetchone()
 
     conn.commit()
@@ -88,7 +145,7 @@ def get_citizen_admin(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT users.id, users.name, users.email FROM users WHERE users.id = %s", id)
+    cursor.execute("SELECT users.id, users.name, users.email FROM users WHERE users.id = %s", [id])
     caRaw = cursor.fetchone()
 
     citizens = get_citizen_admins_citizens(id)
@@ -106,7 +163,7 @@ def get_citizen_admins_citizens(admin_id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT id, name, email, address, city, postnr FROM users, citizen, manages WHERE users.id = citizen.userID AND manages.citizenid = users.id AND manages.adminid = %s", admin_id)
+    cursor.execute("SELECT id, name, email, address, city, postnr FROM users, citizen, manages WHERE users.id = citizen.userID AND manages.citizenid = users.id AND manages.adminid = %s", [admin_id])
     citizensRaw = cursor.fetchall()
 
     for citizen in citizensRaw:
@@ -125,7 +182,7 @@ def get_contact(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT users.id, users.name, users.email, contact.phone FROM users, contact WHERE users.id = contact.userID AND users.id = %s", id)
+    cursor.execute("SELECT users.id, users.name, users.email, contact.phone FROM users, contact WHERE users.id = contact.userID AND users.id = %s", [id])
     contactRaw = cursor.fetchone()
 
     devices = get_user_devices(contactRaw[0])
@@ -141,7 +198,7 @@ def get_citizen(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT id, name, email, address, city, postnr FROM users, citizen WHERE users.id = citizen.userID AND users.id = %s", id)
+    cursor.execute("SELECT id, name, email, address, city, postnr FROM users, citizen WHERE users.id = citizen.userID AND users.id = %s", [id])
     citizenRaw = cursor.fetchone()
 
     contacts = get_citizen_contacts(citizenRaw[0])
@@ -203,11 +260,11 @@ def get_user_devices(userID):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT device.id, device.type FROM device, hasa WHERE device.id = hasa.deviceID AND hasa.userID = %s", [userID])
+    cursor.execute("SELECT device.id, device.content FROM device, hasa WHERE device.id = hasa.deviceID AND hasa.userID = %s", [userID])
     devicesRaw = cursor.fetchall()
 
     for device in devicesRaw:
-        devices.append(Device(device[0], device[1]))
+        devices.append(device.Device(device[0], device[1]))
 
     conn.commit()
     cursor.close()
