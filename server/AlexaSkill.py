@@ -49,11 +49,11 @@ def confirm_help(userid):
     json_string = json.dumps({"devicetype": "alexa", "messagetype": "input", "userid": userid})
 
     temp_device = device.Device(-1, json_string)
-
+    print(json.dumps(temp_device.working_serializer(), cls=JsonSerializer))
     alarm_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/alarm"
     citizen_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/device/user"
 
-    #headers_citizen = {"device": json.dumps(temp_device.working_serializer(), cls=JsonSerializer)}
+    headers_citizen = {"device": json.dumps(temp_device.working_serializer(), cls=JsonSerializer)}
     ctz_json = requests.get(citizen_uri).text#, headers=headers_citizen).text
     print("Citizen? " + ctz_json)
     headers_alarm = {"citizen": ctz_json}
