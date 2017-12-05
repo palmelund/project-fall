@@ -30,7 +30,9 @@ file_folder_lists = [
 
     ["alexa_help.py", "lib:requests", "alexa_help"],
 
-    ["device_get_user.py", "device_user"]
+    ["device_get_user.py", "device_user"],
+
+    ["CreateUsers.py", "populate_server"]
 ]
 
 for file_folder_list in file_folder_lists:

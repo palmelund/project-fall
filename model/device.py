@@ -36,6 +36,9 @@ class Device:
     def update(self, user):
         database_manager.update_device(self, user)
 
+    def get_owner(self):
+        return database_manager.get_device_owner(self.id)
+
 
     def working_serializer(self):
         return self.__dict__
