@@ -153,7 +153,6 @@ function renderCitizenInfo (phone) {
 
 
 function login () {
-    // let form = $('form').serializeArray();
     let form = $('form').serialize();
     console.log(form);
     $.ajax({
