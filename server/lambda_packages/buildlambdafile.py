@@ -32,7 +32,7 @@ file_folder_lists = [
 
     ["device_get_user.py", "device_user"],
 
-    ["CreateUsers.py", "populate_server"]
+    ["populate_server.py", "populate_server"]
 ]
 
 for file_folder_list in file_folder_lists:
