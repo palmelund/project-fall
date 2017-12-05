@@ -26,11 +26,18 @@ class Device:
     def get(deviceID):
         return database_manager.get_device(deviceID)
 
+    @staticmethod
+    def get_from_object(obj):
+        return database_manager.get_device_from_id(obj["userid"])
+
     def put(self, user):
         database_manager.set_device(self, user)
 
     def update(self, user):
         database_manager.update_device(self, user)
+
+    def get_owner(self):
+        return database_manager.get_device_owner(self.id)
 
 
     def working_serializer(self):

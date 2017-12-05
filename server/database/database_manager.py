@@ -68,7 +68,7 @@ def get_device_from_id(deviceid):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT device.id, device.content FROM device JOIN devicemap ON devicemap.deviceid = device.id WHERE devicemap.id = %s", [deviceid])
+    cursor.execute("SELECT device.id, device.content FROM device JOIN devicemap ON devicemap.deviceid = device.id WHERE devicemap.token = %s", [deviceid])
     dvc = cursor.fetchone()
 
     conn.commit()
@@ -92,11 +92,25 @@ def get_device(id):
     return user.UserAdmin(caRaw[0], caRaw[1], caRaw[2], caRaw[3])
 
 
+def get_device_owner(deviceid):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT userid FROM hasa WHERE deviceid = %s", [deviceid])
+    uid = cursor.fetchone()[0]
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return get_user(uid)
+
+
 def set_device(device, user):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO device VALUES (DEFAULT, %s, %s) RETURNING id", [user.id, device.content])
+    cursor.execute("INSERT INTO device VALUES (DEFAULT, %s) RETURNING id", [device.content])
     device_id = cursor.fetchone()[0]
 
     cursor.execute("INSERT INTO hasa VALUES (%s, %s)", [user.id, device_id])
@@ -120,10 +134,10 @@ def get_user(id):
     if userType == "citizen":
         return get_citizen(id)
     elif userType == "contact":
-        return get_citizen(id)
-    elif userType == "CitizenAdmin":
+        return get_contact(id)
+    elif userType == "citizenAdmin":
         return get_citizen_admin(id)
-    elif userType == "UserAdmin":
+    elif userType == "userAdmin":
         return get_user_admin(id)
 
 
@@ -154,7 +168,7 @@ def get_citizen_admin(id):
     cursor.close()
     conn.close()
 
-    return user.CitizenAdmin(caRaw[0], caRaw[1], caRaw[2], caRaw[3], citizens)
+    return user.CitizenAdmin(caRaw[0], caRaw[1], caRaw[2], citizens)
 
 
 def get_citizen_admins_citizens(admin_id):
@@ -191,7 +205,7 @@ def get_contact(id):
     cursor.close()
     conn.close()
 
-    return user.Contact(contactRaw[0], contactRaw[1], contactRaw[2], contactRaw[4], devices)
+    return user.Contact(contactRaw[0], contactRaw[1], contactRaw[2], contactRaw[3], devices)
 
 
 def get_citizen(id):
@@ -199,16 +213,16 @@ def get_citizen(id):
     cursor = conn.cursor()
 
     cursor.execute("SELECT id, name, email, address, city, postnr FROM users, citizen WHERE users.id = citizen.userID AND users.id = %s", [id])
-    citizenRaw = cursor.fetchone()
+    citizen_raw = cursor.fetchone()
 
-    contacts = get_citizen_contacts(citizenRaw[0])
-    devices = get_user_devices(citizenRaw[0])
+    contacts = get_citizen_contacts(citizen_raw[0])
+    devices = get_user_devices(citizen_raw[0])
 
     conn.commit()
     cursor.close()
     conn.close()
 
-    return user.Citizen(citizenRaw[0], citizenRaw[1], citizenRaw[2], contacts, devices, citizenRaw[3], citizenRaw[4], citizenRaw[5])
+    return user.Citizen(citizen_raw[0], citizen_raw[1], citizen_raw[2], contacts, devices, citizen_raw[3], citizen_raw[4], citizen_raw[5])
 
 
 def get_all_citizens():
@@ -263,8 +277,8 @@ def get_user_devices(userID):
     cursor.execute("SELECT device.id, device.content FROM device, hasa WHERE device.id = hasa.deviceID AND hasa.userID = %s", [userID])
     devicesRaw = cursor.fetchall()
 
-    for device in devicesRaw:
-        devices.append(device.Device(device[0], device[1]))
+    for d in devicesRaw:
+        devices.append(device.Device(d[0], d[1]))
 
     conn.commit()
     cursor.close()
@@ -273,8 +287,7 @@ def get_user_devices(userID):
     return devices
 
 
-def add_user(username, email, password, name, role):
-    # TODO: Avoid duplicate database entries
+def add_user(email, password, name, role):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
@@ -282,26 +295,24 @@ def add_user(username, email, password, name, role):
     hashed_password = hash_password(password, salt)
 
     try:
-        cursor.execute("SELECT * FROM users WHERE username = %s OR email = %s", (username, email))
+        cursor.execute("SELECT * FROM users WHERE email = %s", [email])
         exist = cursor.fetchone()
 
         if exist:
             return None
 
-        cursor.execute("INSERT INTO users VALUES (DEFAULT, %s, %s, %s, %s, %s, %s);", (username, hashed_password, salt, name, email, role))
-        cursor.execute("SELECT * FROM users WHERE username = %s", [username])
-        user = cursor.fetchone()
-    except Exception:
-        return None
+        cursor.execute("INSERT INTO users VALUES (DEFAULT, %s, %s, %s, %s, %s) RETURNING id, name, email;", (hashed_password, salt, name, email, role))
+        # cursor.execute("SELECT * FROM users WHERE username = %s", [username])
+        usr = cursor.fetchone()
+
+    except Exception as ex:
+        return ex
 
     conn.commit()
     cursor.close()
     conn.close()
 
-    if not user:
-        return None
-    else:
-        return get_user(user[0])
+    return user.User(usr[0], usr[1], usr[2])
 
 
 def add_citizen(userid, address, city, postnr, managedby):
@@ -315,6 +326,19 @@ def add_citizen(userid, address, city, postnr, managedby):
     conn.close()
 
     return get_citizen(userid)
+
+
+def add_contact(userid, phone):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("INSERT INTO contact VALUES (%s, %s)", (userid, phone))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return get_contact(userid)
 
 
 def add_citizen_admin(userid):
@@ -344,21 +368,32 @@ def add_admin(userid):
     return get_user_admin(userid)
 
 
+def associate(citizen_id, contact_id):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("INSERT INTO associateswith VALUES (%s, %s);", (citizen_id, contact_id))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
 def login(email, password):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM users WHERE email = %s", [email])
-    user = cursor.fetchone()
+    usr = cursor.fetchone()
     conn.commit()
     cursor.close()
     conn.close()
 
-    if not user:
+    if not usr:
         return None
 
-    if check_password(password, user[2], user[3]):
-        return user
+    if check_password(password, usr[1], usr[2]):
+        return usr
     else:
         return None
 

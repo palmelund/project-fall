@@ -21,6 +21,8 @@ try:
 
     # Device
     cursor.execute(
+        "CREATE TABLE devicemap (token text PRIMARY KEY, deviceid int REFERENCES device(id));")
+    cursor.execute(
         "CREATE TABLE device (id SERIAL PRIMARY KEY, content text);")
     cursor.execute(
         "CREATE TABLE hasa (userID int REFERENCES users(id), deviceID int REFERENCES device(id), PRIMARY KEY(userID, deviceID));")

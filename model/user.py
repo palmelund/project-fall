@@ -15,7 +15,8 @@ def deserialize(load):
         for device in load['devices']:
             devices.append(device.Device(**device))
 
-        return Citizen(load['id'], load['name'], load['email'], contacts, devices, load['address'], load['city'], load['postnr'])
+        return Citizen(load['id'], load['name'], load['email'], contacts, devices, load['address'], load['city'],
+                       load['postnr'])
     # Contact
     elif len(load) == 5:
         devices = []
@@ -53,12 +54,28 @@ class User:
         return self.__dict__
 
     @staticmethod
-    def attempt_login(mail, password):
-        return 1
+    def attempt_login(email, password):
+        return database_manager.login(email, password)
 
     @staticmethod
     def get(userID):
         return database_manager.get_user(userID)
+
+    @staticmethod
+    def create_new_user(name, email, password, role, address=None, city=None, zipcode=None, managed_by=None, phone=None):
+        usr = database_manager.add_user(email, password, name, role)
+
+        if not usr:
+            raise Exception
+
+        if role == "citizen":
+            return database_manager.add_citizen(usr.id, address, city, zipcode, managed_by)
+        elif role == "contact":
+            return database_manager.add_contact(usr.id, phone)
+        elif role == "citizenAdmin":
+            return database_manager.add_citizen_admin(usr.id)
+        else:
+            raise Exception
 
 
 class CitizenAdmin(User):
@@ -78,10 +95,10 @@ class Citizen(User):
         self.devices = devices
         self.address = address
         self.city = city
-        self. postnr = postnr
+        self.postnr = postnr
 
-    # @staticmethod
-    # def Create(self, id, name, email, contacts, devices, address, city, postnr):
+        # @staticmethod
+        # def Create(self, id, name, email, contacts, devices, address, city, postnr):
 
 
 class Contact(User):
