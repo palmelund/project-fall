@@ -88,9 +88,6 @@ class UserAdmin(User):
 
 def deserialize(jsonstring):
     usr: User = schemas.UserSchema().load(jsonstring).data
-    print("(!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!)")
-    print(type(usr))
-    print(jsonstring)
     if usr.role == "citizen":
         return schemas.CitizenSchema().load(jsonstring).data
     elif usr.role == "contact":
