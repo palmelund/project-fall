@@ -130,6 +130,8 @@ chardet*
 idna*
 requests*
 urllib3*
+marshmallow*
+psycopg2
 
 # Endpoints
 server/endpoints.py

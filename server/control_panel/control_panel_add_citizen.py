@@ -1,9 +1,11 @@
 import psycopg2
-import model
 from connect_str import connect_str
-from usermanager import add_user
 from respond import respond, build_response
+
+import model
+import psycopg2
 from model import user
+
 
 def lambda_handler(event, context):
     try:

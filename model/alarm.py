@@ -1,18 +1,16 @@
-from database import database_manager
-from model.user import *
-from model import user
+from model.schemas import AlarmSchema
+from server.database import database_manager
 
 
 class Alarm:
-
     def __init__(self, status, activatedby, responder):
         self.status = status
         self.activatedby = activatedby
         self.responder = responder
 
     @staticmethod
-    def get(citizenID):
-        return database_manager.get_alarm(citizenID)
+    def get(citizen_id):
+        return database_manager.get_alarm(citizen_id)
 
     def set(self):
         if not self.responder:
@@ -21,13 +19,8 @@ class Alarm:
         database_manager.set_alarm(self)
 
     def serialize(self):
-        return json.dumps(self, default=lambda o: o.__dict__)
+        return AlarmSchema().dump(self).data
 
-    def working_serializer(self):
-        return self.__dict__
 
-def deserialize(mapping):
-    if mapping["responder"]:
-        return Alarm(mapping["status"], user.deserialize(mapping["activatedby"]), user.deserialize(mapping["responder"]))
-    else:
-        return Alarm(mapping["status"], user.deserialize(mapping["activatedby"]), None)
+def deserialize(jsonstring):
+    return AlarmSchema().load(jsonstring).data
