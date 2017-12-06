@@ -80,7 +80,7 @@ def get_device_from_id(deviceid):
     cursor.close()
     conn.close()
 
-    return device.Device(dvc[0], dvc[1], dvc[2], json.load(dvc[3]))
+    return device.Device(dvc[0], dvc[1], dvc[2], dvc[3])
 
 
 def get_device(id):
@@ -95,7 +95,7 @@ def get_device(id):
     cursor.close()
     conn.close()
 
-    return device.Device(dvc[0], dvc[1], dvc[2], json.load(dvc[3]))
+    return device.Device(dvc[0], dvc[1], dvc[2], dvc[3])
 
 
 def get_device_owner(deviceid):
@@ -375,6 +375,19 @@ def add_citizen_admin(userid):
     conn.close()
 
     return get_citizen_admin(userid)
+
+
+def add_user_admin(userid):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("INSERT INTO useradmin VALUES (%s)", [userid])
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return get_user_admin(userid)
 
 
 # def add_admin(user_id):

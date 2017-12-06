@@ -37,6 +37,7 @@ file_folder_lists = [
     ["contact_get.py", "contact_get"],
     ["alarm_get.py", "alarm_get"],
 
+    ["user_post.py", "user_post"],
 
     ["populate_server.py", "populate_server"]
 ]

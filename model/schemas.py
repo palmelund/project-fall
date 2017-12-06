@@ -30,7 +30,7 @@ class ContactSchema(Schema):
     id = fields.Int()
     name = fields.Str()
     email = fields.Str()
-    devices = fields.Nested(DeviceSchema, many=True)
+    devices = fields.Nested(DeviceSchema, many=True, missing=[])
 
     @post_load
     def make_contact(self, data):
@@ -41,8 +41,8 @@ class CitizenSchema(Schema):
     id = fields.Int()
     name = fields.Str()
     email = fields.Str()
-    contacts = fields.Nested(ContactSchema, many=True)
-    devices = fields.Nested(DeviceSchema, many=True)
+    contacts = fields.Nested(ContactSchema, many=True, missing=[])
+    devices = fields.Nested(DeviceSchema, many=True, missing=[])
     address = fields.Str()
     city = fields.Str()
     postnr = fields.Str()
@@ -56,7 +56,7 @@ class CitizenAdminSchema(Schema):
     id = fields.Int()
     name = fields.Str()
     email = fields.Str()
-    citizens = fields.Nested(CitizenSchema, many=True)
+    citizens = fields.Nested(CitizenSchema, many=True, missing=[])
 
     @post_load
     def make_citizen_admin(self, data):
