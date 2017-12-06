@@ -1,6 +1,7 @@
 from server.database import database_manager
 from model import schemas
 
+
 class User:
     'Generalization of different user types'
 
@@ -41,18 +42,19 @@ class User:
 class CitizenAdmin(User):
     'A specialized user, representing a contact'
 
-    def __init__(self, id, name, email, role, citizens):
-        super().__init__(id, name, email, role)
+    def __init__(self, id, name, email, citizens):
+        super().__init__(id, name, email, "citizenadmin")
         self.citizens = citizens
 
     def serialize(self):
         return schemas.CitizenAdminSchema().dump(self).data
 
+
 class Citizen(User):
     'A specialized user, representing a contact'
 
-    def __init__(self, id, name, email, role, contacts, devices, address, city, postnr):
-        super().__init__(id, name, email, role)
+    def __init__(self, id, name, email, contacts, devices, address, city, postnr):
+        super().__init__(id, name, email, "citizen")
         self.contacts = contacts
         self.devices = devices
         self.address = address
@@ -66,8 +68,8 @@ class Citizen(User):
 class Contact(User):
     'A specialized user, representing a contact'
 
-    def __init__(self, id, name, email, role, devices):
-        super().__init__(id, name, email, role)
+    def __init__(self, id, name, email, devices):
+        super().__init__(id, name, email, "contact")
         self.devices = devices
 
     def serialize(self):
@@ -77,8 +79,8 @@ class Contact(User):
 class UserAdmin(User):
     'A specialized user, representing a contact'
 
-    def __init__(self, id, name, email, role):
-        super().__init__(id, name, email, role)
+    def __init__(self, id, name, email):
+        super().__init__(id, name, email, "useradmin")
 
     def serialize(self):
         return schemas.UserAdminSchema().dump(self).data
