@@ -51,7 +51,7 @@ class UserTestCase(unittest.TestCase):
 
         user_post_header = {"user": _user.serialize(), "password": "1234"}
         user_get_header = {"email": "testington@tester.dk", "password": "1234"}
-
+        print("-------------------------------Citizen: " + str(_user.serialize()))
         _user = user.deserialize(get_response(requests.post(user_post_uri, headers=user_post_header)))
 
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"

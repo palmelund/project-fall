@@ -43,7 +43,7 @@ class CitizenAdmin(User):
     'A specialized user, representing a contact'
 
     def __init__(self, id, name, email, citizens):
-        super().__init__(id, name, email, "citizenadmin")
+        super().__init__(id, name, email, "citizenAdmin")
         self.citizens = citizens
 
     def serialize(self):
@@ -80,15 +80,16 @@ class UserAdmin(User):
     'A specialized user, representing a contact'
 
     def __init__(self, id, name, email):
-        super().__init__(id, name, email, "useradmin")
+        super().__init__(id, name, email, "userAdmin")
 
     def serialize(self):
         return str(schemas.UserAdminSchema().dump(self).data)
 
 
 def deserialize(jsonstring):
+    print("!!!!!!!-----------------------!!!!!!!" + "Kommer jeg her til?" + "!!!!!!-------------------------!!!!!")
     usr: User = schemas.UserSchema().load(jsonstring).data
-    
+    print("!!!!!!!-----------------------!!!!!!!" + str(usr) + "!!!!!!-------------------------!!!!!")
     if usr.role == "citizen":
         return schemas.CitizenSchema().load(jsonstring).data
     elif usr.role == "contact":
