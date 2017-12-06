@@ -6,7 +6,8 @@ def lambda_handler(event, context):
     try:
         usr = user.deserialize(event["user"])
         password = event["password"]
-    except:
+    except Exception as ex:
+        raise ex
         return respond("400", user.User(-1, "", "", "").serialize())
 
     if not all(x is not None for x in [usr, password]):
