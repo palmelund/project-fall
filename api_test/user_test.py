@@ -35,7 +35,10 @@ class UserTestCase(unittest.TestCase):
         self._user = user.deserialize(requests.post(user_post_uri, headers=user_post_header))
 
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/" + str(self._user.id)
-        _user_response = user.deserialize(requests.get(user_get_uri))
+        _user_response = user.deserialize(requests.get(user_get_uri).text)
+        user_delete_header = {"user": _user_response.serialize()}
+
+        requests.delete(user_delete_uri, headers=user_delete_header)
 
         self.assertEqual(self._user, _user_response)
 
@@ -47,9 +50,9 @@ class UserTestCase(unittest.TestCase):
         user_post_header = {"user": self._user.serialize()}
 
         self._user = user.deserialize(requests.post(user_post_uri, headers=user_post_header))
-
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/" + str(self._user.id)
-        _user_response = user.deserialize(requests.get(user_get_uri))
+
+        _user_response = user.deserialize(requests.get(user_get_uri).text)
 
         user_delete_header = {"user": _user_response.serialize()}
         requests.delete(user_delete_uri, headers=user_delete_header)
@@ -65,7 +68,7 @@ class UserTestCase(unittest.TestCase):
         self._user = user.deserialize(requests.post(user_post_uri, headers=user_post_header))
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/" + str(self._user.id)
 
-        _user_response = user.deserialize(requests.get(user_get_uri))
+        _user_response = user.deserialize(requests.get(user_get_uri).text)
 
         user_delete_header = {"user": _user_response.serialize()}
         requests.delete(user_delete_uri, headers=user_delete_header)
@@ -75,13 +78,14 @@ class UserTestCase(unittest.TestCase):
     def test_get_and_post_user_user_admin(self):
         self._user = user.UserAdmin(-1, "Test Testington", "testington@tester.dk")
         user_post_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
-
+        print("/////////////////////////////////")
+        print("user serialized: " + str(type(self._user.serialize())))
         user_post_header = {"user": self._user.serialize()}
 
         self._user = user.deserialize(requests.post(user_post_uri, headers=user_post_header))
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/" + str(self._user.id)
 
-        _user_response = user.deserialize(requests.get(user_get_uri))
+        _user_response = user.deserialize(requests.get(user_get_uri).text)
 
         user_delete_header = {"user": _user_response.serialize()}
         requests.delete(user_delete_uri, headers=user_delete_header)
