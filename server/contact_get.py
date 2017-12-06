@@ -4,15 +4,14 @@ from model import user
 
 def lambda_handler(event, context):
     try:
-        email = event['email']
-        password = event['password']
+        id = event["id"]
     except:
         return respond("400", user.User(-1, "", "", ""))
 
-    if not all(x is not None for x in [email, password]):
+    if not id:
         return respond("400", user.User(-1, "", "", ""))
 
-    usr = user.User.attempt_login(email, password)
+    usr = user.Contact.get(id)
 
     if not usr or usr.id == -1:
         return respond("400", user.User(-1, "", "", ""))
