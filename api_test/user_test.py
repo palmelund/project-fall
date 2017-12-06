@@ -16,6 +16,7 @@ def get_response(response):
     print(json.loads(response.content.decode()))
     return json.loads(response.content.decode())["body"]
 
+
 class CitizenTestCase(unittest.TestCase):
     def setUp(self):
         # Add test users to DB https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/controlpanel/citizen header: citizen citizenAdmin
@@ -27,14 +28,18 @@ class CitizenTestCase(unittest.TestCase):
 
         citizen_header = {"user": self._citizen.serialize()}
         self.citizen_id = user.deserialize(get_response(requests.post("https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/", headers=citizen_header))).id
-
+        self._citizen = user.deserialize(get_response(requests.get("https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/" + self.citizen_id)))
 
     def tearDown(self):
-        self._citizen = None
+        user_delete_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
+        user_delete_header = {"user": self._citizen.serialize()}
+        requests.delete(user_delete_uri, headers=user_delete_header)
 
     def test_get_citizen(self):
-        self.assertEqual(1, 1)
-        # Remove test users from DB https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/controlpanel/citizen header: id
+        user_get_header = {"email": "testington@tester.dk", "password": "1234"}
+        user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
+        _citizen_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))
+        self.assertEqual(self._citizen, _citizen_response)
 
 
 class UserTestCase(unittest.TestCase):
