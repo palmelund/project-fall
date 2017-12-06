@@ -36,7 +36,7 @@ class User:
             raise Exception("Invalid role")
 
     def serialize(self):
-        return schemas.UserSchema().dump(self).data
+        return str(schemas.UserSchema().dump(self).data)
 
 
 class CitizenAdmin(User):
@@ -47,7 +47,7 @@ class CitizenAdmin(User):
         self.citizens = citizens
 
     def serialize(self):
-        return schemas.CitizenAdminSchema().dump(self).data
+        return str(schemas.CitizenAdminSchema().dump(self).data)
 
 
 class Citizen(User):
@@ -62,7 +62,7 @@ class Citizen(User):
         self.postnr = postnr
 
     def serialize(self):
-        return schemas.CitizenSchema().dump(self).data
+        return str(schemas.CitizenSchema().dump(self).data)
 
 
 class Contact(User):
@@ -73,7 +73,7 @@ class Contact(User):
         self.devices = devices
 
     def serialize(self):
-        return schemas.ContactSchema().dump(self).data
+        return str(schemas.ContactSchema().dump(self).data)
 
 
 class UserAdmin(User):
@@ -83,12 +83,14 @@ class UserAdmin(User):
         super().__init__(id, name, email, "useradmin")
 
     def serialize(self):
-        return schemas.UserAdminSchema().dump(self).data
+        return str(schemas.UserAdminSchema().dump(self).data)
 
 
 def deserialize(jsonstring):
     usr: User = schemas.UserSchema().load(jsonstring).data
-
+    print("(!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!)")
+    print(type(usr))
+    print(jsonstring)
     if usr.role == "citizen":
         return schemas.CitizenSchema().load(jsonstring).data
     elif usr.role == "contact":
