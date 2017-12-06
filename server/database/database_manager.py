@@ -321,8 +321,8 @@ def add_user(email, password, name, role):
         cursor.execute("SELECT * FROM users WHERE email = %s", [email])
         exist = cursor.fetchone()
 
-        if exist:
-            return None
+        # if exist:
+            # return None
 
         cursor.execute("INSERT INTO users VALUES (DEFAULT, %s, %s, %s, %s, %s) RETURNING id, name, email, role;",
                        (hashed_password, salt, name, email, role))

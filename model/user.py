@@ -32,6 +32,8 @@ class User:
             return database_manager.add_contact(usr.id)
         elif role == "citizenAdmin":
             return database_manager.add_citizen_admin(usr.id)
+        elif role == "userAdmin":
+            return database_manager.add_user_admin(usr.id)
         else:
             raise Exception("Invalid role")
 
@@ -43,7 +45,7 @@ class CitizenAdmin(User):
     'A specialized user, representing a contact'
 
     def __init__(self, id, name, email, citizens):
-        super().__init__(id, name, email, "citizenadmin")
+        super().__init__(id, name, email, "citizenAdmin")
         self.citizens = citizens
 
     def serialize(self):
@@ -80,7 +82,7 @@ class UserAdmin(User):
     'A specialized user, representing a contact'
 
     def __init__(self, id, name, email):
-        super().__init__(id, name, email, "useradmin")
+        super().__init__(id, name, email, "userAdmin")
 
     def serialize(self):
         return str(schemas.UserAdminSchema().dump(self).data)
