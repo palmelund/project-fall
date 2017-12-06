@@ -9,8 +9,8 @@ from shutil import copyfile, copytree, make_archive, rmtree
 file_folder_lists = [
     #["activate_alarm.py", "activate_alarm"],
     #["put_alarm.py", "update_alarm"],
-    ["login.py", "login"],
-    ["create_user.py", "create_user"],
+    #["login.py", "login"],
+    #["create_user.py", "create_user"],
     #["control_panel_add_citizen.py", "control_panel_add_citizen"],
     #["control_panel_add_contact.py", "control_panel_add_contact"],
     #["control_panel_get_citizen.py", "control_panel_get_citizen"],
@@ -19,10 +19,10 @@ file_folder_lists = [
     #["control_panel_get_contacts.py", "control_panel_get_contacts"],
     #["control_panel_search_contact.py", "control_panel_search_contacts"],
 
-    ["alarm_activate.py", "alarm_activate"],
-    ["alarm_create.py", "alarm_create"],
-    ["alarm_respond.py", "alarm_respond"],
-    ["alarm_destroy.py", "alarm_destroy"],
+    #["alarm_activate.py", "alarm_activate"],
+    #["alarm_create.py", "alarm_create"],
+    #["alarm_respond.py", "alarm_respond"],
+    #["alarm_destroy.py", "alarm_destroy"],
 
     ["notification_endpoint_create.py", "notification_endpoint_create"],
     ["notification_endpoint_store.py", "notification_endpoint_store"],
@@ -31,6 +31,8 @@ file_folder_lists = [
     ["alexa_help.py", "lib:requests", "alexa_help"],
 
     ["device_get_user.py", "device_user"],
+
+    ["user_get.py", "user_get"],
 
     ["populate_server.py", "populate_server"]
 ]
@@ -49,36 +51,32 @@ for file_folder_list in file_folder_lists:
     makedirs(folder_name)
 
     # copy the main file over, and rename it
-    copyfile("../" + file_folder_list[0], folder_name + "/" + "lambda_function.py")
+    copyfile("../" + file_folder_list[0], folder_name + "/lambda_function.py")
 
     # Copy other specified files to the output directory
     # for file_name in file_folder_list[:-1]:
     #    copyfile("../" + file_name, folder_name + "/" + file_name)
 
-    # connect_str is a private file containing connectivity info for the database
-    # This file should only be present locally on the computer packing the files
-    copyfile("../database/connect_str.py", folder_name + "/" + "connect_str.py")
-
     # database
-    copytree("../database", folder_name + "/" + "database")
+    copytree("../database", folder_name + "/server/database")
+
+    # Some lambdas require SNS support, so we also need to provide that
+    copytree("../sns", folder_name + "/server/sns")
 
     # Copy the respond method. This is used to properly construct the response messages
-    copyfile("../respond.py", folder_name + "/" + "respond.py")
-
-    # Since AWS doesn't provide a library for interacting with PostgreSQL, we have to provide it ourselves
-    copytree("psycopg2", folder_name + "/" + "psycopg2")
+    copyfile("../respond.py", folder_name + "/server/respond.py")
 
     # Since some lambdas depend on the models, we also pack that library
-    copytree("../../model", folder_name + "/" + "model")
-
-    # Some lambdas require SNS support, so we also copy that
-    copytree("../sns", folder_name + "/" + "sns")
-
-    # Proper serialization
-    copyfile("../json_serializer.py", folder_name + "/" + "json_serializer.py")
+    copytree("../../model", folder_name + "/model")
 
     # Include ARN endpoints
-    copyfile("../endpoints.py", folder_name + "/" + "endpoints.py")
+    copyfile("../endpoints.py", folder_name + "/server/endpoints.py")
+
+    # Include marshmallow for proper json support
+    copytree("../../marshmallow", folder_name + "/marshmallow")
+
+    # Since AWS doesn't provide a library for interacting with PostgreSQL, we have to provide it ourselves
+    copytree("../../psycopg2", folder_name + "/psycopg2")
 
     if "lib:requests" in file_folder_list:
 

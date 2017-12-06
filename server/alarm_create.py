@@ -1,9 +1,7 @@
 from model import alarm
 from model.alarm import Alarm
-from model.user import deserialize, User
-import json
-from json_serializer import JsonSerializer
-from respond import build_response_no_ser
+from model.user import deserialize
+from respond import respond
 
 # Note: This file should not be called directly.
 # Please use alarm_activate instead.
@@ -11,17 +9,15 @@ from respond import build_response_no_ser
 
 def lambda_handler(event, context):
     try:
-        citizen = deserialize(json.loads(event["citizen"]))
-        citizen = User.get(citizen.id)
+        citizen = deserialize(event["citizen"])
     except Exception as ex:
-        return build_response_no_ser("400", {"status": "error"})
+        return respond("400", str(ex))
 
     if not citizen:
-        return build_response_no_ser("400", {"status": "error"})
+        return respond("400", "error")
 
     this_alarm: Alarm = alarm.Alarm(0, citizen, None)
 
     this_alarm.set()
 
-    res = json.dumps(this_alarm.working_serializer(), cls=JsonSerializer)
-    return res  # TODO: Proper message format
+    return this_alarm.serialize()

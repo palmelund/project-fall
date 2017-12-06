@@ -1,8 +1,6 @@
 import boto3
-from sns.sns_credentials import region_name, aws_access_key_id, aws_secret_access_key
-from endpoints import arn_sns_android_endpoint
-import json
-from pprint import pprint
+from server.sns.sns_credentials import region_name, aws_access_key_id, aws_secret_access_key
+from server.endpoints import arn_sns_android_endpoint
 
 
 def create_endpoint(token):
