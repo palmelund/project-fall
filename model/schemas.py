@@ -26,10 +26,7 @@ class UserSchema(Schema):
         return user.User(**data)
 
 
-class ContactSchema(Schema):
-    id = fields.Int()
-    name = fields.Str()
-    email = fields.Str()
+class ContactSchema(UserSchema):
     devices = fields.Nested(DeviceSchema, many=True, missing=[])
 
     @post_load
@@ -37,10 +34,7 @@ class ContactSchema(Schema):
         return user.Contact(**data)
 
 
-class CitizenSchema(Schema):
-    id = fields.Int()
-    name = fields.Str()
-    email = fields.Str()
+class CitizenSchema(UserSchema):
     contacts = fields.Nested(ContactSchema, many=True, missing=[])
     devices = fields.Nested(DeviceSchema, many=True, missing=[])
     address = fields.Str()
@@ -52,10 +46,7 @@ class CitizenSchema(Schema):
         return user.Citizen(**data)
 
 
-class CitizenAdminSchema(Schema):
-    id = fields.Int()
-    name = fields.Str()
-    email = fields.Str()
+class CitizenAdminSchema(UserSchema):
     citizens = fields.Nested(CitizenSchema, many=True, missing=[])
 
     @post_load
@@ -63,11 +54,7 @@ class CitizenAdminSchema(Schema):
         return user.CitizenAdmin(**data)
 
 
-class UserAdminSchema(Schema):
-    id = fields.Int()
-    name = fields.Str()
-    email = fields.Str()
-
+class UserAdminSchema(UserSchema):
     @post_load
     def make_user_admin(self, data):
         return user.UserAdmin(**data)
