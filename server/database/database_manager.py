@@ -152,21 +152,21 @@ def get_user_admin(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT users.id, users.name, users.email, users.role FROM users WHERE users.id = %s", [id])
+    cursor.execute("SELECT users.id, users.name, users.email FROM users WHERE users.id = %s", [id])
     ua = cursor.fetchone()
 
     conn.commit()
     cursor.close()
     conn.close()
 
-    return user.UserAdmin(ua[0], ua[1], ua[2], ua[3])
+    return user.UserAdmin(ua[0], ua[1], ua[2])
 
 
 def get_citizen_admin(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT users.id, users.name, users.email, users.role FROM users WHERE users.id = %s", [id])
+    cursor.execute("SELECT users.id, users.name, users.email FROM users WHERE users.id = %s", [id])
     ca = cursor.fetchone()
 
     citizens = get_citizen_admins_citizens(id)
@@ -175,7 +175,7 @@ def get_citizen_admin(id):
     cursor.close()
     conn.close()
 
-    return user.CitizenAdmin(ca[0], ca[1], ca[2], ca[3], citizens)
+    return user.CitizenAdmin(ca[0], ca[1], ca[2], citizens)
 
 
 def get_citizen_admins_citizens(admin_id):
@@ -185,7 +185,7 @@ def get_citizen_admins_citizens(admin_id):
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT id, name, email, users.role, address, city, postnr FROM users, citizen, manages WHERE users.id = citizen.userID AND manages.citizenid = users.id AND manages.adminid = %s",
+        "SELECT id, name, email, address, city, postnr FROM users, citizen, manages WHERE users.id = citizen.userID AND manages.citizenid = users.id AND manages.adminid = %s",
         [admin_id])
     ctz = cursor.fetchall()
 
@@ -193,8 +193,8 @@ def get_citizen_admins_citizens(admin_id):
         contacts = get_citizen_contacts(citizen[0])
         devices = get_user_devices(citizen[0])
         citizens.append(
-            user.Citizen(citizen[0], citizen[1], citizen[2], citizen[3], contacts, devices, citizen[4], citizen[5],
-                         citizen[6]))
+            user.Citizen(citizen[0], citizen[1], citizen[2], contacts, devices, citizen[3], citizen[4],
+                         citizen[5]))
 
     conn.commit()
     cursor.close()
@@ -211,7 +211,7 @@ def get_contact(id):
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT users.id, users.name, users.email, users.role FROM users, contact WHERE users.id = contact.userID AND users.id = %s",
+        "SELECT users.id, users.name, users.email FROM users, contact WHERE users.id = contact.userID AND users.id = %s",
         [id])
     ctc = cursor.fetchone()
 
@@ -221,7 +221,7 @@ def get_contact(id):
     cursor.close()
     conn.close()
 
-    return user.Contact(ctc[0], ctc[1], ctc[2], ctc[3], devices)
+    return user.Contact(ctc[0], ctc[1], ctc[2], devices)
 
 
 def get_citizen(id):
@@ -229,7 +229,7 @@ def get_citizen(id):
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT id, name, email, users.role, address, city, postnr FROM users, citizen WHERE users.id = citizen.userID AND users.id = %s",
+        "SELECT id, name, email, address, city, postnr FROM users, citizen WHERE users.id = citizen.userID AND users.id = %s",
         [id])
     ctz = cursor.fetchone()
 
@@ -240,7 +240,7 @@ def get_citizen(id):
     cursor.close()
     conn.close()
 
-    return user.Citizen(ctz[0], ctz[1], ctz[2], ctz[3], contacts, devices, ctz[4], ctz[5], ctz[6])
+    return user.Citizen(ctz[0], ctz[1], ctz[2], contacts, devices, ctz[3], ctz[4], ctz[5])
 
 
 def get_all_citizens():
@@ -250,14 +250,14 @@ def get_all_citizens():
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT id, name, email, users.role, address, city, postnr FROM users, citizen WHERE users.id = citizen.userID")
+        "SELECT id, name, email, address, city, postnr FROM users, citizen WHERE users.id = citizen.userID")
     ctzs = cursor.fetchall()
 
     for ctz in ctzs:
         contacts = get_citizen_contacts(ctz[0])
         devices = get_user_devices(ctz[0])
 
-        allCitizens.append(user.Citizen(ctz[0], ctz[1], ctz[2], ctz[3], contacts, devices, ctz[4], ctz[5], ctz[6]))
+        allCitizens.append(user.Citizen(ctz[0], ctz[1], ctz[2], contacts, devices, ctz[3], ctz[4], ctz[5]))
 
     conn.commit()
     cursor.close()
@@ -273,14 +273,14 @@ def get_citizen_contacts(citizen_id):
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT users.id, users.name, users.email, users.role FROM users, contact, associateswith WHERE users.id = contact.userID AND associateswith.citizenID = %s AND associateswith.contactID = users.id",
+        "SELECT users.id, users.name, users.email FROM users, contact, associateswith WHERE users.id = contact.userID AND associateswith.citizenID = %s AND associateswith.contactID = users.id",
         [citizen_id])
     ctc = cursor.fetchall()
 
     for contact in ctc:
         devices = get_user_devices(contact[0])
 
-        contacts.append(user.Contact(contact[0], contact[1], contact[2], contact[3], devices))
+        contacts.append(user.Contact(contact[0], contact[1], contact[2], devices))
 
     conn.commit()
     cursor.close()
