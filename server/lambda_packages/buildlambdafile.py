@@ -33,6 +33,10 @@ file_folder_lists = [
     ["device_get_user.py", "device_user"],
 
     ["user_get.py", "user_get"],
+    ["citizen_get.py", "citizen_get"],
+    ["contact_get.py", "contact_get"],
+    ["alarm_get.py", "alarm_get"],
+
 
     ["populate_server.py", "populate_server"]
 ]
