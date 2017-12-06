@@ -24,7 +24,6 @@ class UserSchema(Schema):
 
     @post_load
     def make_user(self, data):
-        pprint(data)
         return user.User(data["id"], data["name"], data["email"], data["role"])
 
 

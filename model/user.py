@@ -1,5 +1,7 @@
 from server.database import database_manager
 from model import schemas
+import json
+import string
 
 
 class User:
@@ -87,16 +89,15 @@ class UserAdmin(User):
 
 
 def deserialize(jsonstring):
-    print("!!!!!!!-----------------------!!!!!!!" + "Kommer jeg her til?" + "!!!!!!-------------------------!!!!!")
-    usr: User = schemas.UserSchema().load(jsonstring).data
-    print("!!!!!!!-----------------------!!!!!!!" + str(usr) + "!!!!!!-------------------------!!!!!")
+    usr: User = schemas.UserSchema().load(json.loads(jsonstring.replace("'", "\""))).data
+    print(jsonstring)
     if usr.role == "citizen":
-        return schemas.CitizenSchema().load(jsonstring).data
+        return schemas.CitizenSchema().load(json.loads(jsonstring.replace("'", "\""))).data
     elif usr.role == "contact":
-        return schemas.ContactSchema().load(jsonstring).data
+        return schemas.ContactSchema().load(json.loads(jsonstring.replace("'", "\""))).data
     elif usr.role == "citizenAdmin":
-        return schemas.CitizenAdminSchema().load(jsonstring).data
+        return schemas.CitizenAdminSchema().load(json.loads(jsonstring.replace("'", "\""))).data
     elif usr.role == "userAdmin":
-        return schemas.UserAdminSchema().load(jsonstring).data
+        return schemas.UserAdminSchema().load(json.loads(jsonstring.replace("'", "\""))).data
     else:
         raise Exception("Invalid role!")
