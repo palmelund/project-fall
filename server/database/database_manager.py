@@ -404,6 +404,92 @@ def add_user_admin(userid):
 #     return get_user_admin(user_id)
 
 
+def delete_user(user_id):
+
+    print("Deleting user")
+
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM users WHERE id = %s", [user_id])
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def delete_citizen(user_id):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM associateswith WHERE citizenid = %s", [user_id])
+    cursor.execute("DELETE FROM citizen WHERE userid = %s", [user_id])
+
+    cursor.execute("SELECT deviceid FROM hasa WHERE userid = %s", [user_id])    
+    dvcs = cursor.fetchall()
+
+    for dvc in dvcs:
+        cursor.execute("DELETE FROM device WHERE id = %s", [dvc])
+
+    cursor.execute("DELETE FROM hasa WHERE userid = %s", [user_id])
+
+    cursor.execute("DELETE FROM users WHERE id = %s", [user_id])
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def delete_contact(user_id):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM contact WHERE userid = %s", [user_id])
+    cursor.execute("DELETE FROM associateswith WHERE contactid = %s", [user_id])
+
+    cursor.execute("SELECT deviceid FROM hasa WHERE userid = %s", [user_id])
+    dvcs = cursor.fetchall()
+
+    for dvc in dvcs:
+        cursor.execute("DELETE FROM device WHERE id = %s", [dvc])
+
+    cursor.execute("DELETE FROM hasa WHERE userid = %s", [user_id])
+
+    cursor.execute("DELETE FROM users WHERE id = %s", [user_id])
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def delete_user_admin(user_id):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM useradmin WHERE id = %s", [user_id])
+
+    cursor.execute("DELETE FROM users WHERE id = %s", [user_id])
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def delete_citizen_admin(user_id):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM citizenadmin WHERE userid = %s", [user_id])
+
+    cursor.execute("DELETE FROM manages WHERE adminid = %s", [user_id])
+
+    cursor.execute("DELETE FROM users WHERE id = %s", [user_id])
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
 def associate(citizen_id, contact_id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
@@ -444,3 +530,14 @@ def hash_password(password, salt):
 
 def check_password(password, hashed_password, salt):
     return hashed_password == hash_password(password, salt)
+
+
+def truncate_all_tables():
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("TRUNCATE TABLE alarm, associateswith, citizen, citizenadmin, contact, device, devicemap, hasa, manages, useradmin, users;")
+
+    conn.commit()
+    cursor.close()
+    conn.close()

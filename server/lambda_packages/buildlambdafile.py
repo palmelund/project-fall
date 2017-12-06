@@ -39,6 +39,8 @@ file_folder_lists = [
 
     ["user_post.py", "user_post"],
 
+    ["user_delete.py", "user_delete"],
+
     ["populate_server.py", "populate_server"]
 ]
 

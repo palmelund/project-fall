@@ -21,6 +21,9 @@ class User:
     def get(user_id):
         return database_manager.get_user(user_id)
 
+    def delete(self):
+        database_manager.delete_user(self.id)
+
     @staticmethod
     def create_new_user(name, email, password, role, address=None, city=None, zipcode=None, managed_by=None, phone=None):
         usr = database_manager.add_user(email, password, name, role)
@@ -50,6 +53,9 @@ class CitizenAdmin(User):
         super().__init__(id, name, email, "citizenAdmin")
         self.citizens = citizens
 
+    def delete(self):
+        database_manager.delete_citizen_admin(self.id)
+
     def serialize(self):
         return str(schemas.CitizenAdminSchema().dump(self).data)
 
@@ -65,6 +71,9 @@ class Citizen(User):
         self.city = city
         self.postnr = postnr
 
+    def delete(self):
+        database_manager.delete_citizen(self.id)
+
     def serialize(self):
         return str(schemas.CitizenSchema().dump(self).data)
 
@@ -76,6 +85,9 @@ class Contact(User):
         super().__init__(id, name, email, "contact")
         self.devices = devices
 
+    def delete(self):
+        database_manager.delete_contact(self.id)
+
     def serialize(self):
         return str(schemas.ContactSchema().dump(self).data)
 
@@ -85,6 +97,9 @@ class UserAdmin(User):
 
     def __init__(self, id, name, email):
         super().__init__(id, name, email, "userAdmin")
+
+    def delete(self):
+        database_manager.delete_user_admin(self.id)
 
     def serialize(self):
         return str(schemas.UserAdminSchema().dump(self).data)
