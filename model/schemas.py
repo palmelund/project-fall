@@ -8,7 +8,7 @@ class DeviceSchema(Schema):
     id = fields.Int()
     devicetype = fields.Str()
     messagetype = fields.Str()
-    content = fields.Dict(missing=None)
+    content = fields.Str(missing=None)
 
     @post_load
     def make_device(self, data):
@@ -30,7 +30,6 @@ class ContactSchema(Schema):
     id = fields.Int()
     name = fields.Str()
     email = fields.Str()
-    role = fields.Str()
     devices = fields.Nested(DeviceSchema, many=True)
 
     @post_load
@@ -42,7 +41,6 @@ class CitizenSchema(Schema):
     id = fields.Int()
     name = fields.Str()
     email = fields.Str()
-    role = fields.Str()
     contacts = fields.Nested(ContactSchema, many=True)
     devices = fields.Nested(DeviceSchema, many=True)
     address = fields.Str()
@@ -58,7 +56,6 @@ class CitizenAdminSchema(Schema):
     id = fields.Int()
     name = fields.Str()
     email = fields.Str()
-    role = fields.Str()
     citizens = fields.Nested(CitizenSchema, many=True)
 
     @post_load
@@ -70,7 +67,6 @@ class UserAdminSchema(Schema):
     id = fields.Int()
     name = fields.Str()
     email = fields.Str()
-    role = fields.Str()
 
     @post_load
     def make_user_admin(self, data):
