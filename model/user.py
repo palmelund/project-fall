@@ -34,6 +34,8 @@ class User:
             return database_manager.add_contact(usr.id)
         elif role == "citizenAdmin":
             return database_manager.add_citizen_admin(usr.id)
+        elif role == "userAdmin":
+            return database_manager.add_user_admin(usr.id)
         else:
             raise Exception("Invalid role")
 

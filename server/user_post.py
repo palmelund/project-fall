@@ -1,13 +1,14 @@
 from server.respond import respond
 from model import user
+import json
 
 
 def lambda_handler(event, context):
     try:
-        usr = user.deserialize(event["user"])
+        usr = user.deserialize(json.loads(event["user"].replace("'", '"')))
+        #usr = user.deserialize(event["user"])
         password = event["password"]
-    except Exception as ex:
-        raise ex
+    except:
         return respond("400", user.User(-1, "", "", "").serialize())
 
     if not all(x is not None for x in [usr, password]):

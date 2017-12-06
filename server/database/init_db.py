@@ -34,6 +34,9 @@ try:
     cursor.execute(
         "CREATE TABLE manages (adminid INTEGER REFERENCES citizenadmin(userid), citizenid INTEGER REFERENCES citizen(userid), PRIMARY KEY (adminid, citizenid));"
     )
+    cursor.execute(
+        "CREATE TABLE useradmin (id SERIAL PRIMARY KEY);"
+    )
 
     conn.commit()
     cursor.close()
