@@ -31,7 +31,7 @@ class DeviceTestCase(unittest.TestCase):
 
         def test_device_post(self):
             _device = Device(-1, device.alexa, "input", {"userid": "abc"})
-            device_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/" + str(self._citizen.id) + "/device"
+            device_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._citizen.id) + "/device"
             device_header = {"device": _device}
             _device = device.deserialize(get_response(requests.post(device_uri, headers=device_header)))
 
