@@ -1,7 +1,9 @@
 from server.database import database_manager
 from model import schemas
 import json
-import string
+from server.sns.sns_interface import push_message
+from typing import List
+# from server.sns.sns_interface import send_sms
 
 
 class User:
@@ -20,6 +22,9 @@ class User:
     @staticmethod
     def get(user_id):
         return database_manager.get_user(user_id)
+
+    def update(self):
+        database_manager.update_user(self)
 
     def delete(self):
         database_manager.delete_user(self.id)
@@ -53,6 +58,16 @@ class CitizenAdmin(User):
         super().__init__(id, name, email, "citizenAdmin")
         self.citizens = citizens
 
+    def update(self):
+
+        old_citizens = database_manager.get_citizen_admins_citizens(self.id)
+
+        added_citizens = List(set(self.citizens)-set(old_citizens))
+        removed_citizens = List(set(old_citizens)-set(self.citizens))
+
+        database_manager.update_citizen_admin(self, added_citizens, removed_citizens)
+        super().update()
+
     def delete(self):
         database_manager.delete_citizen_admin(self.id)
 
@@ -71,6 +86,21 @@ class Citizen(User):
         self.city = city
         self.postnr = postnr
 
+    def update(self):
+
+        old_devices = database_manager.get_user_devices(self.id)
+        old_contacts = database_manager.get_user_devices(self.id)
+
+        added_devices = List(set(self.devices)-set(old_devices))
+        removed_devices = List(set(old_devices)-set(self.devices))
+
+        added_contacts = List(set(self.contacts)-set(old_contacts))
+        removed_contacts = List(set(old_contacts)-set(self.contacts))
+
+        database_manager.update_citizen(self, added_devices, removed_devices, added_contacts, removed_contacts)
+
+        super().update()
+
     def delete(self):
         database_manager.delete_citizen(self.id)
 
@@ -85,6 +115,25 @@ class Contact(User):
         super().__init__(id, name, email, "contact")
         self.devices = devices
 
+    def notify(self, citizen):
+        for d in self.devices:
+            if d.devicetype == "smartphone":
+                content = json.loads(d.content)
+                if d.messagetype == "notification":
+                    push_message(content["arn"], citizen.name + " has had an falling accident, and requests help.")
+                    # elif d.messagetype == "sms":
+                    # Disabled sms since we pay per sms when sending outside US.
+                    # send_sms(content["number"], message_builder(citizen))
+
+    def update(self):
+        old_devices = database_manager.get_user_devices(self.id)
+
+        added_devices = List(set(self.devices)-set(old_devices))
+        removed_devices = List(set(old_devices)-set(self.devices))
+
+        database_manager.update_contact(self.id, added_devices, removed_devices)
+        super().update()
+
     def delete(self):
         database_manager.delete_contact(self.id)
 
@@ -97,6 +146,11 @@ class UserAdmin(User):
 
     def __init__(self, id, name, email):
         super().__init__(id, name, email, "userAdmin")
+
+    def update(self):
+        # Nothing to update
+        x = 0   # Just so it won't complain
+        super().update()
 
     def delete(self):
         database_manager.delete_user_admin(self.id)

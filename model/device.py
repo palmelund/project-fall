@@ -24,6 +24,9 @@ class Device:
     def update(self):
         database_manager.update_device(self)
 
+    def delete(self):
+        database_manager.delete_device(self.id)
+
     def get_owner(self):
         return database_manager.get_device_owner(self.id)
 
