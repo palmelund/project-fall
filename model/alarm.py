@@ -1,7 +1,7 @@
 from model.schemas import AlarmSchema
 from server.database import database_manager
 import json
-
+import string
 
 class Alarm:
     def __init__(self, status, activatedby, responder):
