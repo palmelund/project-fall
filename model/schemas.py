@@ -80,7 +80,7 @@ class UserAdminSchema(Schema):
 
 class AlarmSchema(Schema):
     status = fields.Int()
-    activatedby = fields.Nested(CitizenSchema)
+    activatedby = fields.Nested(CitizenSchema, missing=None)
     responder = fields.Nested(ContactSchema, missing=None)
 
     @post_load
