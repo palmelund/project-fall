@@ -1,26 +1,28 @@
 from model.device import deserialize
-from model import device
-from respond import build_response
-from json_serializer import JsonSerializer
+from model import device, user
+from server.respond import respond
 import json
 
 
 def lambda_handler(event, context):
     try:
-        inputdevice = deserialize(json.loads(event["device"]))
+        dvc = deserialize(event["device"])
 
-        content = json.loads(inputdevice.content)
+        content = json.loads(dvc.content)
 
+        # We only allow input devices to get the user
         if content["messagetype"] != "input":
-            return build_response("400", {"status": "error 1"})
+            return respond("400", user.User(-1, "", "", "userAdmin").serialize())
 
         if content["devicetype"] == "alexa":
             dvc: device.Device = device.Device.get_from_object(content)
             usr = dvc.get_owner()
 
-            return build_response("200", json.dumps(usr.working_serializer(), cls=JsonSerializer))
+            return respond("200", usr.serialize())
+
+        # TODO: Add more devices
 
         else:
-            return build_response("400", {"status": "error 2"})
-    except Exception as ex:
-        return build_response("400", {"status": "error 3"})
+            return respond("400", user.User(-1, "", "", "userAdmin").serialize())
+    except:
+        return respond("400", user.User(-1, "", "", "userAdmin").serialize())

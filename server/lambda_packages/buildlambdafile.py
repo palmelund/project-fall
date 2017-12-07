@@ -7,23 +7,6 @@ from shutil import copyfile, copytree, make_archive, rmtree
 # The name of the output directory and zip file should be the last element in the list.
 # The first file in each list must be the main file
 file_folder_lists = [
-    #["activate_alarm.py", "activate_alarm"],
-    #["put_alarm.py", "update_alarm"],
-    #["login.py", "login"],
-    #["create_user.py", "create_user"],
-    #["control_panel_add_citizen.py", "control_panel_add_citizen"],
-    #["control_panel_add_contact.py", "control_panel_add_contact"],
-    #["control_panel_get_citizen.py", "control_panel_get_citizen"],
-    #["control_panel_get_citizens.py", "control_panel_get_citizens"],
-    #["control_panel_get_contact.py", "control_panel_get_contact"],
-    #["control_panel_get_contacts.py", "control_panel_get_contacts"],
-    #["control_panel_search_contact.py", "control_panel_search_contacts"],
-
-    #["alarm_activate.py", "alarm_activate"],
-    #["alarm_create.py", "alarm_create"],
-    #["alarm_respond.py", "alarm_respond"],
-    #["alarm_destroy.py", "alarm_destroy"],
-
     ["notification_endpoint_create.py", "notification_endpoint_create"],
     ["notification_endpoint_store.py", "notification_endpoint_store"],
     ["notification_endpoint_update.py", "notification_endpoint_update"],
@@ -38,6 +21,16 @@ file_folder_lists = [
     ["alarm_get.py", "alarm_get"],
 
     ["user_post.py", "user_post"],
+    ["alarm_post.py", "alarm_post"],
+    ["device_post.py, device_post"],
+
+    ["user_put.py", "user_put"],
+    ["alarm_put.py", "alarm_put"],
+    ["device_put.py", "device_put"],
+
+    ["user_delete.py", "user_delete"],
+    ["alarm_delete.py", "alarm_delete"],
+    ["device_delete.py", "device_delete"],
 
     ["populate_server.py", "populate_server"]
 ]

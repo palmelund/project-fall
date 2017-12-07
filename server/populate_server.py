@@ -1,8 +1,9 @@
 from model.user import User, Contact, Citizen, CitizenAdmin
-from model.device import Device
-from database.database_manager import associate
+from server.database.database_manager import associate, truncate_all_tables
 
 def lambda_handler(event, context):
+
+    truncate_all_tables()
 
     # Create users
 
@@ -14,14 +15,14 @@ def lambda_handler(event, context):
 
     citizena: Citizen = User.create_new_user("a", "a", "b", "citizen", address="addr", city="city", zipcode="zip", managed_by=admin1.id)
 
-    contact1: Contact = User.create_new_user("Contact 1", "k1", "k1", "contact", phone="<phone number>")
-    contact2: Contact = User.create_new_user("Contact 2", "k2", "k2", "contact", phone="<phone number>")
-    contact3: Contact = User.create_new_user("Contact 3", "k3", "k3", "contact", phone="<phone number>")
-    contact4: Contact = User.create_new_user("Contact 4", "k4", "k4", "contact", phone="<phone number>")
-    contact5: Contact = User.create_new_user("Contact 5", "k5", "k5", "contact", phone="<phone number>")
-    contact6: Contact = User.create_new_user("Contact 6", "k6", "k6", "contact", phone="<phone number>")
+    contact1: Contact = User.create_new_user("Contact 1", "k1", "k1", "contact")
+    contact2: Contact = User.create_new_user("Contact 2", "k2", "k2", "contact")
+    contact3: Contact = User.create_new_user("Contact 3", "k3", "k3", "contact")
+    contact4: Contact = User.create_new_user("Contact 4", "k4", "k4", "contact")
+    contact5: Contact = User.create_new_user("Contact 5", "k5", "k5", "contact")
+    contact6: Contact = User.create_new_user("Contact 6", "k6", "k6", "contact")
 
-    contactb: Contact = User.create_new_user("b", "b", "a", "contact", phone=None)
+    contactb: Contact = User.create_new_user("b", "b", "a", "contact")
 
     # Link citizen and contact
 

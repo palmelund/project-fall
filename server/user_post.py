@@ -5,7 +5,7 @@ import json
 
 def lambda_handler(event, context):
     try:
-        usr = user.deserialize(json.loads(event["user"].replace("'", '"')))
+        usr = user.deserialize(event["user"])
         #usr = user.deserialize(event["user"])
         password = event["password"]
     except:
