@@ -10,7 +10,7 @@ from model import user
 import unittest
 import requests
 import json
-
+from pprint import pprint
 
 def get_response(response):
     print("+++++++++++++++++++++++++++++")
@@ -22,25 +22,22 @@ def get_response(response):
 class AlarmTestCase(unittest.TestCase):
     def test_alarm_post_get_delete(self):
         print("type of citizen: " + str(type(self._citizen)))
-        self._alarm = Alarm(0, self._citizen, user.Contact(-1, "Contactium", "contactium@tester.dk", []))
+        self._alarm = Alarm(0, self._citizen, None)
         alarm_post_header = {"alarm": self._alarm.serialize()}
-        print("serialize: " + self._alarm.serialize())
-
-        print("1111111111111111111111111111111111111111")
-        print(type(alarm.deserialize(self._alarm.serialize())))
 
         alarm_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._citizen.id) + "/alarm"
         self._alarm = alarm.deserialize(get_response(requests.post(alarm_uri, headers=alarm_post_header)))
         self._alarm_response = alarm.deserialize(get_response(requests.get(alarm_uri)))
-
-        self.assertDictEqual(json.loads(self._alarm.serialize().replace("'", "\"")), json.loads(_alarm_response.serialize().replace("'", "\"")))
 
         alarm_delete_header = {"alarm": self._alarm.serialize()}
         alarm_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._citizen.id) + "/alarm"
 
         _alarm_delete = alarm.deserialize(get_response(requests.delete(alarm_uri, headers=alarm_delete_header)))
 
+        self.assertDictEqual(json.loads(self._alarm.serialize()), json.loads(self._alarm_response.serialize())
         self.assertEqual(-1, _alarm_delete.status)
+
+
 
     def setUp(self):
         self._citizen = user.Citizen(-1, "Test Testington", "testington@tester.dk", [], [], "Teststrasse 10", "Testerup", "1000")

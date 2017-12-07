@@ -24,5 +24,5 @@ class Alarm:
 
 
 def deserialize(jsonstring):
-    print("json: " + jsonstring)
-    return AlarmSchema().load(json.loads(jsonstring.replace("'", "\""))).data
+    #print("json: " + jsonstring)
+    return AlarmSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
