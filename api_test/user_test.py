@@ -21,7 +21,7 @@ class CitizenTestCase(unittest.TestCase):
         # citizen_admin_header = {"user": temp_citizen_admin.serialize()}
 
         # admin_id = user.deserialize(get_response(requests.post("https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/", headers=citizen_admin_header))).id
-        self._citizen = user.Citizen(-1, "Test Testington", "testington@tester.dk", [], [], "Teststrasse 10", "Testerup", "1000")
+        self._citizen = user.Citizen(-1, "Test Testington", "testington@tester.dk", [user.Contact(-1, "Contactium", "contactium@tester.dk", [])], [], "Teststrasse 10", "Testerup", "1000")
 
         citizen_header = {"user": self._citizen.serialize()}
         self._citizen = user.deserialize(get_response(requests.post("https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/", headers=citizen_header)))
@@ -57,7 +57,7 @@ class ContactTestCase(unittest.TestCase):
         user_delete_header = {"user": self._contact.serialize()}
         requests.delete(user_delete_uri, headers=user_delete_header).text
 
-    def test_get_citizen(self):
+    def test_get_contact(self):
         user_get_header = {"email": "testington@tester.dk", "password": "1234"}
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._contact.id)
 
