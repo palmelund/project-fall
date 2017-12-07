@@ -15,12 +15,12 @@ from server.sns.sns_credentials import region_name, aws_access_key_id, aws_secre
 
 def lambda_handler(event, context):
     try:
-        ctz = user.User.get(event["id"])  # user.deserialize(json.loads(event["citizen"]))
+        ctz_id = event["id"]  # user.deserialize(json.loads(event["citizen"]))
         alm = alarm_deserializer(event["alarm"])
     except:
         return respond("400", alarm.Alarm(-1, None, None).serialize())
 
-    if not all(x is not None for x in [ctz, alm]) or ctz.id != alm.activatedby.id:
+    if not all(x is not None for x in [ctz_id, alm]) or ctz_id != alm.activatedby.id:
         return respond("400", alarm.Alarm(-1, None, None).serialize())
 
     # Create alarm
@@ -32,8 +32,7 @@ def lambda_handler(event, context):
                                      aws_access_key_id=aws_access_key_id,
                                      aws_secret_access_key=aws_secret_access_key)
 
-        dump = ctz.serialize()
-        arg = bytes(json.dumps({"citizen": dump}), 'utf-8')
+        arg = bytes(json.dumps({"id": ctz_id}), 'utf-8')
         response = lambda_client.invoke(
             FunctionName=arn_alarm_create_endpoint,
             InvocationType="RequestResponse",
@@ -41,13 +40,13 @@ def lambda_handler(event, context):
 
         data = response["Payload"].read().decode()
     except:
-        return respond("400", alarm.Alarm(-1, ctz.serialize(), None).serialize())
+        return respond("400", alarm.Alarm(-1, None, None).serialize())
 
     # Get the alarm
     try:
         alm = alarm_deserializer(json.load(data))
     except:
-        return respond("400", alarm.Alarm(-1, ctz.serialize(), None).serialize())
+        return respond("400", alarm.Alarm(-1, None, None).serialize())
 
     # Send notifications
     for c in alm.activatedby.contacts:

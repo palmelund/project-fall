@@ -1,5 +1,6 @@
 from model.schemas import AlarmSchema
 from server.database import database_manager
+import json
 
 
 class Alarm:
@@ -23,4 +24,4 @@ class Alarm:
 
 
 def deserialize(jsonstring):
-    return AlarmSchema().load(jsonstring).data
+    return AlarmSchema().load(json.loads(jsonstring.replace("'", "\""))).data

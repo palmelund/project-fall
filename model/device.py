@@ -1,5 +1,6 @@
 from server.database import database_manager
 from model import schemas
+import json
 
 alexa = "alexa"
 smartphone = "smartphone"
@@ -39,4 +40,4 @@ class Device:
 
 
 def deserialize(jsonstring):
-    return schemas.DeviceSchema().load(jsonstring).data
+    return schemas.DeviceSchema().load(json.loads(jsonstring.replace("'", "\""))).data

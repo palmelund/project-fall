@@ -1,6 +1,5 @@
 from model import alarm
-from model.alarm import Alarm
-from model.user import deserialize
+from model.user import Citizen
 
 # Note: This file should not be called directly.
 # Please use alarm_activate instead.
@@ -8,14 +7,14 @@ from model.user import deserialize
 
 def lambda_handler(event, context):
     try:
-        ctz = deserialize(event["citizen"])
+        ctz =  Citizen.get(event["id"]) # deserialize(event["citizen"])
     except Exception as ex:
         return None
 
     if not ctz:
         return None
 
-    this_alarm: Alarm = alarm.Alarm(0, ctz, None)
+    this_alarm = alarm.Alarm(0, ctz, None)
 
     this_alarm.set()
 
