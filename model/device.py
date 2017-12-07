@@ -1,6 +1,7 @@
 from server.database import database_manager
 from model import schemas
 import json
+import string
 
 alexa = "alexa"
 smartphone = "smartphone"
