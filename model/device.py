@@ -1,6 +1,10 @@
 from server.database import database_manager
 from model import schemas
 
+alexa = "alexa"
+smartphone = "smartphone"
+ifttt = "ifttt"
+
 
 class Device:
 
