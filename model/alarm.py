@@ -19,10 +19,13 @@ class Alarm:
 
         database_manager.set_alarm(self)
 
+    def delete(self):
+        database_manager.delete_alarm(self.activatedby.id)
+
     def serialize(self):
         return str(AlarmSchema().dump(self).data)
 
 
 def deserialize(jsonstring):
     print("json: " + jsonstring)
-    return AlarmSchema().load(json.loads(jsonstring.replace("'", "\""))).data
+    return AlarmSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data

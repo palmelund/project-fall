@@ -41,4 +41,4 @@ class Device:
 
 
 def deserialize(jsonstring):
-    return schemas.DeviceSchema().load(json.loads(jsonstring.replace("'", "\""))).data
+    return schemas.DeviceSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data

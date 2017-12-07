@@ -7,14 +7,14 @@ from model.user import Citizen
 
 def lambda_handler(event, context):
     try:
-        ctz =  Citizen.get(event["id"]) # deserialize(event["citizen"])
+        ctz = Citizen.get(event["id"]) # deserialize(event["citizen"])
     except Exception as ex:
         return None
 
     if not ctz:
         return None
 
-    this_alarm = alarm.Alarm(0, ctz, None)
+    this_alarm = alarm.Alarm(-1, ctz, None)
 
     this_alarm.set()
 

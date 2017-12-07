@@ -15,12 +15,11 @@ from server.sns.sns_credentials import region_name, aws_access_key_id, aws_secre
 
 def lambda_handler(event, context):
     try:
-        ctz_id = event["id"]  # user.deserialize(json.loads(event["citizen"]))
-        alm = alarm_deserializer(event["alarm"])
+        ctz_id = int(event["id"])
     except:
         return respond("400", alarm.Alarm(-1, None, None).serialize())
 
-    if not all(x is not None for x in [ctz_id, alm]) or ctz_id != alm.activatedby.id:
+    if not ctz_id:
         return respond("400", alarm.Alarm(-1, None, None).serialize())
 
     # Create alarm
@@ -44,7 +43,7 @@ def lambda_handler(event, context):
 
     # Get the alarm
     try:
-        alm = alarm_deserializer(json.load(data))
+        alm = alarm_deserializer(data.replace('"', "").replace("'", '"'))
     except:
         return respond("400", alarm.Alarm(-1, None, None).serialize())
 

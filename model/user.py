@@ -148,15 +148,15 @@ class UserAdmin(User):
 
 
 def deserialize(jsonstring):
-    usr: User = schemas.UserSchema().load(json.loads(jsonstring.replace("'", "\""))).data
+    usr: User = schemas.UserSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
     print("&&&&&&&&& json: " + jsonstring)
     if usr.role == "citizen":
-        return schemas.CitizenSchema().load(json.loads(jsonstring.replace("'", "\""))).data
+        return schemas.CitizenSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
     elif usr.role == "contact":
-        return schemas.ContactSchema().load(json.loads(jsonstring.replace("'", "\""))).data
+        return schemas.ContactSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
     elif usr.role == "citizenAdmin":
-        return schemas.CitizenAdminSchema().load(json.loads(jsonstring.replace("'", "\""))).data
+        return schemas.CitizenAdminSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
     elif usr.role == "userAdmin":
-        return schemas.UserAdminSchema().load(json.loads(jsonstring.replace("'", "\""))).data
+        return schemas.UserAdminSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
     else:
         raise Exception("Invalid role!")
