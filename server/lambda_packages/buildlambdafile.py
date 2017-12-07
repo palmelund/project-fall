@@ -15,6 +15,8 @@ file_folder_lists = [
 
     ["device_get_user.py", "device_user"],
 
+    ["alarm_post_helper.py", "alarm_post_helper"],
+
     ["user_get.py", "user_get"],
     ["citizen_get.py", "citizen_get"],
     ["contact_get.py", "contact_get"],
@@ -22,7 +24,7 @@ file_folder_lists = [
 
     ["user_post.py", "user_post"],
     ["alarm_post.py", "alarm_post"],
-    ["device_post.py, device_post"],
+    ["device_post.py", "device_post"],
 
     ["user_put.py", "user_put"],
     ["alarm_put.py", "alarm_put"],
