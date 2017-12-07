@@ -1,9 +1,7 @@
 from server.database import database_manager
 from model import schemas
 import json
-from server.sns.sns_interface import push_message
 from typing import List
-# from server.sns.sns_interface import send_sms
 
 
 class User:
@@ -114,16 +112,6 @@ class Contact(User):
     def __init__(self, id, name, email, devices):
         super().__init__(id, name, email, "contact")
         self.devices = devices
-
-    def notify(self, citizen):
-        for d in self.devices:
-            if d.devicetype == "smartphone":
-                content = json.loads(d.content)
-                if d.messagetype == "notification":
-                    push_message(content["arn"], citizen.name + " has had an falling accident, and requests help.")
-                    # elif d.messagetype == "sms":
-                    # Disabled sms since we pay per sms when sending outside US.
-                    # send_sms(content["number"], message_builder(citizen))
 
     def update(self):
         old_devices = database_manager.get_user_devices(self.id)

@@ -2,10 +2,12 @@ import json
 import urllib.request
 
 import boto3
+from server.sns.sns_interface import push_message
+# from server.sns.sns_interface import send_sms
 
 from model import alarm
 from model.alarm import deserialize as alarm_deserializer
-from model.user import deserialize as user_deserializer
+from model import user
 from server.endpoints import arn_alarm_create_endpoint
 from server.respond import respond
 from server.sns.sns_credentials import region_name, aws_access_key_id, aws_secret_access_key
@@ -13,8 +15,12 @@ from server.sns.sns_credentials import region_name, aws_access_key_id, aws_secre
 
 def lambda_handler(event, context):
     try:
-        ctz = user_deserializer(event["citizen"])  # user.deserialize(json.loads(event["citizen"]))
+        ctz = user.User.get(event["id"])  # user.deserialize(json.loads(event["citizen"]))
+        alm = alarm_deserializer(event["alarm"])
     except:
+        return respond("400", alarm.Alarm(-1, None, None).serialize())
+
+    if not all(x is not None for x in [ctz, alm]) or ctz.id != alm.activatedby.id:
         return respond("400", alarm.Alarm(-1, None, None).serialize())
 
     # Create alarm
@@ -45,7 +51,7 @@ def lambda_handler(event, context):
 
     # Send notifications
     for c in alm.activatedby.contacts:
-        c.notify(alm.activatedby)
+        notify(c, alm.activatedby)
 
     # Send IFTTT event to citizen devices
     for d in alm.activatedby.devices:
@@ -56,3 +62,14 @@ def lambda_handler(event, context):
             break
 
     return respond("200", alm.serialize())
+
+
+def notify(cnt, ctz):
+    for d in cnt.devices:
+        if d.devicetype == "smartphone":
+            content = json.loads(d.content)
+            if d.messagetype == "notification":
+                push_message(content["arn"], ctz.name + " has had an falling accident, and requests help.")
+                # elif d.messagetype == "sms":
+                # Disabled sms since we pay per sms when sending outside US.
+                    # send_sms(content["number"], message_builder(citizen))
