@@ -80,3 +80,5 @@ def deserialize(jsonstring):
         return schemas.SmsDeviceSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
     elif _device.devicetype == "phonecalldevice":
         return schemas.PhoneCallDeviceSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
+    else:
+        raise Exception

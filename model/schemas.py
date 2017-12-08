@@ -8,12 +8,61 @@ from pprint import pprint
 class DeviceSchema(Schema):
     id = fields.Int()
     devicetype = fields.Str()
-    messagetype = fields.Str()
-    content = fields.Str(missing=None)
 
     @post_load
     def make_device(self, data):
-        return device.Device(data["id"], data["devicetype"], data["messagetype"], data["content"])
+        return device.Device(data["id"], data["devicetype"])
+
+
+class AppDeviceSchema(Schema):
+    id = fields.Int()
+    devicetype = fields.Str()
+    token = fields.Str()
+    arn = fields.Str()
+
+    @post_load
+    def make_app_device(self, data):
+        return device.AppDevice(data["id"], data["token"], data["arn"])
+
+
+class AlexaDeviceSchema(Schema):
+    id = fields.Int()
+    devicetype = fields.Str()
+    user_id = fields.Str()
+
+    @post_load
+    def make_alexa_device(self, data):
+        return device.AlexaDevice(data["id"], data["user_id"])
+
+
+class IFTTTDeviceSchema(Schema):
+    id = fields.Int()
+    devicetype = fields.Str()
+    token = fields.Str()
+
+    @post_load
+    def make_ifttt_device(self, data):
+        return device.IFTTTDevice(data["id"], data["token"])
+
+
+class SmsDeviceSchema(Schema):
+    id = fields.Int()
+    devicetype = fields.Str()
+    phone_number = fields.Str()
+
+    @post_load
+    def make_sms_device(self, data):
+        return device.SmsDevice(data["id"], data["phone_number"])
+
+
+class PhoneCallDeviceSchema(Schema):
+    id = fields.Int()
+    devicetype = fields.Str()
+    phone_number = fields.Str()
+
+    @post_load
+    def make_phone_call_device(self, data):
+        return device.PhoneCallDevice(data["id"], data["phone_number"])
 
 
 class UserSchema(Schema):
