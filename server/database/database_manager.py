@@ -112,7 +112,7 @@ def get_device_owner(deviceid):
     return get_user(uid)
 
 
-def set_device(dvc, usr):
+def post_device(dvc, usr):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 

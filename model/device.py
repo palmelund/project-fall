@@ -24,10 +24,10 @@ class Device:
     def get_from_object(obj):
         return database_manager.get_device_from_id(obj["userid"])
 
-    def put(self, user):
-        database_manager.set_device(self, user)
+    def post(self, user):
+        database_manager.post_device(self, user)
 
-    def update(self):
+    def put(self):
         database_manager.update_device(self)
 
     def delete(self):
@@ -37,7 +37,7 @@ class Device:
         return database_manager.get_device_owner(self.id)
 
     def serialize(self):
-        return schemas.DeviceSchema().dump(self).data
+        return str(schemas.DeviceSchema().dump(self).data)
 
 
 def deserialize(jsonstring):
