@@ -31,7 +31,19 @@ class Device:
         return database_manager.get_device_owner(self.id)
 
     def serialize(self):
-        return str(schemas.DeviceSchema().dump(self).data)
+
+        if self.devicetype == "appdevice":
+            return str(schemas.AppDeviceSchema().dump(self).data)
+        elif self.devicetype == "alexadevice":
+            return str(schemas.AlexaDeviceSchema().dump(self).data)
+        elif self.devicetype == "iftttdevice":
+            return str(schemas.IFTTTDeviceSchema().dump(self).data)
+        elif self.devicetype == "smsdevice":
+            return str(schemas.SmsDeviceSchema().dump(self).data)
+        elif self.devicetype == "phonecalldevice":
+            str(schemas.PhoneCallDeviceSchema().dump(self).data)
+        else:
+            return str(schemas.DeviceSchema().dump(self).data)
 
 
 class AppDevice(Device):

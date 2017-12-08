@@ -87,7 +87,7 @@ def get_device(id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT device.id, device.devicetype, device.messagetype, device.content FROM device WHERE id = %s",
+    cursor.execute("SELECT device.id, device.devicetype, device.content FROM device WHERE id = %s",
                    [id])
     dvc = cursor.fetchone()
 
@@ -95,7 +95,7 @@ def get_device(id):
     cursor.close()
     conn.close()
 
-    return device.Device(dvc[0], dvc[1], dvc[2], dvc[3])
+    return tuple_to_device(dvc)
 
 
 def get_device_owner(deviceid):
@@ -116,8 +116,9 @@ def post_device(dvc, usr):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO device VALUES (DEFAULT, %s, %s, %s) RETURNING id",
-                   [dvc.devicetype, dvc.messagetype, dvc.content])
+    content = pack_content(dvc)
+
+    cursor.execute("INSERT INTO device VALUES (DEFAULT, %s, %s) RETURNING id", [content, dvc.devicetype])
     device_id = cursor.fetchone()[0]
 
     cursor.execute("INSERT INTO hasa VALUES (%s, %s)", [usr.id, device_id])
@@ -296,12 +297,12 @@ def get_user_devices(user_id):
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT device.id, device.devicetype, device.messagetype, device.content FROM device, hasa WHERE device.id = hasa.deviceID AND hasa.userID = %s",
+        "SELECT device.id, device.devicetype, device.content FROM device, hasa WHERE device.id = hasa.deviceID AND hasa.userID = %s",
         [user_id])
     dvcs = cursor.fetchall()
 
     for dvc in dvcs:
-        devices.append(device.Device(dvc[0], dvc[1], dvc[2], dvc[3]))
+        devices.append(tuple_to_device(dvc))
 
     conn.commit()
     cursor.close()
@@ -561,11 +562,11 @@ def associate(citizen_id, contact_id):
     conn.close()
 
 
-def hasa(citizen_id, device_id):
+def hasa(user_id, device_id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO hasa VALUES (%s, %s);", (citizen_id, device_id))
+    cursor.execute("INSERT INTO hasa VALUES (%s, %s);", (user_id, device_id))
 
     conn.commit()
     cursor.close()
@@ -612,3 +613,36 @@ def truncate_all_tables():
     conn.commit()
     cursor.close()
     conn.close()
+
+
+def pack_content(dvc):
+    if dvc.devicetype == "appdevice":
+        return json.dumps({"token": dvc.token, "arn": dvc.arn})
+    elif dvc.devicetype == "alexadevice":
+        return json.dumps({"user_id": dvc.user_id})
+    elif dvc.devicetype == "iftttdevice":
+        return json.dumps({"token": dvc.token})
+    elif dvc.devicetype == "smsdevice":
+        return json.dumps({"phone_number": dvc.phone_number})
+    elif dvc.devicetype == "phonecalldevice":
+        return json.dumps({"phone_number": dvc.phone_number})
+    else:
+        raise Exception
+
+
+def tuple_to_device(dvc):
+    device_type = dvc[1]
+    content = json.loads(dvc[2])
+
+    if device_type == "appdevice":
+        return device.AppDevice(dvc[0], content["token"], content["arn"])
+    elif device_type == "alexadevice":
+        return device.AlexaDevice(dvc[0], content["user_id"])
+    elif device_type == "iftttdevice":
+        return device.IFTTTDevice(dvc[0], content["token"])
+    elif device_type == "smsdevice":
+        return device.SmsDevice(dvc[0], content["phone_number"])
+    elif device_type == "phonecalldevice":
+        return device.PhoneCallDevice(dvc[0], content["phone_number"])
+    else:
+        raise Exception
