@@ -9,17 +9,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<div class="container">
+<div id="container" class="container"></div>
+
+<template id="template-login">
+    <h5 style="text-align: center">Login</h5>
+    <a style="float:right; cursor: pointer;" onclick="RenderRegisterView()">Opret en ny bruger</a>
     <form id="login">
-        <h5 style="text-align: center">Login</h5>
         <input class="u-full-width" type="email" name="email" value="" placeholder="Email" tabindex="1">
         <input class="u-full-width" type="password" name="password" value="" placeholder="Kodeord" tabindex="2">
-        <!--<input type="button" name="submit" value="submit" placeholder="Log ind" onclick="login()" tabindex="3">-->
-        <div class="btn-submit" onclick="login()" tabindex="3">Log ind</div>
+        <div class="btn-submit" onclick="Login()" onkeypress="Login()" tabindex="3">Log ind</div>
     </form>
-    </div>
-</div>
+</template>
+
+<template id="template-register">
+    <form id="add-new-user-form">
+        <h5 style="text-align: center;">Tilføj bruger</h5>
+        <input id="name" class="u-full-width" type="text" name="name" value="" placeholder="Fulde navn" tabindex="1">
+        <input id="email" class="u-full-width" type="email" name="email" value="" placeholder="Email" tabindex="2">
+        <select class="u-full-width" name="role" tabindex="3">
+            <option value="citizen">Borger</option>
+            <option value="contact">Kontakt</option>
+        </select>
+        <div class="row">
+            <input id="address" class="four columns" type="text" name="address" value="" placeholder="Addresse" tabindex="4">
+            <input id="city" class="four columns" type="text" name="city" value="" placeholder="By" tabindex="5">
+            <input id="post-code" class="four columns" type="number" name="postcode" value="" placeholder="Post nr." tabindex="6">
+        </div>
+        <div class="btn-submit u-full-width" onclick="RegisterNewUser()" onkeydown="RegisterNewUser()" tabindex="6">Tilføj</div>
+    </form>
+</template>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="js/main.js"></script>
+<script src="js/JsTemplates.js"></script>
+<script src="js/login.js"></script>
 </body>
 </html>
