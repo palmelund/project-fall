@@ -24,21 +24,23 @@ def lambda_handler(event, context):
     policy.restApiId = apiGatewayArnTmp[0]
     policy.region = tmp[3]
     policy.stage = apiGatewayArnTmp[1]
-    #policy.allowAllMethods()
+
 
     if token["user_role"] == "citizen":
-        #policy.allowMethod(HttpVerb.GET, '/user/*')
-        policy.allowAllMethods()
+        policy.allowMethod(HttpVerb.POST, '/citizen/*/alarm')
+        policy.allowMethod(HttpVerb.GET, '/citizen/*')
+        #policy.allowAllMethods()
     elif token["user_role"] == "contact":
-        policy.allowAllMethods()
+        policy.allowMethod(HttpVerb.ALL, '/contact/*/device')
+        policy.allowMethod(HttpVerb.PUT, '/citizen/*/alarm')
     elif token["user_role"] == "citizenAdmin":
-        policy.allowAllMethods()
+        policy.allowMethod(HttpVerb.ALL, '/citizen/*/device')
+        policy.allowMethod(HttpVerb.GET, '/citizen/*')
     elif token["user_role"] == "userAdmin":
-        policy.allowAllMethods()
+        policy.allowMethod(HttpVerb.DELETE, "/user")
+        policy.allowMethod(HttpVerb.PUT, "/user")
 
 
-
-    # Finally, build the policy
     authResponse = policy.build()
 
 
