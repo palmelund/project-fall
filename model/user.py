@@ -2,6 +2,7 @@ from server.database import database_manager
 from model import schemas
 import json
 from typing import List
+from pprint import pprint
 
 
 class User:
@@ -150,7 +151,7 @@ class UserAdmin(User):
 
 def deserialize(jsonstring):
     usr: User = schemas.UserSchema().load(json.loads(jsonstring.replace("'", "\"").replace("\\\"", "\"").replace("None", "null"))).data
-    print(str(type(usr)))
+    pprint(usr.token)
     if usr.role == "citizen":
         return schemas.CitizenSchema().load(json.loads(jsonstring.replace("'", "\"").replace("\\\"", "\"").replace("None", "null"))).data
     elif usr.role == "contact":

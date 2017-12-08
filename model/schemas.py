@@ -89,8 +89,9 @@ class ContactSchema(Schema):
 
     @post_load
     def make_contact(self, data):
-        return user.Contact(data["id"], data["name"], data["email"], data["devices"])
-
+        _user = user.Contact(data["id"], data["name"], data["email"], data["devices"])
+        _user.token = data["token"]
+        return _user
 
 class CitizenSchema(Schema):
     id = fields.Int()
@@ -106,8 +107,9 @@ class CitizenSchema(Schema):
 
     @post_load
     def make_citizen(self, data):
-        return user.Citizen(data["id"], data["name"], data["email"], data["contacts"], data["devices"], data["address"], data["city"], data["postnr"])
-
+        _user = user.Citizen(data["id"], data["name"], data["email"], data["contacts"], data["devices"], data["address"], data["city"], data["postnr"])
+        _user.token = data["token"]
+        return _user
 
 class CitizenAdminSchema(Schema):
     id = fields.Int()
@@ -119,8 +121,9 @@ class CitizenAdminSchema(Schema):
 
     @post_load
     def make_citizen_admin(self, data):
-        return user.CitizenAdmin(data["id"], data["name"], data["email"], data["citizens"])
-
+        _user = user.CitizenAdmin(data["id"], data["name"], data["email"], data["citizens"])
+        _user.token = data["token"]
+        return _user
 
 class UserAdminSchema(Schema):
     id = fields.Int()
@@ -131,8 +134,9 @@ class UserAdminSchema(Schema):
 
     @post_load
     def make_user_admin(self, data):
-        return user.UserAdmin(data["id"], data["name"], data["email"])
-
+        _user = user.UserAdmin(data["id"], data["name"], data["email"])
+        _user.token = data["token"]
+        return _user
 
 class AlarmSchema(Schema):
     status = fields.Int()

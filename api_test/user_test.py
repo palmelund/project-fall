@@ -27,8 +27,9 @@ class CitizenTestCase(unittest.TestCase):
         self._citizen = user.Citizen(-1, "Test Testington", "testington@tester.dk", [user.Contact(-1, "Contactium", "contactium@tester.dk", [])], [], "Teststrasse 10", "Testerup", "1000")
 
         citizen_header = {"user": self._citizen.serialize().replace("\"", "\\\"")}
-        print(citizen_header)
+
         self._citizen = user.deserialize(get_response(requests.post("https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/", headers=citizen_header)))
+        print(self._citizen.__dict__)
 
     def tearDown(self):
         user_delete_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
