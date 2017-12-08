@@ -37,7 +37,8 @@ class CitizenTestCase(unittest.TestCase):
         print("------------ delete response: " + str(requests.delete(user_delete_uri, headers=user_delete_header).text))
 
     def test_get_citizen(self):
-        user_get_header = {"auth": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjM0IiwidXNlcl9yb2xlIjoiY2l0aXplbiJ9.Lk0L4BX6Dx0b6PlfWMlSp3xFv5o7lYmya2PyAc-FQdE"}
+        user_get_header = {'token': self._citizen.token}
+        print("token: " + self._citizen.token)
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._citizen.id)
 
         _citizen_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))
