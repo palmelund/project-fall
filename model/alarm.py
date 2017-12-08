@@ -19,6 +19,9 @@ class Alarm:
 
         database_manager.set_alarm(self)
 
+    def delete(self):
+        database_manager.delete_alarm(self.activatedby.id)
+
     def serialize(self):
         return str(AlarmSchema().dump(self).data).replace("'", "\"").replace("None", "null")
 

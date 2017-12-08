@@ -12,6 +12,6 @@ def lambda_handler(event, context):
 
     try:
         usr.delete()
-        return respond("200", user.User(-1, "", "", usr.role).serialize())
+        return respond("200", user.User(-1, "", "", "citizenAdmin").serialize())
     except:
         return respond("400", event["user"])
