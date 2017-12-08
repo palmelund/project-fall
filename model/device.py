@@ -68,18 +68,17 @@ class PhoneCallDevice(Device):
 
 
 def deserialize(jsonstring):
-    x = json.loads(jsonstring.replace("'", "\"").replace("None", "null"))
-    dvc = schemas.DeviceSchema().load(x).data
+    _device = schemas.DeviceSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
 
-    if dvc.devicetype == "appdevice":
-        return schemas.AppDeviceSchema().load(x).data
-    elif dvc.devicetype == "alexadevice":
-        return schemas.AlexaDeviceSchema().load(x).data
-    elif dvc.devicetype == "iftttdevice":
-        return schemas.IFTTTDeviceSchema().load(x).data
-    elif dvc.devicetype == "smsdevice":
-        return schemas.SmsDeviceSchema().load(x).data
-    elif dvc.devicetype == "phonecalldevice":
-        return schemas.PhoneCallDeviceSchema().load(x).data
+    if _device.devicetype == "appdevice":
+        return schemas.AppDeviceSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
+    elif _device.devicetype == "alexadevice":
+        return schemas.AlexaDeviceSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
+    elif _device.devicetype == "iftttdevice":
+        return schemas.IFTTTDeviceSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
+    elif _device.devicetype == "smsdevice":
+        return schemas.SmsDeviceSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
+    elif _device.devicetype == "phonecalldevice":
+        return schemas.PhoneCallDeviceSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
     else:
         raise Exception
