@@ -21,15 +21,14 @@ def get_response(response):
 
 class AlarmTestCase(unittest.TestCase):
     def test_alarm_post_get_delete(self):
-        print("type of citizen: " + str(type(self._citizen)))
         self._alarm = Alarm(0, self._citizen, None)
-        alarm_post_header = {"alarm": self._alarm.serialize()}
+        alarm_post_header = {"alarm": self._alarm.serialize().replace("\"", "\\\""), "auth": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjM0IiwidXNlcl9yb2xlIjoiY2l0aXplbiJ9.Lk0L4BX6Dx0b6PlfWMlSp3xFv5o7lYmya2PyAc-FQdE"}
 
         alarm_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._citizen.id) + "/alarm"
         self._alarm = alarm.deserialize(get_response(requests.post(alarm_uri, headers=alarm_post_header)))
         self._alarm_response = alarm.deserialize(get_response(requests.get(alarm_uri)))
 
-        alarm_delete_header = {"alarm": self._alarm.serialize()}
+        alarm_delete_header = {"alarm": self._alarm.serialize().replace("\"", "\\\"")}
         alarm_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._citizen.id) + "/alarm"
 
         _alarm_delete = alarm.deserialize(get_response(requests.delete(alarm_uri, headers=alarm_delete_header)))
@@ -42,12 +41,12 @@ class AlarmTestCase(unittest.TestCase):
     def setUp(self):
         self._citizen = user.Citizen(-1, "Test Testington", "testington@tester.dk", [], [], "Teststrasse 10", "Testerup", "1000")
 
-        citizen_header = {"user": self._citizen.serialize()}
+        citizen_header = {"user": self._citizen.serialize().replace("\"", "\\\"")}
         self._citizen = user.deserialize(get_response(requests.post("https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/", headers=citizen_header)))
 
     def tearDown(self):
         user_delete_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
-        user_delete_header = {"user": self._citizen.serialize()}
+        user_delete_header = {"user": self._citizen.serialize().replace("\"", "\\\"")}
         print("------------ delete user: " + str(self._citizen.serialize()))
         print("------------ delete response: " + str(requests.delete(user_delete_uri, headers=user_delete_header).text))
 

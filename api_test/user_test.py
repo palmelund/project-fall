@@ -11,6 +11,9 @@ import json
 
 
 def get_response(response):
+    print("+++++++++++++++++++++++++++++")
+    print(response.text)
+    print("+++++++++++++++++++++++++++++")
     return str(json.loads(response.content.decode())["body"])
 
 
@@ -23,17 +26,18 @@ class CitizenTestCase(unittest.TestCase):
         # admin_id = user.deserialize(get_response(requests.post("https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/", headers=citizen_admin_header))).id
         self._citizen = user.Citizen(-1, "Test Testington", "testington@tester.dk", [user.Contact(-1, "Contactium", "contactium@tester.dk", [])], [], "Teststrasse 10", "Testerup", "1000")
 
-        citizen_header = {"user": self._citizen.serialize()}
+        citizen_header = {"user": self._citizen.serialize().replace("\"", "\\\"")}
+        print(citizen_header)
         self._citizen = user.deserialize(get_response(requests.post("https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/", headers=citizen_header)))
 
     def tearDown(self):
         user_delete_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
-        user_delete_header = {"user": self._citizen.serialize()}
-        print("------------ delete user: " + str(self._citizen.serialize()))
+        user_delete_header = {"user": self._citizen.serialize().replace("\"", "\\\"")}
+        print("------------ delete user: " + str(self._citizen.serialize().replace("\"", "\\\"")))
         print("------------ delete response: " + str(requests.delete(user_delete_uri, headers=user_delete_header).text))
 
     def test_get_citizen(self):
-        user_get_header = {"email": "testington@tester.dk", "password": "1234"}
+        user_get_header = {"auth": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjM0IiwidXNlcl9yb2xlIjoiY2l0aXplbiJ9.Lk0L4BX6Dx0b6PlfWMlSp3xFv5o7lYmya2PyAc-FQdE"}
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._citizen.id)
 
         _citizen_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))
@@ -49,21 +53,20 @@ class ContactTestCase(unittest.TestCase):
         # admin_id = user.deserialize(get_response(requests.post("https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/", headers=citizen_admin_header))).id
         self._contact = user.Contact(-1, "Contactium", "contactium@tester.dk", [])
 
-        contact_header = {"user": self._contact.serialize()}
+        contact_header = {"user": self._contact.serialize().replace("\"", "\\\"")}
         self._contact = user.deserialize(get_response(requests.post("https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/", headers=contact_header)))
 
     def tearDown(self):
         user_delete_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
-        user_delete_header = {"user": self._contact.serialize()}
+        user_delete_header = {"user": self._contact.serialize().replace("\"", "\\\"")}
         requests.delete(user_delete_uri, headers=user_delete_header).text
 
     def test_get_contact(self):
-        user_get_header = {"email": "testington@tester.dk", "password": "1234"}
-        user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._contact.id)
+        user_get_header = {}
+        user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/contact/" + str(self._contact.id)
 
         _citizen_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))
         self.assertDictEqual(json.loads(self._contact.serialize().replace("'", "\"")), json.loads(_citizen_response.serialize().replace("'", "\"")))
-
 
 
 class UserTestCase(unittest.TestCase):
@@ -73,7 +76,7 @@ class UserTestCase(unittest.TestCase):
         user_post_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
         user_delete_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
 
-        user_post_header = {"user": _user.serialize(), "password": "1234"}
+        user_post_header = {"user": _user.serialize().replace("\"", "\\\""), "password": "1234"}
         user_get_header = {"email": "citizen@tester.dk", "password": "1234"}
         print("Post:")
         _user = user.deserialize(get_response(requests.post(user_post_uri, headers=user_post_header)))
@@ -81,7 +84,7 @@ class UserTestCase(unittest.TestCase):
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
         print("Get:")
         _user_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))
-        user_delete_header = {"user": _user_response.serialize()}
+        user_delete_header = {"user": _user_response.serialize().replace("\"", "\\\"")}
 
         _delete_response = user.deserialize(get_response(requests.delete(user_delete_uri, headers=user_delete_header)))
 
@@ -93,14 +96,14 @@ class UserTestCase(unittest.TestCase):
         user_post_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
         user_delete_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
 
-        user_post_header = {"user": _user.serialize(), "password": "1234"}
+        user_post_header = {"user": _user.serialize().replace("\"", "\\\""), "password": "1234"}
         user_get_header = {"email": "cadmin@tester.dk", "password": "1234"}
 
         _user = user.deserialize(get_response(requests.post(user_post_uri, headers=user_post_header)))
 
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
         _user_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))
-        user_delete_header = {"user": _user_response.serialize()}
+        user_delete_header = {"user": _user_response.serialize().replace("\"", "\\\"")}
 
         _delete_response = user.deserialize(get_response(requests.delete(user_delete_uri, headers=user_delete_header)))
 
@@ -112,14 +115,14 @@ class UserTestCase(unittest.TestCase):
         user_post_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
         user_delete_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
 
-        user_post_header = {"user": _user.serialize(), "password": "1234"}
+        user_post_header = {"user": _user.serialize().replace("\"", "\\\""), "password": "1234"}
         user_get_header = {"email": "contact@tester.dk", "password": "1234"}
 
         _user = user.deserialize(get_response(requests.post(user_post_uri, headers=user_post_header)))
 
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
         _user_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))
-        user_delete_header = {"user": _user_response.serialize()}
+        user_delete_header = {"user": _user_response.serialize().replace("\"", "\\\"")}
 
         _delete_response = user.deserialize(get_response(requests.delete(user_delete_uri, headers=user_delete_header)))
 
@@ -131,14 +134,14 @@ class UserTestCase(unittest.TestCase):
         user_post_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
         user_delete_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
 
-        user_post_header = {"user": _user.serialize(), "password": "1234"}
+        user_post_header = {"user": _user.serialize().replace("\"", "\\\""), "password": "1234"}
         user_get_header = {"email": "uadmin@tester.dk", "password": "1234"}
 
         _user = user.deserialize(get_response(requests.post(user_post_uri, headers=user_post_header)))
 
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
         _user_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))
-        user_delete_header = {"user": _user_response.serialize()}
+        user_delete_header = {"user": _user_response.serialize().replace("\"", "\\\"")}
 
         _delete_response = user.deserialize(get_response(requests.delete(user_delete_uri, headers=user_delete_header)))
 
