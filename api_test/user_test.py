@@ -29,7 +29,6 @@ class CitizenTestCase(unittest.TestCase):
         citizen_header = {"user": self._citizen.serialize().replace("\"", "\\\"")}
 
         self._citizen = user.deserialize(get_response(requests.post("https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/", headers=citizen_header)))
-        print(self._citizen.__dict__)
 
     def tearDown(self):
         user_delete_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
@@ -39,7 +38,7 @@ class CitizenTestCase(unittest.TestCase):
 
     def test_get_citizen(self):
         user_get_header = {'token': self._citizen.token}
-        print("token: " + self._citizen.token)
+        #print("token: " + str(user_get_header))
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._citizen.id)
 
         _citizen_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))

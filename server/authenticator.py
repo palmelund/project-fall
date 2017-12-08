@@ -27,22 +27,23 @@ def lambda_handler(event, context):
     #policy.allowAllMethods()
 
     if token["user_role"] == "citizen":
-        return 1
+        #policy.allowMethod(HttpVerb.GET, '/user/*')
+        policy.allowAllMethods()
     elif token["user_role"] == "contact":
-        return 1
+        policy.allowAllMethods()
     elif token["user_role"] == "citizenAdmin":
-        return 1
+        policy.allowAllMethods()
     elif token["user_role"] == "userAdmin":
-        return 1
+        policy.allowAllMethods()
 
-    policy.allowMethod(HttpVerb.POST, '/user/*')
+
 
     # Finally, build the policy
     authResponse = policy.build()
 
 
     #authResponse['context'] = context
-    pprint(authResponse)
+    #pprint(authResponse)
     return authResponse
 
 class HttpVerb:
