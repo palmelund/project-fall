@@ -1,5 +1,8 @@
 from os import path, makedirs
 from shutil import copyfile, copytree, make_archive, rmtree
+import boto3
+from server.sns.sns_credentials import region_name, aws_access_key_id, aws_secret_access_key
+from pprint import pprint
 
 # When more lambda functions are made, append them below.
 # We do it this way just to make everything easier.
@@ -17,7 +20,7 @@ file_folder_lists = [
 
     ["alarm_post_helper.py", "alarm_post_helper"],
 
-    ["user_get.py", "user_get"],
+    ["user_get.py", "login", "user_get"],
     ["citizen_get.py", "citizen_get"],
     ["contact_get.py", "contact_get"],
     ["alarm_get.py", "alarm_get"],
@@ -53,15 +56,12 @@ for file_folder_list in file_folder_lists:
     # copy the main file over, and rename it
     copyfile("../" + file_folder_list[0], folder_name + "/lambda_function.py")
 
-    # Copy other specified files to the output directory
-    # for file_name in file_folder_list[:-1]:
-    #    copyfile("../" + file_name, folder_name + "/" + file_name)
-
     # database
     copytree("../database", folder_name + "/server/database")
 
     # Some lambdas require SNS support, so we also need to provide that
-    copytree("../sns", folder_name + "/server/sns")
+    if "arn:sns" in file_folder_list:
+        copytree("../sns", folder_name + "/server/sns")
 
     # Copy the respond method. This is used to properly construct the response messages
     copyfile("../respond.py", folder_name + "/server/respond.py")
@@ -70,7 +70,12 @@ for file_folder_list in file_folder_lists:
     copytree("../../model", folder_name + "/model")
 
     # Include ARN endpoints
-    copyfile("../endpoints.py", folder_name + "/server/endpoints.py")
+    if "and:endpoint" in file_folder_list:
+        copyfile("../endpoints.py", folder_name + "/server/endpoints.py")
+
+    # Get user token lib
+    if "login" in file_folder_list:
+        copytree("../../jwt", folder_name + "jwt")
 
     # Include marshmallow for proper json support
     copytree("../../marshmallow", folder_name + "/marshmallow")
@@ -78,9 +83,8 @@ for file_folder_list in file_folder_lists:
     # Since AWS doesn't provide a library for interacting with PostgreSQL, we have to provide it ourselves
     copytree("../../psycopg2", folder_name + "/psycopg2")
 
+    # If we need to make requests
     if "lib:requests" in file_folder_list:
-
-        # Copy files related to requests library
         copytree("../../certifi", folder_name + "/" + "certifi")
         copytree("../../chardet", folder_name + "/" + "chardet")
         copytree("../../idna", folder_name + "/" + "idna")
@@ -93,3 +97,52 @@ for file_folder_list in file_folder_lists:
     # Cleanup
     rmtree(folder_name)
 
+
+# Upload zip files to lambdas
+
+arn_map = [
+    ["notification_endpoint_create.zip", "ProjectFallNotificationCreate"],
+    ["notification_endpoint_store.zip", "ProjectFallNotificationStore"],
+    ["notification_endpoint_update.zip", "ProjectFallNotificationUpdate"],
+
+    ["alexa_help.zip", "AlexaHelp"],
+
+    ["device_user.zip", "ProjectFallDeviceUser"],
+
+    ["alarm_post_helper.zip", "ProjectFallAlarmCreate"],
+
+    # ["user_get.zip", "ProjectFallUserGet"],
+    ["citizen_get.zip", "ProjectFallCitizenGet"],
+    ["contact_get.zip", "ProjectFallContactGet"],
+    ["alarm_get.zip", "ProjectFallAlarmGet"],
+
+    ["user_post.zip", "ProjectFallUserPost"],
+    ["alarm_post.zip", "ProjectFallAlarmPost"],
+    ["device_post.zip", "ProjectFallDevicePost"],
+
+    ["user_put.zip", "ProjectFallUserPut"],
+    ["alarm_put.zip", "ProjectFallAlarmPut"],
+    ["device_put.zip", "ProjectFallDevicePut"],
+
+    ["user_delete.zip", "ProjectFallUserDelete"],
+    ["alarm_delete.zip", "ProjectFallAlarmDelete"],
+    ["device_delete.zip", "ProjectFallDeviceDelete"]
+]
+
+aws_client = boto3.client(
+    "lambda",
+    region_name=region_name,
+    aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key
+)
+
+for m in arn_map:
+    file_name = m[0]
+    function_name = m[-1]
+
+    res = aws_client.update_function_code(
+        FunctionName=function_name,
+        ZipFile=open(file_name, "rb").read()
+    )
+
+    pprint(res)
