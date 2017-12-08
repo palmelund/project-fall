@@ -561,6 +561,17 @@ def associate(citizen_id, contact_id):
     conn.close()
 
 
+def hasa(citizen_id, device_id):
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute("INSERT INTO hasa VALUES (%s, %s);", (citizen_id, device_id))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
 def login(email, password):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
