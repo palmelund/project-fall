@@ -25,7 +25,7 @@ file_folder_lists = [
     ["contact_get.py", "contact_get"],
     ["alarm_get.py", "alarm_get"],
 
-    ["user_post.py", "user_post"],
+    ["user_post.py", "authenticate", "user_post"],
     ["alarm_post.py", "alarm_post"],
     ["device_post.py", "device_post"],
 
@@ -128,9 +128,9 @@ arn_map = [
     ["alarm_delete.zip", "ProjectFallAlarmDelete"],
     ["device_delete.zip", "ProjectFallDeviceDelete"],
 
-    ["populate_server.zip", "ProjectFallPopulateServer"]
+    ["populate_server.zip", "ProjectFallPopulateServer"],
 
-    # ["authenticator.zip", "ProjectFallAuthenticator"],
+    ["authenticator.zip", "ProjectFallAuthenticator"],
 ]
 
 aws_client = boto3.client(

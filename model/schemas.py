@@ -1,7 +1,8 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, post_dump
 from model import user
 from model import device
 from model import alarm
+from server.database import database_manager
 from pprint import pprint
 
 
@@ -12,6 +13,13 @@ class DeviceSchema(Schema):
     @post_load
     def make_device(self, data):
         return device.Device(data["id"], data["devicetype"])
+
+    @post_dump
+    def dismantle_device(self, data):
+        print("id: " + str(data))
+        dvc = database_manager.get_device(data["id"])
+        print(type(dvc))
+        return dvc.serialize()
 
 
 class AppDeviceSchema(Schema):
