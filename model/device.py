@@ -31,19 +31,7 @@ class Device:
         return database_manager.get_device_owner(self.id)
 
     def serialize(self):
-
-        if self.devicetype == "appdevice":
-            return str(schemas.AppDeviceSchema().dump(self).data)
-        elif self.devicetype == "alexadevice":
-            return str(schemas.AlexaDeviceSchema().dump(self).data)
-        elif self.devicetype == "iftttdevice":
-            return str(schemas.IFTTTDeviceSchema().dump(self).data)
-        elif self.devicetype == "smsdevice":
-            return str(schemas.SmsDeviceSchema().dump(self).data)
-        elif self.devicetype == "phonecalldevice":
-            str(schemas.PhoneCallDeviceSchema().dump(self).data)
-        else:
-            return str(schemas.DeviceSchema().dump(self).data)
+        return str(schemas.DeviceSchema().dump(self).data)
 
 
 class AppDevice(Device):
@@ -52,12 +40,18 @@ class AppDevice(Device):
         self.token = token
         self.arn = arn
 
+    def serialize(self):
+        return str(schemas.AppDeviceSchema().dump(self).data)
+
 
 class AlexaDevice(Device):
 
     def __init__(self, device_id, user_id):
         super().__init__(device_id, "alexadevice")
         self.user_id = user_id
+
+    def serialize(self):
+        return str(schemas.AlexaDeviceSchema().dump(self).data)
 
 
 class IFTTTDevice(Device):
@@ -66,17 +60,27 @@ class IFTTTDevice(Device):
         super().__init__(device_id, "iftttdevice")
         self.token = token
 
+    def serialize(self):
+        return str(schemas.IFTTTDeviceSchema().dump(self).data)
+
 
 class SmsDevice(Device):
     def __init__(self, device_id, phone_number):
         super().__init__(device_id, "smsdevice")
         self.phone_number = phone_number
 
+    def serialize(self):
+        return str(schemas.SmsDeviceSchema().dump(self).data)
+
 
 class PhoneCallDevice(Device):
     def __init__(self, device_id, phone_number):
         super().__init__(device_id, "phonecalldevice")
         self.phone_number = phone_number
+
+    def serialize(self):
+        print("O/")
+        return str(schemas.PhoneCallDeviceSchema().dump(self).data)
 
 
 def deserialize(jsonstring):
@@ -93,4 +97,4 @@ def deserialize(jsonstring):
     elif _device.devicetype == "phonecalldevice":
         return schemas.PhoneCallDeviceSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
     else:
-        raise Exception
+        return schemas.DeviceSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
