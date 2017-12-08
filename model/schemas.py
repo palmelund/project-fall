@@ -70,6 +70,7 @@ class UserSchema(Schema):
     name = fields.Str()
     email = fields.Str()
     role = fields.Str()
+    token = fields.Str(missing="")
 
     @post_load
     def make_user(self, data):
@@ -82,6 +83,7 @@ class ContactSchema(Schema):
     email = fields.Str()
     role = fields.Str()
     devices = fields.Nested(DeviceSchema, many=True, missing=[])
+    token = fields.Str(missing="")
 
     @post_load
     def make_contact(self, data):
@@ -98,6 +100,7 @@ class CitizenSchema(Schema):
     address = fields.Str()
     city = fields.Str()
     postnr = fields.Str()
+    token = fields.Str(missing="")
 
     @post_load
     def make_citizen(self, data):
@@ -110,6 +113,7 @@ class CitizenAdminSchema(Schema):
     email = fields.Str()
     role = fields.Str()
     citizens = fields.Nested(CitizenSchema, many=True, missing=[])
+    token = fields.Str(missing="")
 
     @post_load
     def make_citizen_admin(self, data):
@@ -121,6 +125,7 @@ class UserAdminSchema(Schema):
     name = fields.Str()
     email = fields.Str()
     role = fields.Str()
+    token = fields.Str(missing="")
 
     @post_load
     def make_user_admin(self, data):

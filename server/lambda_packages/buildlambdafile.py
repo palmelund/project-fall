@@ -20,7 +20,7 @@ file_folder_lists = [
 
     ["alarm_post_helper.py", "alarm_post_helper"],
 
-    ["user_get.py", "login", "user_get"],
+    ["user_get.py", "authenticate", "user_get"],
     ["citizen_get.py", "citizen_get"],
     ["contact_get.py", "contact_get"],
     ["alarm_get.py", "alarm_get"],
@@ -37,7 +37,9 @@ file_folder_lists = [
     ["alarm_delete.py", "alarm_delete"],
     ["device_delete.py", "device_delete"],
 
-    ["populate_server.py", "populate_server"]
+    ["populate_server.py", "populate_server"],
+
+    ["authenticator.py", "authenticate", "authenticator"],
 ]
 
 for file_folder_list in file_folder_lists:
@@ -74,8 +76,8 @@ for file_folder_list in file_folder_lists:
         copyfile("../endpoints.py", folder_name + "/server/endpoints.py")
 
     # Get user token lib
-    if "login" in file_folder_list:
-        copytree("../../jwt", folder_name + "jwt")
+    if "authenticate" in file_folder_list:
+        copytree("../../jwt", folder_name + "/jwt")
 
     # Include marshmallow for proper json support
     copytree("../../marshmallow", folder_name + "/marshmallow")
@@ -101,32 +103,34 @@ for file_folder_list in file_folder_lists:
 # Upload zip files to lambdas
 
 arn_map = [
-    ["notification_endpoint_create.zip", "ProjectFallNotificationCreate"],
-    ["notification_endpoint_store.zip", "ProjectFallNotificationStore"],
-    ["notification_endpoint_update.zip", "ProjectFallNotificationUpdate"],
+    # ["notification_endpoint_create.zip", "ProjectFallNotificationCreate"],
+    # ["notification_endpoint_store.zip", "ProjectFallNotificationStore"],
+    # ["notification_endpoint_update.zip", "ProjectFallNotificationUpdate"],
+    #
+    # ["alexa_help.zip", "AlexaHelp"],
+    #
+    # ["device_user.zip", "ProjectFallDeviceUser"],
+    #
+    # ["alarm_post_helper.zip", "ProjectFallAlarmCreate"],
 
-    ["alexa_help.zip", "AlexaHelp"],
+    ["user_get.zip", "ProjectFallUserGet"],
+    # ["citizen_get.zip", "ProjectFallCitizenGet"],
+    # ["contact_get.zip", "ProjectFallContactGet"],
+    # ["alarm_get.zip", "ProjectFallAlarmGet"],
+    #
+    # ["user_post.zip", "ProjectFallUserPost"],
+    # ["alarm_post.zip", "ProjectFallAlarmPost"],
+    # ["device_post.zip", "ProjectFallDevicePost"],
+    #
+    # ["user_put.zip", "ProjectFallUserPut"],
+    # ["alarm_put.zip", "ProjectFallAlarmPut"],
+    # ["device_put.zip", "ProjectFallDevicePut"],
+    #
+    # ["user_delete.zip", "ProjectFallUserDelete"],
+    # ["alarm_delete.zip", "ProjectFallAlarmDelete"],
+    # ["device_delete.zip", "ProjectFallDeviceDelete"]
 
-    ["device_user.zip", "ProjectFallDeviceUser"],
-
-    ["alarm_post_helper.zip", "ProjectFallAlarmCreate"],
-
-    # ["user_get.zip", "ProjectFallUserGet"],
-    ["citizen_get.zip", "ProjectFallCitizenGet"],
-    ["contact_get.zip", "ProjectFallContactGet"],
-    ["alarm_get.zip", "ProjectFallAlarmGet"],
-
-    ["user_post.zip", "ProjectFallUserPost"],
-    ["alarm_post.zip", "ProjectFallAlarmPost"],
-    ["device_post.zip", "ProjectFallDevicePost"],
-
-    ["user_put.zip", "ProjectFallUserPut"],
-    ["alarm_put.zip", "ProjectFallAlarmPut"],
-    ["device_put.zip", "ProjectFallDevicePut"],
-
-    ["user_delete.zip", "ProjectFallUserDelete"],
-    ["alarm_delete.zip", "ProjectFallAlarmDelete"],
-    ["device_delete.zip", "ProjectFallDeviceDelete"]
+    ["authenticator.zip", "ProjectFallAuthenticator"],
 ]
 
 aws_client = boto3.client(
