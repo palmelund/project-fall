@@ -3,6 +3,7 @@ from model import device, user
 from server.respond import respond
 import json
 
+# TODO: Fix me!
 
 def lambda_handler(event, context):
     try:
@@ -10,11 +11,7 @@ def lambda_handler(event, context):
 
         content = json.loads(dvc.content)
 
-        # We only allow input devices to get the user
-        if content["messagetype"] != "input":
-            return respond("400", user.User(-1, "", "", "userAdmin").serialize())
-
-        if content["devicetype"] == "alexa":
+        if content["devicetype"] == "alexadevice":
             dvc: device.Device = device.Device.get_from_object(content)
             usr = dvc.get_owner()
 
