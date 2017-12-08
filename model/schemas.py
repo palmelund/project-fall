@@ -75,7 +75,7 @@ class UserSchema(Schema):
     @post_load
     def make_user(self, data):
         _user = user.User(data["id"], data["name"], data["email"], data["role"])
-        _user = data["token"]
+        _user.token = data["token"]
         return _user
 
 

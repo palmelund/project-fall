@@ -150,7 +150,7 @@ class UserAdmin(User):
 
 def deserialize(jsonstring):
     usr: User = schemas.UserSchema().load(json.loads(jsonstring.replace("'", "\"").replace("\\\"", "\"").replace("None", "null"))).data
-
+    print(str(type(usr)))
     if usr.role == "citizen":
         return schemas.CitizenSchema().load(json.loads(jsonstring.replace("'", "\"").replace("\\\"", "\"").replace("None", "null"))).data
     elif usr.role == "contact":
