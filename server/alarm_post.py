@@ -3,7 +3,7 @@ import urllib.request
 
 import boto3
 from server.sns.sns_interface import push_message
-# from server.sns.sns_interface import send_sms
+#from server.sns.sns_interface import send_sms
 
 from model import alarm
 from model.alarm import deserialize as alarm_deserializer
@@ -47,27 +47,16 @@ def lambda_handler(event, context):
     except:
         return respond("400", alarm.Alarm(-1, None, None).serialize())
 
-    # Send notifications
     for c in alm.activatedby.contacts:
-        notify(c, alm.activatedby)
+        for d in c.devices:
+            if d.devicetype == "appdevice":
+                push_message(d.arn, c.activatedby.name + " has had an falling accident, and requests help.")
+            # elif d.devicetype == "smsdevice":
+                # send_sms(d.phone_number, c.activatedby.name + " has had an falling accident, and requests help.")
 
-    # Send IFTTT event to citizen devices
     for d in alm.activatedby.devices:
-        if d.messagetype == "ifttt":
-            content = json.loads(d.content)
+        if d.devicetype == "iftttdevice":
             urllib.request.urlopen(
-                "https://maker.ifttt.com/trigger/fall_detected/with/key/" + json.loads(d.content)["key"]).read()
-            break
+                "https://maker.ifttt.com/trigger/fall_detected/with/key/" + d.token).read()
 
     return respond("200", alm.serialize())
-
-
-def notify(cnt, ctz):
-    for d in cnt.devices:
-        if d.devicetype == "smartphone":
-            content = json.loads(d.content)
-            if d.messagetype == "notification":
-                push_message(content["arn"], ctz.name + " has had an falling accident, and requests help.")
-                # elif d.messagetype == "sms":
-                # Disabled sms since we pay per sms when sending outside US.
-                    # send_sms(content["number"], message_builder(citizen))

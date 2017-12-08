@@ -68,4 +68,18 @@ class PhoneCallDevice(Device):
 
 
 def deserialize(jsonstring):
-    return schemas.DeviceSchema().load(json.loads(jsonstring.replace("'", "\"").replace("None", "null"))).data
+    x = json.loads(jsonstring.replace("'", "\"").replace("None", "null"))
+    dvc = schemas.DeviceSchema().load(x).data
+
+    if dvc.devicetype == "appdevice":
+        return schemas.AppDeviceSchema().load(x).data
+    elif dvc.devicetype == "alexadevice":
+        return schemas.AlexaDeviceSchema().load(x).data
+    elif dvc.devicetype == "iftttdevice":
+        return schemas.IFTTTDeviceSchema().load(x).data
+    elif dvc.devicetype == "smsdevice":
+        return schemas.SmsDeviceSchema().load(x).data
+    elif dvc.devicetype == "phonecalldevice":
+        return schemas.PhoneCallDeviceSchema().load(x).data
+    else:
+        raise Exception
