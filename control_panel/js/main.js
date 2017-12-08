@@ -1,36 +1,25 @@
-function getNewCitizenData(){
-    let obj = new Object();
+function AddNewCitizen(){
+    let form = $("#citizen-form");
 
-    obj.name = $('#name').val();
-    obj.email = $('#email').val();
-    obj.username = $('#username').val();
-    obj.address = $('#address').val();
-    obj.city = $('#city').val();
-    obj.post = $('#post-code').val();
-
-    $("#citizen-form")[0].reset();
-    return JSON.stringify(obj);
-}
-
-function addNewCitizen(){
     $.ajax({
         url: '/fisk/fisk',
         type: 'POST',
-        data: {data: getNewCitizenData()},
-        success: function(respose){
+        data: form.serialize(),
+        success: function(respose) {
             console.log("success");
         },
-        error: function(response){
+        error: function(response) {
             console.log("error");
         }
     });
+    form[0].reset();
 }
 
-function getContactList () {
+function GetContactList () {
     let box = document.getElementById('contact-list');
 }
 
-function addNewContact (name, phone) {
+function AddNewContact (name, phone) {
     $.ajax({
         url: 'addcontact/tolis',
         type: 'POST',
@@ -47,7 +36,7 @@ function addNewContact (name, phone) {
 }
 
 
-function renderContactList () {
+function RenderContactList () {
     let contactList = document.getElementById('contact-table');
     let template = JsT.loadById('template-contact-row');
     let clst;
@@ -73,7 +62,7 @@ function renderContactList () {
     }
 }
 
-function removeContact (phone) {
+function RemoveContact (phone) {
     $.ajax({
         url: 'removecontact/tolis',
         type: 'POST',
@@ -88,7 +77,7 @@ function removeContact (phone) {
 
 }
 
-function searchForCitizen (phone) {
+function SearchForCitizen (phone) {
     let searchNr = document.getElementById("").value;
 
     $.ajax({
@@ -113,7 +102,7 @@ function searchForCitizen (phone) {
     });
 }
 
-function renderCitizenInfo (phone) {
+function RenderCitizenInfo (phone) {
     // let infoBox = document.getElementById('citizen-info');
     // let template = JsT.loadById('template-citizen-info');
 
@@ -122,12 +111,14 @@ function renderCitizenInfo (phone) {
         type: 'GET',
         data: {data: phone},
         success: function (response){
-            let infoBox= document.getElementById('citizen-info');
+            let infoBox = document.getElementById('citizen-info');
             let template = JsT.loadById('template-citizen-info');
+            infoBox.className += " box";
 
             infoBox.innerHTML = template.render({
                 citizenName: 'Fru Jensen',
                 email: 'jensen@hotmail.com',
+
                 address: 'Aalborgvej 13',
                 city: 'Aalborg',
                 postalCode: '9220'
@@ -136,8 +127,9 @@ function renderCitizenInfo (phone) {
         error: function (response){
             console.log('no citizen found');
 
-            let infoBox= document.getElementById('citizen-info');
+            let infoBox = document.getElementById('citizen-info');
             let template = JsT.loadById('template-citizen-info');
+            infoBox.className += " box";
 
             infoBox.innerHTML = template.render({
                 citizenName: 'Fru Jensen',
@@ -146,25 +138,6 @@ function renderCitizenInfo (phone) {
                 city: 'Aalborg',
                 postalCode: '9220'
             });
-        }
-    });
-
-}
-
-
-function login () {
-    let form = $('form').serialize();
-    console.log(form);
-    $.ajax({
-        url: 'https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user',
-        type: 'GET',
-        data: form,
-        success: function (response) {
-            let res = (JSON.parse(response));
-            console.log(res);
-        },
-        error: function (response) {
-            console.log("ajax error");
         }
     });
 }
