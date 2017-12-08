@@ -10,11 +10,9 @@ ifttt = "ifttt"
 
 class Device:
 
-    def __init__(self, id, devicetype, messagetype, content):
+    def __init__(self, id, devicetype):
         self.id = id
-        self.content = content
         self.devicetype = devicetype
-        self.messagetype = messagetype
 
     @staticmethod
     def get(deviceID):
@@ -37,7 +35,43 @@ class Device:
         return database_manager.get_device_owner(self.id)
 
     def serialize(self):
-        return schemas.DeviceSchema().dump(self).data
+        return str(schemas.DeviceSchema().dump(self).data)
+
+
+class AppDevice(Device):
+    def __init__(self, device_id, token, arn):
+        super.__init__(device_id, "appdevice")
+        self.token = token
+        self.arn = arn
+
+    def notify(self, activatedby):
+
+
+
+class AlexaDevice(Device):
+
+    def __init__(self, device_id, user_id):
+        super.__init__(device_id, "alexadevice")
+        self.user_id = user_id
+
+
+class IFTTTDevice(Device):
+
+    def __init__(self, device_id, token):
+        super.__init__(device_id, "iftttdevice")
+        self.token = token
+
+
+class SmsDevice(Device):
+    def __init__(self, device_id, phone_number):
+        super.__init__(device_id, "smsdevice")
+        self.phone_number = phone_number
+
+
+class PhoneCallDevice(Device):
+    def __init__(self, device_id, phone_number):
+        super.__init__(device_id, "phonecalldevice")
+        self.phone_number = phone_number
 
 
 def deserialize(jsonstring):

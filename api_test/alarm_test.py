@@ -33,8 +33,8 @@ class AlarmTestCase(unittest.TestCase):
         alarm_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._citizen.id) + "/alarm"
 
         _alarm_delete = alarm.deserialize(get_response(requests.delete(alarm_uri, headers=alarm_delete_header)))
-
-        self.assertDictEqual(json.loads(self._alarm.serialize()), json.loads(self._alarm_response.serialize())
+        pprint(_alarm_delete.__dict__)
+        self.assertDictEqual(json.loads(self._alarm.serialize().replace("'", "\"").replace("None", "null")), json.loads(self._alarm_response.serialize().replace("'", "\"").replace("None", "null")))
         self.assertEqual(-1, _alarm_delete.status)
 
 
