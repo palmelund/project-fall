@@ -1,6 +1,6 @@
 from server.respond import respond
 from model import user
-
+import jwt
 
 def lambda_handler(event, context):
     try:
@@ -17,4 +17,9 @@ def lambda_handler(event, context):
     if not usr or usr.id == -1:
         return respond("400", user.User(-1, "", "", "").serialize())
     else:
+        usr.token = get_auth_token(usr)
         return respond("200", usr.serialize())
+
+
+def get_auth_token(user):
+    return jwt.encode({'user_id': user.id, 'user_role': user.role}, 'power123')
