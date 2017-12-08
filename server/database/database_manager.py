@@ -72,7 +72,7 @@ def get_device_from_id(deviceid):
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT device.id, device.devicetype, device.messagetype, device.content FROM device JOIN devicemap ON devicemap.deviceid = device.id WHERE devicemap.token = %s",
+        "SELECT device.devicetype, devicel.json FROM device JOIN devicemap ON devicemap.deviceid = device.id WHERE devicemap.token = %s",
         [deviceid])
     dvc = cursor.fetchone()
 
@@ -80,7 +80,7 @@ def get_device_from_id(deviceid):
     cursor.close()
     conn.close()
 
-    return device.Device(dvc[0], dvc[1], dvc[2], dvc[3])
+    return device.deserialize(dvc[1])
 
 
 def get_device(id):
@@ -472,7 +472,7 @@ def delete_citizen(user_id):
     cursor.execute("DELETE FROM associateswith WHERE citizenid = %s", [user_id])
     cursor.execute("DELETE FROM citizen WHERE userid = %s", [user_id])
 
-    cursor.execute("SELECT deviceid FROM hasa WHERE userid = %s", [user_id])    
+    cursor.execute("SELECT deviceid FROM hasa WHERE userid = %s", [user_id])
     dvcs = cursor.fetchall()
 
     for dvc in dvcs:
