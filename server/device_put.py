@@ -11,6 +11,6 @@ def lambda_handler(event, context):
     if not dvc:
         return respond("400", event["device"])
 
-    dvc.update()
+    dvc.put()
 
     return respond("200", dvc.serialize())

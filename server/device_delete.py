@@ -10,7 +10,7 @@ def lambda_handler(event, context):
         return respond("400", event["device"])
 
     if not dvc:
-        dvc = deserialize(event["device"])
+        return respond("400", event["device"])
 
     dvc.delete()
 
