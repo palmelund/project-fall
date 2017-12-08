@@ -46,7 +46,7 @@ class User:
             raise Exception("Invalid role")
 
     def serialize(self):
-        return str(schemas.UserSchema().dump(self).data)
+        return str(schemas.UserSchema().dump(self).data).replace("'", "\"").replace("None", "null")
 
 
 class CitizenAdmin(User):
@@ -70,7 +70,7 @@ class CitizenAdmin(User):
         database_manager.delete_citizen_admin(self.id)
 
     def serialize(self):
-        return str(schemas.CitizenAdminSchema().dump(self).data)
+        return str(schemas.CitizenAdminSchema().dump(self).data).replace("'", "\"").replace("None", "null")
 
 
 class Citizen(User):
@@ -103,7 +103,7 @@ class Citizen(User):
         database_manager.delete_citizen(self.id)
 
     def serialize(self):
-        return str(schemas.CitizenSchema().dump(self).data)
+        return str(schemas.CitizenSchema().dump(self).data).replace("'", "\"").replace("None", "null")
 
 
 class Contact(User):
@@ -126,7 +126,7 @@ class Contact(User):
         database_manager.delete_contact(self.id)
 
     def serialize(self):
-        return str(schemas.ContactSchema().dump(self).data)
+        return str(schemas.ContactSchema().dump(self).data).replace("'", "\"").replace("None", "null")
 
 
 class UserAdmin(User):
@@ -144,7 +144,7 @@ class UserAdmin(User):
         database_manager.delete_user_admin(self.id)
 
     def serialize(self):
-        return str(schemas.UserAdminSchema().dump(self).data)
+        return str(schemas.UserAdminSchema().dump(self).data).replace("'", "\"").replace("None", "null")
 
 
 def deserialize(jsonstring):

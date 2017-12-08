@@ -20,7 +20,7 @@ class Alarm:
         database_manager.set_alarm(self)
 
     def serialize(self):
-        return str(AlarmSchema().dump(self).data)
+        return str(AlarmSchema().dump(self).data).replace("'", "\"").replace("None", "null")
 
 
 def deserialize(jsonstring):
