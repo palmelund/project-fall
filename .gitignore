@@ -132,6 +132,8 @@ requests*
 urllib3*
 marshmallow*
 psycopg2
+jwt*
+pyjwt*
 
 # Endpoints
 server/endpoints.py
