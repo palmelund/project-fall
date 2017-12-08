@@ -12,6 +12,7 @@ class User:
         self.name = name
         self.email = email
         self.role = role
+        self.token = ""
 
     @staticmethod
     def attempt_login(email, password):
