@@ -3,10 +3,6 @@ from model import schemas
 import json
 import string
 
-alexa = "alexa"
-smartphone = "smartphone"
-ifttt = "ifttt"
-
 
 class Device:
 
@@ -40,37 +36,34 @@ class Device:
 
 class AppDevice(Device):
     def __init__(self, device_id, token, arn):
-        super.__init__(device_id, "appdevice")
+        super().__init__(device_id, "appdevice")
         self.token = token
         self.arn = arn
-
-    def notify(self, activatedby):
-
 
 
 class AlexaDevice(Device):
 
     def __init__(self, device_id, user_id):
-        super.__init__(device_id, "alexadevice")
+        super().__init__(device_id, "alexadevice")
         self.user_id = user_id
 
 
 class IFTTTDevice(Device):
 
     def __init__(self, device_id, token):
-        super.__init__(device_id, "iftttdevice")
+        super().__init__(device_id, "iftttdevice")
         self.token = token
 
 
 class SmsDevice(Device):
     def __init__(self, device_id, phone_number):
-        super.__init__(device_id, "smsdevice")
+        super().__init__(device_id, "smsdevice")
         self.phone_number = phone_number
 
 
 class PhoneCallDevice(Device):
     def __init__(self, device_id, phone_number):
-        super.__init__(device_id, "phonecalldevice")
+        super().__init__(device_id, "phonecalldevice")
         self.phone_number = phone_number
 
 

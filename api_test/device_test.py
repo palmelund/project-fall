@@ -4,7 +4,6 @@ sys.path.insert(0, "../")
 sys.path.insert(0, "../server")
 sys.path.insert(0, "../server/database")
 # Imports
-from model.device import Device
 from model import device
 from model import user
 import unittest
@@ -33,7 +32,7 @@ class DeviceTestCase(unittest.TestCase):
             # print("------------ delete response: " + str(requests.delete(user_delete_uri, headers=user_delete_header).text))
 
         def test_device_post(self):
-            _device = Device(-1, device.alexa, "input", "")
+            _device = device.AlexaDevice(-1, "temp_token1234")
             device_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._citizen.id) + "/device"
             print(_device.serialize())
             device_header = {"device": _device.serialize()}
@@ -47,7 +46,7 @@ class DeviceTestCase(unittest.TestCase):
             self.assertDictEqual(json.loads(_device.serialize().replace("'", "\"")), json.loads(_citizen_response.devices[0].serialize().replace("'", "\"")))
 
         def test_device_delete(self):
-            _device = Device(-1, device.alexa, "input", "")
+            _device = device.AlexaDevice(-1, "temp_token1234")
             device_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._citizen.id) + "/device"
             device_header = {"device": _device.serialize()}
             _device = device.deserialize(get_response(requests.delete(device_uri, headers=device_header)))
