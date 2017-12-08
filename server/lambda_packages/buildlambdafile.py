@@ -62,8 +62,7 @@ for file_folder_list in file_folder_lists:
     copytree("../database", folder_name + "/server/database")
 
     # Some lambdas require SNS support, so we also need to provide that
-    if "arn:sns" in file_folder_list:
-        copytree("../sns", folder_name + "/server/sns")
+    copytree("../sns", folder_name + "/server/sns")
 
     # Copy the respond method. This is used to properly construct the response messages
     copyfile("../respond.py", folder_name + "/server/respond.py")
@@ -72,8 +71,7 @@ for file_folder_list in file_folder_lists:
     copytree("../../model", folder_name + "/model")
 
     # Include ARN endpoints
-    if "and:endpoint" in file_folder_list:
-        copyfile("../endpoints.py", folder_name + "/server/endpoints.py")
+    copyfile("../endpoints.py", folder_name + "/server/endpoints.py")
 
     # Get user token lib
     if "authenticate" in file_folder_list:
@@ -113,7 +111,7 @@ arn_map = [
     #
     # ["alarm_post_helper.zip", "ProjectFallAlarmCreate"],
 
-    ["user_get.zip", "ProjectFallUserGet"],
+    # ["user_get.zip", "ProjectFallUserGet"],
     # ["citizen_get.zip", "ProjectFallCitizenGet"],
     # ["contact_get.zip", "ProjectFallContactGet"],
     # ["alarm_get.zip", "ProjectFallAlarmGet"],
@@ -127,10 +125,10 @@ arn_map = [
     # ["device_put.zip", "ProjectFallDevicePut"],
     #
     # ["user_delete.zip", "ProjectFallUserDelete"],
-    # ["alarm_delete.zip", "ProjectFallAlarmDelete"],
+    ["alarm_delete.zip", "ProjectFallAlarmDelete"],
     # ["device_delete.zip", "ProjectFallDeviceDelete"]
 
-    ["authenticator.zip", "ProjectFallAuthenticator"],
+    # ["authenticator.zip", "ProjectFallAuthenticator"],
 ]
 
 aws_client = boto3.client(
