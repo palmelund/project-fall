@@ -1,5 +1,5 @@
 from model.user import User
-from model import user
+from model import user, device
 from server.respond import respond
 from server.endpoints import arn_notification_endpoint_store_endpoint
 from server.sns.sns_interface import create_endpoint
@@ -10,9 +10,13 @@ import boto3
 
 def lambda_handler(event, context):
     try:
-        usr: User = user.deserialize(json.loads(event["user"]))
-        token = event["token"]
-    except Exception as ex:
+        usr: User = user.deserialize(event["user"])
+        dvc: device.AppDevice = device.deserialize(event["device"])
+
+        if not usr or not dvc or dvc.devicetype != "appdevice":
+            return respond("400", "")
+
+    except:
         return respond("400", "")
 
     lambda_client = boto3.client('lambda',
@@ -21,9 +25,11 @@ def lambda_handler(event, context):
                                  aws_secret_access_key=aws_secret_access_key)
 
     try:
-        arn_endpoint = create_endpoint(token)
+        arn_endpoint = create_endpoint(dvc.token)
 
-        arg = bytes(json.dumps({"messagetype": "notification", "token": token, "arn": arn_endpoint, "action": "create", "citizen": usr.serialize()}), 'utf-8')
+        dvc.arn = arn_endpoint
+
+        arg = bytes(json.dumps({"action": "create", "user": usr.serialize(), "device": dvc.serialize()}), 'utf-8')
 
         response = lambda_client.invoke(
             FunctionName=arn_notification_endpoint_store_endpoint,
@@ -33,7 +39,7 @@ def lambda_handler(event, context):
         data = response["Payload"].read().decode()
         res = json.loads(data)
 
-        if res["status"] == "ok":
+        if res == "ok":
             return respond("200", "")
         else:
             return respond("400", "")

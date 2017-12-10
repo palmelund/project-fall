@@ -15,7 +15,7 @@ def create_endpoint(token):
     return sns_client.create_platform_endpoint(
         PlatformApplicationArn=arn_sns_android_endpoint,
         Token=token
-    )["ArnEndpoint"]
+    )["EndpointArn"]
 
 
 def update_endpoint(endpoint_arn, new_token):
@@ -29,8 +29,8 @@ def update_endpoint(endpoint_arn, new_token):
 
     # TODO: This is untested
     return sns_client.set_endpoint_attributes(
-        EndpointArn=arn_sns_android_endpoint,
-        Token=new_token
+        EndpointArn=endpoint_arn,
+        Attributes={"Token": new_token}
     )
 
 
