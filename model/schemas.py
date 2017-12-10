@@ -1,9 +1,36 @@
-from marshmallow import Schema, fields, post_load, post_dump
+from marshmallow import Schema, fields, post_load
 from model import user
 from model import device
 from model import alarm
-from server.database import database_manager
-from pprint import pprint
+import json
+
+
+class DeviceInheritanceSchema(fields.Field):
+    def _serialize(self, value, attr, obj):
+        print(obj)
+
+        res = []
+
+        if not value:
+            return res
+
+        for d in value:
+            res.append(json.loads(d.serialize().replace("'", '"')))
+
+        return res
+
+    def _deserialize(self, value, attr, obj):
+        print(obj)
+
+        res = []
+
+        if not value:
+            return res
+
+        for d in value:
+            res.append(device.deserialize(str(d)))
+
+        return res
 
 
 class DeviceSchema(Schema):
@@ -13,13 +40,6 @@ class DeviceSchema(Schema):
     @post_load
     def make_device(self, data):
         return device.Device(data["id"], data["devicetype"])
-
-    @post_dump
-    def dismantle_device(self, data):
-        print("id: " + str(data))
-        dvc = database_manager.get_device(data["id"])
-        print(type(dvc))
-        return dvc.serialize()
 
 
 class AppDeviceSchema(Schema):
@@ -92,7 +112,8 @@ class ContactSchema(Schema):
     name = fields.Str()
     email = fields.Str()
     role = fields.Str()
-    devices = fields.Nested(DeviceSchema, many=True, missing=[])
+    devices = DeviceInheritanceSchema(many=True, missing=[])
+    # devices = fields.Nested(DeviceSchema, many=True, missing=[])
     token = fields.Str(missing="")
 
     @post_load
@@ -101,13 +122,15 @@ class ContactSchema(Schema):
         _user.token = data["token"]
         return _user
 
+
 class CitizenSchema(Schema):
     id = fields.Int()
     name = fields.Str()
     email = fields.Str()
     role = fields.Str()
     contacts = fields.Nested(ContactSchema, many=True, missing=[])
-    devices = fields.Nested(DeviceSchema, many=True, missing=[])
+    devices = DeviceInheritanceSchema(many=True, missing=[])
+    # devices = fields.Nested(DeviceSchema, many=True, missing=[])
     address = fields.Str()
     city = fields.Str()
     postnr = fields.Str()
@@ -115,9 +138,11 @@ class CitizenSchema(Schema):
 
     @post_load
     def make_citizen(self, data):
-        _user = user.Citizen(data["id"], data["name"], data["email"], data["contacts"], data["devices"], data["address"], data["city"], data["postnr"])
+        _user = user.Citizen(data["id"], data["name"], data["email"], data["contacts"], data["devices"],
+                             data["address"], data["city"], data["postnr"])
         _user.token = data["token"]
         return _user
+
 
 class CitizenAdminSchema(Schema):
     id = fields.Int()
@@ -133,6 +158,7 @@ class CitizenAdminSchema(Schema):
         _user.token = data["token"]
         return _user
 
+
 class UserAdminSchema(Schema):
     id = fields.Int()
     name = fields.Str()
@@ -145,6 +171,7 @@ class UserAdminSchema(Schema):
         _user = user.UserAdmin(data["id"], data["name"], data["email"])
         _user.token = data["token"]
         return _user
+
 
 class AlarmSchema(Schema):
     status = fields.Int()

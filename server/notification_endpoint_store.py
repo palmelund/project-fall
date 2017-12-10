@@ -1,23 +1,21 @@
-from model import user
-from model.user import Citizen
+from model import user, device
 from model.device import Device
-from database.database_manager import get_user_devices
+from server.database.database_manager import get_user_devices
 import json
 
 
 def lambda_handler(event, context):
     try:
-        usr = user.deserialize(json.loads(event["citizen"]))
-        messagetype = event["messagetype"]
-        token = event["token"]
-        arn = event["arn"]
+        dvc = device.deserialize(json.loads(event["device"]))
         action = event["action"]
 
         if action == "create":
-            dvc: Device = Device(0, json.dumps({"messagetype": messagetype, "token": token, "arn": arn}))
-            dvc.put(usr)
+            dvc.put()
 
         elif action == "update":
+            dvc.update()
+
+
             devices = get_user_devices(usr.id)
             for d in devices:
                 content = json.loads(d.content)
