@@ -31,7 +31,7 @@ def lambda_handler(event, context):
     contactb: Contact = User.create_new_user("b", "b", "a", "contact")
     citizena: Citizen = User.create_new_user("a", "a", "b", "citizen", address="addr", city="city", zipcode="zip", managed_by=admin1.id)
 
-    contactbdev: Device = PhoneCallDevice(-1, "31663272")
+    contactbdev: Device = PhoneCallDevice(-1, "51161217")
     contactbdev.post(contactb)
 
     associate(citizena.id, contactb.id)

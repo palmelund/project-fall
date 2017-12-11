@@ -89,7 +89,7 @@ class Citizen(User):
     def update(self):
 
         old_devices = database_manager.get_user_devices(self.id)
-        old_contacts = database_manager.get_user_devices(self.id)
+        old_contacts = database_manager.get_citizen_contacts(self.id)
 
         added_devices = List(set(self.devices)-set(old_devices))
         removed_devices = List(set(old_devices)-set(self.devices))

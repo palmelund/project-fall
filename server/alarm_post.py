@@ -43,7 +43,9 @@ def lambda_handler(event, context):
 
     # Get the alarm
     try:
-        alm = alarm_deserializer(data.replace('"', "").replace("'", '"'))
+        dt = json.loads(json.loads(data))
+        usr = user.deserialize(str(dt["activatedby"])) #user.Citizen(str(dt["activatedby"]).replace("'", '"'))
+        alm = alarm.Alarm(dt["status"], usr, None)
     except:
         return respond("400", alarm.Alarm(-1, None, None).serialize())
 

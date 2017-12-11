@@ -60,7 +60,20 @@ def update_device(dvc):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
-    cursor.execute("UPDATE device SET content = %s WHERE id = %s", [dvc.content, dvc.id])
+    if dvc.devicetype == "appdevice":
+        content = {"token": dvc.token, "arn": dvc.arn}
+    elif dvc.devicetype == "alexadevice":
+        content = {"user_id": dvc.user_id}
+    elif dvc.devicetype == "iftttdevice":
+        content = {"token": dvc.token}
+    elif dvc.devicetype == "smsdevice":
+        content = {"phone_number": dvc.phone_number}
+    elif dvc.devicetype == "phonecalldevice":
+        content = {"phone_number": dvc.phone_number}
+    else:
+        content = {}
+
+    cursor.execute("UPDATE device SET content = %s WHERE id = %s", [json.dumps(content), dvc.id])
 
     conn.commit()
     cursor.close()
