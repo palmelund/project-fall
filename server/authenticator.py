@@ -37,8 +37,8 @@ def lambda_handler(event, context):
         policy.allowMethod(HttpVerb.ALL, '/citizen/*/device')
         policy.allowMethod(HttpVerb.GET, '/citizen/*')
     elif token["user_role"] == "userAdmin":
-        policy.allowMethod(HttpVerb.DELETE, "/user")
-        policy.allowMethod(HttpVerb.PUT, "/user")
+        policy.allowAllMethods()
+        policy.allowMethod(HttpVerb.ALL, '/citizen/*/alarm')
 
 
     authResponse = policy.build()
