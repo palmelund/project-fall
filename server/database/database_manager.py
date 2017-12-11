@@ -80,20 +80,19 @@ def update_device(dvc):
     conn.close()
 
 
-def get_device_from_id(deviceid):
+def get_device_from_user_id(user_id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT device.devicetype, devicel.json FROM device JOIN devicemap ON devicemap.deviceid = device.id WHERE devicemap.token = %s",
-        [deviceid])
+        "SELECT device.id FROM device, devicemap WHERE devicemap.token = %s AND devicemap.deviceid = device.id", [user_id])
     dvc = cursor.fetchone()
 
     conn.commit()
     cursor.close()
     conn.close()
 
-    return device.deserialize(dvc[1])
+    return device.AlexaDevice(dvc[0], user_id)
 
 
 def get_device(id):

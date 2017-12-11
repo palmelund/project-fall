@@ -42,7 +42,7 @@ class DeviceSchema(Schema):
         return device.Device(data["id"], data["devicetype"])
 
 
-class AppDeviceSchema(DeviceSchema):
+class AppDeviceSchema(Schema):
     id = fields.Int()
     devicetype = fields.Str()
     token = fields.Str()
@@ -53,7 +53,7 @@ class AppDeviceSchema(DeviceSchema):
         return device.AppDevice(data["id"], data["token"], data["arn"])
 
 
-class AlexaDeviceSchema(DeviceSchema):
+class AlexaDeviceSchema(Schema):
     id = fields.Int()
     devicetype = fields.Str()
     user_id = fields.Str()
@@ -63,7 +63,7 @@ class AlexaDeviceSchema(DeviceSchema):
         return device.AlexaDevice(data["id"], data["user_id"])
 
 
-class IFTTTDeviceSchema(DeviceSchema):
+class IFTTTDeviceSchema(Schema):
     id = fields.Int()
     devicetype = fields.Str()
     token = fields.Str()
@@ -73,7 +73,7 @@ class IFTTTDeviceSchema(DeviceSchema):
         return device.IFTTTDevice(data["id"], data["token"])
 
 
-class SmsDeviceSchema(DeviceSchema):
+class SmsDeviceSchema(Schema):
     id = fields.Int()
     devicetype = fields.Str()
     phone_number = fields.Str()
@@ -83,7 +83,7 @@ class SmsDeviceSchema(DeviceSchema):
         return device.SmsDevice(data["id"], data["phone_number"])
 
 
-class PhoneCallDeviceSchema(DeviceSchema):
+class PhoneCallDeviceSchema(Schema):
     id = fields.Int()
     devicetype = fields.Str()
     phone_number = fields.Str()

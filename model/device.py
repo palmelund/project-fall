@@ -15,8 +15,8 @@ class Device:
         return database_manager.get_device(deviceID)
 
     @staticmethod
-    def get_from_object(obj):
-        return database_manager.get_device_from_id(obj["userid"])
+    def get_from_object(user_id):
+        return database_manager.get_device_from_user_id(user_id)
 
     def post(self, user):
         database_manager.post_device(self, user)

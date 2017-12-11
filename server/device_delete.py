@@ -14,4 +14,4 @@ def lambda_handler(event, context):
 
     dvc.delete()
 
-    return respond("200", device.Device(-1, "", "", "").serialize())
+    return respond("200", device.Device(-1, "").serialize())

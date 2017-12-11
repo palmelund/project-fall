@@ -107,30 +107,30 @@ arn_map = [
     ["notification_endpoint_store.zip", "ProjectFallNotificationStore"],
     ["notification_endpoint_update.zip", "ProjectFallNotificationUpdate"],
 
-    #["alexa_help.zip", "AlexaHelp"],
+    ["alexa_help.zip", "AlexaHelp"],
 
-    #["device_user.zip", "ProjectFallDeviceUser"],
+    ["device_user.zip", "ProjectFallDeviceUser"],
 
-    #["alarm_post_helper.zip", "ProjectFallAlarmCreate"],
+    ["alarm_post_helper.zip", "ProjectFallAlarmCreate"],
 
-    #["user_get.zip", "ProjectFallUserGet"],
-    #["citizen_get.zip", "ProjectFallCitizenGet"],
-    #["contact_get.zip", "ProjectFallContactGet"],
-    #["alarm_get.zip", "ProjectFallAlarmGet"],
+    ["user_get.zip", "ProjectFallUserGet"],
+    ["citizen_get.zip", "ProjectFallCitizenGet"],
+    ["contact_get.zip", "ProjectFallContactGet"],
+    ["alarm_get.zip", "ProjectFallAlarmGet"],
 
-    #["user_post.zip", "ProjectFallUserPost"],
-    #["alarm_post.zip", "ProjectFallAlarmPost"],
-    #["device_post.zip", "ProjectFallDevicePost"],
+    ["user_post.zip", "ProjectFallUserPost"],
+    ["alarm_post.zip", "ProjectFallAlarmPost"],
+    ["device_post.zip", "ProjectFallDevicePost"],
 
-    #["user_put.zip", "ProjectFallUserPut"],
-    #["alarm_put.zip", "ProjectFallAlarmPut"],
-    #["device_put.zip", "ProjectFallDevicePut"],
+    ["user_put.zip", "ProjectFallUserPut"],
+    ["alarm_put.zip", "ProjectFallAlarmPut"],
+    ["device_put.zip", "ProjectFallDevicePut"],
 
-    #["user_delete.zip", "ProjectFallUserDelete"],
-    #["alarm_delete.zip", "ProjectFallAlarmDelete"],
-    #["device_delete.zip", "ProjectFallDeviceDelete"],
+    ["user_delete.zip", "ProjectFallUserDelete"],
+    ["alarm_delete.zip", "ProjectFallAlarmDelete"],
+    ["device_delete.zip", "ProjectFallDeviceDelete"],
 
-    #["populate_server.zip", "ProjectFallPopulateServer"],
+    ["populate_server.zip", "ProjectFallPopulateServer"],
 
     #["authenticator.zip", "ProjectFallAuthenticator"],
 ]

@@ -7,12 +7,10 @@ import json
 
 def lambda_handler(event, context):
     try:
-        dvc = deserialize(event["device"])
+        dvc: device.AlexaDevice = deserialize(event["device"])
 
-        content = json.loads(dvc.content)
-
-        if content["devicetype"] == "alexadevice":
-            dvc: device.Device = device.Device.get_from_object(content)
+        if dvc.devicetype == "alexadevice":
+            dvc: device.Device = device.Device.get_from_object(dvc.user_id)
             usr = dvc.get_owner()
 
             return respond("200", usr.serialize())
@@ -22,4 +20,4 @@ def lambda_handler(event, context):
         else:
             return respond("400", user.User(-1, "", "", "userAdmin").serialize())
     except:
-        return respond("400", user.User(-1, "", "", "userAdmin").serialize())
+        return respond("401", user.User(-1, "", "", "userAdmin").serialize())
