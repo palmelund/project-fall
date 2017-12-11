@@ -7,15 +7,15 @@ def lambda_handler(event, context):
         email = event['email']
         password = event['password']
     except:
-        return respond("400", user.User(-1, "", "", "").serialize())
+        return respond("400", user.User(-1, "", "", "userAdmin").serialize())
 
     if not all(x is not None for x in [email, password]):
-        return respond("400", user.User(-1, "", "", "").serialize())
+        return respond("400", user.User(-1, "", "", "userAdmin").serialize())
 
     usr = user.User.attempt_login(email, password)
 
     if not usr or usr.id == -1:
-        return respond("400", user.User(-1, "", "", "").serialize())
+        return respond("400", user.User(-1, "", "", "userAdmin").serialize())
     else:
         usr.token = get_auth_token(usr)
         return respond("200", usr.serialize())
