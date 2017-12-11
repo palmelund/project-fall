@@ -11,8 +11,7 @@ from server.sns.sns_credentials import region_name, aws_access_key_id, aws_secre
 
 def lambda_handler(event, context):
     try:
-        dvc_old: device.AppDevice = device.deserialize(event["old_device"])
-        dvc_new: device.AppDevice = device.deserialize(event["new_device"])
+        dvc: device.AppDevice = device.deserialize(event["device"])
 
     except Exception as ex:
         return respond("400", "error")

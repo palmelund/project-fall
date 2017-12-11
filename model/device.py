@@ -19,7 +19,7 @@ class Device:
         return database_manager.get_device_from_user_id(user_id)
 
     def post(self, user):
-        database_manager.post_device(self, user)
+        return database_manager.post_device(self, user)
 
     def put(self):
         database_manager.update_device(self)

@@ -139,6 +139,8 @@ def post_device(dvc, usr):
     cursor.close()
     conn.close()
 
+    return device_id
+
 
 def get_user(id):
     conn = psycopg2.connect(connect_str)
@@ -471,6 +473,19 @@ def delete_user(user_id):
     conn = psycopg2.connect(connect_str)
     cursor = conn.cursor()
 
+    cursor.execute("SELECT deviceid FROM hasa WHERE userid = %s", [user_id])
+    devices = cursor.fetchall()
+
+    # cursor.execute("DELETE FROM hasa WHERE userid = %s", [user_id])
+
+    for dvc in devices:
+        cursor.execute("DELETE FROM hasa WHERE deviceid = %s", [dvc])
+        cursor.execute("DELETE FROM device WHERE id = %s", [dvc])
+
+    cursor.execute("DELETE FROM associateswith WHERE contactid = %s OR citizenid = %s", [user_id, user_id])
+
+    cursor.execute("DELETE FROM manages WHERE adminid = %s OR citizenid = %s", [user_id, user_id])
+
     cursor.execute("DELETE FROM users WHERE id = %s", [user_id])
 
     conn.commit()
@@ -488,10 +503,10 @@ def delete_citizen(user_id):
     cursor.execute("SELECT deviceid FROM hasa WHERE userid = %s", [user_id])
     dvcs = cursor.fetchall()
 
+    cursor.execute("DELETE FROM hasa WHERE userid = %s", [user_id])
+
     for dvc in dvcs:
         cursor.execute("DELETE FROM device WHERE id = %s", [dvc])
-
-    cursor.execute("DELETE FROM hasa WHERE userid = %s", [user_id])
 
     cursor.execute("DELETE FROM users WHERE id = %s", [user_id])
 
@@ -510,10 +525,10 @@ def delete_contact(user_id):
     cursor.execute("SELECT deviceid FROM hasa WHERE userid = %s", [user_id])
     dvcs = cursor.fetchall()
 
+    cursor.execute("DELETE FROM hasa WHERE userid = %s", [user_id])
+
     for dvc in dvcs:
         cursor.execute("DELETE FROM device WHERE id = %s", [dvc])
-
-    cursor.execute("DELETE FROM hasa WHERE userid = %s", [user_id])
 
     cursor.execute("DELETE FROM users WHERE id = %s", [user_id])
 
