@@ -22,7 +22,7 @@ class DeviceSchema(Schema):
         return dvc.serialize()
 
 
-class AppDeviceSchema(Schema):
+class AppDeviceSchema(DeviceSchema):
     id = fields.Int()
     devicetype = fields.Str()
     token = fields.Str()
@@ -33,7 +33,7 @@ class AppDeviceSchema(Schema):
         return device.AppDevice(data["id"], data["token"], data["arn"])
 
 
-class AlexaDeviceSchema(Schema):
+class AlexaDeviceSchema(DeviceSchema):
     id = fields.Int()
     devicetype = fields.Str()
     user_id = fields.Str()
@@ -43,7 +43,7 @@ class AlexaDeviceSchema(Schema):
         return device.AlexaDevice(data["id"], data["user_id"])
 
 
-class IFTTTDeviceSchema(Schema):
+class IFTTTDeviceSchema(DeviceSchema):
     id = fields.Int()
     devicetype = fields.Str()
     token = fields.Str()
@@ -53,7 +53,7 @@ class IFTTTDeviceSchema(Schema):
         return device.IFTTTDevice(data["id"], data["token"])
 
 
-class SmsDeviceSchema(Schema):
+class SmsDeviceSchema(DeviceSchema):
     id = fields.Int()
     devicetype = fields.Str()
     phone_number = fields.Str()
@@ -63,7 +63,7 @@ class SmsDeviceSchema(Schema):
         return device.SmsDevice(data["id"], data["phone_number"])
 
 
-class PhoneCallDeviceSchema(Schema):
+class PhoneCallDeviceSchema(DeviceSchema):
     id = fields.Int()
     devicetype = fields.Str()
     phone_number = fields.Str()

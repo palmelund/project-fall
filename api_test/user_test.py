@@ -32,7 +32,7 @@ class CitizenTestCase(unittest.TestCase):
 
     def tearDown(self):
         user_delete_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
-        user_delete_header = {"user": self._citizen.serialize().replace("\"", "\\\"")}
+        user_delete_header = {"user": self._citizen.serialize().replace("\"", "\\\""), "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjM0IiwidXNlcl9yb2xlIjoidXNlckFkbWluIn0._zMvLSI7elh4ebv-1iaE8nXYdbzjyvpBNlDNhNSJMc0"}
         print("------------ delete user: " + str(self._citizen.serialize().replace("\"", "\\\"")))
         print("------------ delete response: " + str(requests.delete(user_delete_uri, headers=user_delete_header).text))
 
@@ -42,6 +42,10 @@ class CitizenTestCase(unittest.TestCase):
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._citizen.id)
 
         _citizen_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))
+
+        self._citizen.token = ""
+        _citizen_response.token = ""
+
         self.assertDictEqual(json.loads(self._citizen.serialize().replace("'", "\"")), json.loads(_citizen_response.serialize().replace("'", "\"")))
 
 
@@ -59,14 +63,16 @@ class ContactTestCase(unittest.TestCase):
 
     def tearDown(self):
         user_delete_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
-        user_delete_header = {"user": self._contact.serialize().replace("\"", "\\\"")}
+        user_delete_header = {"user": self._contact.serialize().replace("\"", "\\\""), "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjM0IiwidXNlcl9yb2xlIjoidXNlckFkbWluIn0._zMvLSI7elh4ebv-1iaE8nXYdbzjyvpBNlDNhNSJMc0"}
         requests.delete(user_delete_uri, headers=user_delete_header).text
 
     def test_get_contact(self):
-        user_get_header = {}
+        user_get_header = {"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjM0IiwidXNlcl9yb2xlIjoidXNlckFkbWluIn0._zMvLSI7elh4ebv-1iaE8nXYdbzjyvpBNlDNhNSJMc0"}
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/contact/" + str(self._contact.id)
 
         _citizen_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))
+        self._contact.token = ""
+        _citizen_response.token = ""
         self.assertDictEqual(json.loads(self._contact.serialize().replace("'", "\"")), json.loads(_citizen_response.serialize().replace("'", "\"")))
 
 
@@ -85,9 +91,12 @@ class UserTestCase(unittest.TestCase):
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
         print("Get:")
         _user_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))
-        user_delete_header = {"user": _user_response.serialize().replace("\"", "\\\"")}
+        user_delete_header = {"user": _user_response.serialize().replace("\"", "\\\""), "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjM0IiwidXNlcl9yb2xlIjoidXNlckFkbWluIn0._zMvLSI7elh4ebv-1iaE8nXYdbzjyvpBNlDNhNSJMc0"}
 
         _delete_response = user.deserialize(get_response(requests.delete(user_delete_uri, headers=user_delete_header)))
+
+        _user.token = ""
+        _user_response.token = ""
 
         self.assertDictEqual(json.loads(_user.serialize().replace("'", "\"")), json.loads(_user_response.serialize().replace("'", "\"")))
         self.assertEqual(-1, _delete_response.id)
@@ -104,9 +113,12 @@ class UserTestCase(unittest.TestCase):
 
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
         _user_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))
-        user_delete_header = {"user": _user_response.serialize().replace("\"", "\\\"")}
+        user_delete_header = {"user": _user_response.serialize().replace("\"", "\\\""), "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjM0IiwidXNlcl9yb2xlIjoidXNlckFkbWluIn0._zMvLSI7elh4ebv-1iaE8nXYdbzjyvpBNlDNhNSJMc0"}
 
         _delete_response = user.deserialize(get_response(requests.delete(user_delete_uri, headers=user_delete_header)))
+
+        _user.token = ""
+        _user_response.token = ""
 
         self.assertDictEqual(json.loads(_user.serialize().replace("'", "\"")), json.loads(_user_response.serialize().replace("'", "\"")))
         self.assertEqual(-1, _delete_response.id)
@@ -123,9 +135,12 @@ class UserTestCase(unittest.TestCase):
 
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
         _user_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))
-        user_delete_header = {"user": _user_response.serialize().replace("\"", "\\\"")}
+        user_delete_header = {"user": _user_response.serialize().replace("\"", "\\\""), "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjM0IiwidXNlcl9yb2xlIjoidXNlckFkbWluIn0._zMvLSI7elh4ebv-1iaE8nXYdbzjyvpBNlDNhNSJMc0"}
 
         _delete_response = user.deserialize(get_response(requests.delete(user_delete_uri, headers=user_delete_header)))
+
+        _user.token = ""
+        _user_response.token = ""
 
         self.assertDictEqual(json.loads(_user.serialize().replace("'", "\"")), json.loads(_user_response.serialize().replace("'", "\"")))
         self.assertEqual(-1, _delete_response.id)
@@ -142,9 +157,12 @@ class UserTestCase(unittest.TestCase):
 
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
         _user_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))
-        user_delete_header = {"user": _user_response.serialize().replace("\"", "\\\"")}
+        user_delete_header = {"user": _user_response.serialize().replace("\"", "\\\""), "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjM0IiwidXNlcl9yb2xlIjoidXNlckFkbWluIn0._zMvLSI7elh4ebv-1iaE8nXYdbzjyvpBNlDNhNSJMc0"}
 
         _delete_response = user.deserialize(get_response(requests.delete(user_delete_uri, headers=user_delete_header)))
+
+        _user.token = ""
+        _user_response.token = ""
 
         self.assertDictEqual(json.loads(_user.serialize().replace("'", "\"")), json.loads(_user_response.serialize().replace("'", "\"")))
         self.assertEqual(-1, _delete_response.id)
