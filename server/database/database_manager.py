@@ -135,6 +135,9 @@ def post_device(dvc, usr):
 
     cursor.execute("INSERT INTO hasa VALUES (%s, %s)", [usr.id, device_id])
 
+    if dvc.devicetype == "alexadevice":
+        cursor.execute("INSERT INTO devicemap VALUES (%s, %s)", [dvc.user_id, dvc.id])
+
     conn.commit()
     cursor.close()
     conn.close()
@@ -237,6 +240,27 @@ def get_contact(id):
     conn.close()
 
     return user.Contact(ctc[0], ctc[1], ctc[2], devices)
+
+
+def get_contact_all():
+    all_contacts = []
+
+    conn = psycopg2.connect(connect_str)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT users.id, users.name, users.email FROM users, contact WHERE users.id = contact.userID")
+    citizens_raw = cursor.fetchall()
+
+    for ctc in citizens_raw:
+        devices = get_user_devices(ctc[0])
+        all_contacts.append(user.Contact(ctc[0], ctc[1], ctc[2], devices))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return all_contacts
 
 
 def get_citizen(id):

@@ -7,7 +7,6 @@ import json
 
 class DeviceInheritanceSchema(fields.Field):
     def _serialize(self, value, attr, obj):
-        print(obj)
 
         res = []
 
@@ -20,7 +19,6 @@ class DeviceInheritanceSchema(fields.Field):
         return res
 
     def _deserialize(self, value, attr, obj):
-        print(obj)
 
         res = []
 

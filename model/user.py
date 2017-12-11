@@ -130,6 +130,10 @@ class Contact(User):
     def serialize(self):
         return str(schemas.ContactSchema().dump(self).data).replace("'", "\"").replace("None", "null")
 
+    @staticmethod
+    def get_all():
+        database_manager.get_contact_all()
+
 
 class UserAdmin(User):
     'A specialized user, representing a contact'
