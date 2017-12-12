@@ -1,92 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Citizen admin panel</title>
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/skeleton.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-<div id="wrapper">
-    <div id="add-new-citizen" class="three columns">
-        <div class="box">
-            <form id="citizen-form" class="add-citizen">
-                <h5 style="text-align: center;">Tilføj borger</h5>
-                <input id="name" class="u-full-width" type="text" name="name" value="" placeholder="Fulde navn" tabindex="1">
-                <input id="email" class="u-full-width" type="email" name="email" value="" placeholder="Email" tabindex="2">
-                <select class="u-full-width" name="role" tabindex="3">
-                    <option value="citizen">Borger</option>
-                    <option value="contact">Kontakt</option>
-                </select>
-                <div class="row">
-                    <input id="address" class="four columns u-full-width" type="text" name="address" value="" placeholder="Addresse" tabindex="4">
-                    <input id="city" class="four columns u-full-width" type="text" name="city" value="" placeholder="By" tabindex="5">
-                    <input id="post-code" class="four columns u-full-width" type="number" name="postcode" value="" placeholder="Post nr." tabindex="6">
-                </div>
-                <div class="btn-submit u-full-width" onclick="AddNewCitizen()" onkeypress="AddNewCitizen()" tabindex="7">Tilføj</div>
-            </form>
-        </div>
-        <div id="citizen-list" class="box">
-            <h5 style="margin-top: 10px;">Borger liste</h5>
-            <div class="separator" style="margin-bottom: 0;"></div>
-            <ul class="u-full-width citizen-list">
-                <li onclick="GetContactList()">fru jensen</li>
-                <li onclick="RenderCitizenInfo()">fru jensen</li>
-            </ul>
-        </div>
-    </div>
-    <div id="citizen-info" class="nine columns"></div>
-
-    <template id="template-citizen-info">
-        <h5>{{ citizenName }}</h5>
-        <div class="separator" style="margin-bottom: 20px;"></div>
-        <div class="six columns" style="margin-left: 0">
-            <p>Email: {{ email }}</p>
-            <address style="margin-bottom: 20px">
-                Addresse: {{ address }}<br>
-                By: {{ city }}<br>
-                Post nr.: {{ postalCode }}<br>
-            </address>
-            <div class="separator"></div>
-            <input class="u-full-width" type="text" placeholder="Søg efter nr.">
-            <div class="box-no-shadow search-result-box">
-                <table class="u-full-width search-result-list">
-                    <tbody id="search-result">
-                    <tr>
-                        <td>Hr. Hansen</td>
-                        <td class="search-add-btn" onclick="AddNewContact('hansen', '12345678')">Tilføj</td>
-                    </tr>
-                    </tbody>
-                </table>
+<template id="template-citizenadmin">
+    <div id="wrapper">
+        <div id="add-new-citizen" class="three columns">
+            <div class="box">
+                <form id="citizen-form" class="add-citizen">
+                    <h5 style="text-align: center;">Tilføj borger</h5>
+                    <input id="name" class="u-full-width" type="text" name="name" value="" placeholder="Fulde navn" tabindex="1">
+                    <input id="email" class="u-full-width" type="email" name="email" value="" placeholder="Email" tabindex="2">
+                    <select class="u-full-width" name="role" tabindex="3">
+                        <option value="citizen">Borger</option>
+                        <option value="contact">Kontakt</option>
+                    </select>
+                    <div class="row">
+                        <input id="address" class="four columns u-full-width" type="text" name="address" value="" placeholder="Addresse" tabindex="4">
+                        <input id="city" class="four columns u-full-width" type="text" name="city" value="" placeholder="By" tabindex="5">
+                        <input id="post-code" class="four columns u-full-width" type="number" name="postcode" value="" placeholder="Post nr." tabindex="6">
+                    </div>
+                    <div class="btn-submit u-full-width" onclick="AddNewCitizen()" onkeypress="AddNewCitizen()" tabindex="7">Tilføj</div>
+                </form>
+            </div>
+            <div id="citizen-list" class="box">
+                <h5 style="margin-top: 10px;">Borger liste</h5>
+                <div class="separator" style="margin-bottom: 0;"></div>
+                <ul class="u-full-width citizen-list">
+                    <li onclick="GetContactList()">fru jensen</li>
+                    <li onclick="RenderCitizenInfo()">fru jensen</li>
+                </ul>
             </div>
         </div>
-        <div id="contact-list" class="six columns box-no-shadow" >
-            <table  class="u-full-width" style="">
-                <tbody id="contact-table"></tbody>
+        <div id="citizen-info" class="nine columns"></div>
+    </div>
+</template>
+
+<template id="template-citizen-info">
+    <h5>{{ citizenName }}</h5>
+    <div class="separator" style="margin-bottom: 20px;"></div>
+    <div class="six columns" style="margin-left: 0">
+        <p>Email: {{ email }}</p>
+        <address style="margin-bottom: 20px">
+            Addresse: {{ address }}<br>
+            By: {{ city }}<br>
+            Post nr.: {{ postalCode }}<br>
+        </address>
+        <div class="separator"></div>
+        <input class="u-full-width" type="text" placeholder="Søg efter nr.">
+        <div class="box-no-shadow search-result-box">
+            <table class="u-full-width search-result-list">
+                <tbody id="search-result">
+                <tr>
+                    <td>Hr. Hansen</td>
+                    <td class="search-add-btn" onclick="AddNewContact('hansen', '12345678')">Tilføj</td>
+                </tr>
+                </tbody>
             </table>
         </div>
-    </template>
+    </div>
+    <div id="contact-list" class="six columns box-no-shadow" >
+        <table  class="u-full-width" style="">
+            <tbody id="contact-table"></tbody>
+        </table>
+    </div>
+</template>
 
-    <template id="template-search-result-row">
-        <tr>
-            <td>{{ name }}</td>
-            <td class="search-add-btn" onclick="AddNewContact('{{ name }}', '{{ phone }}')"></td>
-        </tr>
-    </template>
+<template id="template-search-result-row">
+    <tr>
+        <td>{{ name }}</td>
+        <td class="search-add-btn" onclick="AddNewContact('{{ name }}', '{{ phone }}')"></td>
+    </tr>
+</template>
 
-    <template id="template-contact-row">
-        <tr>
-            <td>{{ name }}</td>
-            <td>{{ phone }}</td>
-            <td class="contact-list-btn" onclose="RemoveContact('{{ phone }}')">Fjern</td>
-        </tr>
-    </template>
-</div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="js/JsTemplates.js"></script>
-    <script src="js/main.js"></script>
-</body>
-</html>
+<template id="template-contact-row">
+    <tr>
+        <td>{{ name }}</td>
+        <td>{{ phone }}</td>
+        <td class="contact-list-btn" onclose="RemoveContact('{{ phone }}')">Fjern</td>
+    </tr>
+</template>

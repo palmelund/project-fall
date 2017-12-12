@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div id="container"></div>
+
+<template id="template-login">
+    <h5 style="text-align: center">Login</h5>
+    <a style="float:right; cursor: pointer;" onclick="RenderRegisterView()">Opret en ny bruger</a>
+    <form id="login">
+        <input class="u-full-width" type="email" name="email" value="" placeholder="Email" tabindex="1">
+        <input class="u-full-width" type="password" name="password" value="" placeholder="Kodeord" tabindex="2">
+        <div class="btn-submit" onclick="Login()" onkeypress="Login()" tabindex="3">Log ind</div>
+    </form>
+</template>
+<template id="template-register">
+    <h5 style="text-align: center;">Tilføj ny bruger</h5>
+    <div class="row" style="margin-bottom: 10px;">
+        <div id="btn-register-citizen" class="six columns" onclick="RenderRegisterCitizenView()">Borger</div>
+        <div id="btn-register-contact" class="six columns" onclick="RenderRegisterContactView()">Kontakt</div>
+    </div>
+    <div class="separator"></div>
+    <div id="register-user-view"></div>
+</template>
+<template id="template-register-citizen">
+    <form id="add-new-user-form">
+        <input class="u-full-width" type="text" name="name" value="" placeholder="Fulde navn" tabindex="1">
+        <input class="u-full-width" type="email" name="email" value="" placeholder="Email" tabindex="2">
+        <div class="row">
+            <input class="six columns" type="password" name="password" value="" placeholder="Kodeord" tabindex="3">
+            <input class="six columns" type="password" name="passwordConfirm" value="" placeholder="Gentag kodeord" tabindex="4">
+        </div>
+        <div class="row">
+            <input class="four columns" type="text" name="address" value="" placeholder="Addresse" tabindex="5">
+            <input class="four columns" type="text" name="city" value="" placeholder="By" tabindex="6">
+            <input class="four columns" type="number" name="postcode" value="" placeholder="Post nr." tabindex="7">
+        </div>
+        <div class="btn-submit u-full-width" onclick="RegisterNewUser('citizen')" onkeydown="RegisterNewUser('citizen')" tabindex="8">Tilføj</div>
+    </form>
+</template>
+<template id="template-register-contact">
+    <form id="add-new-user-form">
+        <input class="u-full-width" type="text" name="name" placeholder="Fulde navn" tabindex="1">
+        <input class="u-full-width" type="email" name="email" placeholder="Email" tabindex="2">
+        <div class="row">
+            <input class="six columns" type="password" name="password" placeholder="Kodeord" tabindex="3">
+            <input class="six columns" type="password" name="passwordConfirm" placeholder="Gentag kodeord" tabindex="4">
+        </div>
+        <div class="btn-submit u-full-width" onclick="RegisterNewUser('contact')" onkeydown="RegisterNewUser('contact')" tabindex="5">Tilføj</div>
+    </form>
+</template>
+<template id="template-citizen-view">
+    <div id="add-new-citizen" class="three columns">
+        <div class="box">
+            <form id="citizen-form" class="add-citizen">
+                <h5 style="text-align: center;">Tilføj borger</h5>
+                <input class="u-full-width" type="text" name="name" placeholder="Fulde navn" tabindex="1">
+                <input class="u-full-width" type="email" name="email" placeholder="Email" tabindex="2">
+                <div class="row">
+                    <input class="six columns" type="password" name="password" placeholder="Kodeord" tabindex="3">
+                    <input class="six columns" type="password" name="passwordConfirm" placeholder="Gentag kodeord" tabindex="4">
+                </div>
+                <select class="u-full-width" name="role" tabindex="5">
+                    <option value="citizen">Borger</option>
+                    <option value="contact">Kontakt</option>
+                </select>
+                <div class="row">
+                    <input id="address" class="four columns u-full-width" type="text" name="address" value="" placeholder="Addresse" tabindex="6">
+                    <input id="city" class="four columns u-full-width" type="text" name="city" value="" placeholder="By" tabindex="7">
+                    <input id="post-code" class="four columns u-full-width" type="number" name="postcode" value="" placeholder="Post nr." tabindex="8">
+                </div>
+                <div class="btn-submit u-full-width" onclick="AddNewCitizen()" onkeypress="AddNewCitizen()" tabindex="9">Tilføj</div>
+            </form>
+        </div>
+        <div id="citizen-list" class="box">
+            <h5 style="margin-top: 10px;">Borger liste</h5>
+            <div class="separator" style="margin-bottom: 0;"></div>
+            <ul class="u-full-width citizen-list">
+                <li onclick="RenderCitizenInfo()">fru jensen</li>
+            </ul>
+        </div>
+    </div>
+    <div id="citizen-info" class="nine columns"></div>
+</template>
+<template id="template-citizen-info">
+    <h5>{{ citizenName }}</h5>
+    <div class="separator" style="margin-bottom: 20px;"></div>
+    <div class="six columns" style="margin-left: 0">
+        <p>Email: {{ email }}</p>
+        <address style="margin-bottom: 20px">
+            Addresse: {{ address }}<br>
+            By: {{ city }}<br>
+            Post nr.: {{ postalCode }}<br>
+        </address>
+        <div class="separator"></div>
+        <input id="search-contact-box" class="u-full-width" type="text" value="" onkeypress="SearchForContact(event)" name="searchforcontactbox" placeholder="Søg efter email.">
+        <div id="device-box box-no-shadow"></div>
+    </div>
+    <div class="six columns">
+        <div class="box-no-shadow search-result-box" >
+            <table class="u-full-width search-result-list">
+                <tbody id="search-result">
+                </tbody>
+            </table>
+        </div>
+        <div class="" style="margin-bottom: 15px; margin-top: 15px;"></div>
+        <div id="contact-list" class="box-no-shadow" >
+            <table class="u-full-width" >
+                <tbody id="contact-table"></tbody>
+            </table>
+        </div>
+    </div>
+</template>
+<template id="template-search-result-row">
+    <tr>
+        <td>{{ name }}</td>
+        <td class="search-add-btn" onclick="AddNewContact('{{ id }}', '{{ name }}')">Tilføj</td>
+    </tr>
+</template>
+<template id="template-contact-row">
+    <tr>
+        <td>{{ name }}</td>
+        <td class="contact-list-btn" onclick="RemoveContact('{{ id }}')">Fjern</td>
+    </tr>
+</template>
+<template id="template-device-box">
+
+</template>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://libs.rosenbjerg.dk/jstemplates/latest/JsTemplates.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
