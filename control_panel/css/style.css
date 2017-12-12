@@ -19,7 +19,7 @@ h5 {
     list-style-type: none;
     margin-bottom: 0;
     overflow-y: scroll;
-    height: 43vh;
+    height: 36vh;
 }
 
 li, li:last-child {
@@ -49,7 +49,7 @@ td {
 }
 
 
-#wrapper {
+.wrapper {
     margin: 10px;
 }
 
@@ -65,7 +65,7 @@ td {
     box-shadow: none;
 }
 
-#container{
+.container{
     margin: 0 auto;
     max-width: 560px;
     margin-top: 100px;
@@ -77,7 +77,7 @@ td {
 
 #citizen-list {
     padding: 0;
-    height: 52vh;
+    height: 45vh;
     margin-top: 7px;
 }
 
@@ -92,14 +92,14 @@ td {
 }
 
 .search-result-box {
-    height: 47.1vh;
+    height: 30vh;
     overflow-y: scroll;
     padding: 0;
 }
 
 #contact-list {
     padding: 0;
-    height: 83.5vh;
+    height: 50vh;
     overflow-y: scroll;
 }
 
@@ -109,20 +109,26 @@ td {
 
 .btn-submit,
 .search-add-btn,
-.contact-list-btn {
+.contact-list-btn,
+#btn-register-citizen,
+#btn-register-contact {
     background-color: #33C3F0;
     cursor: pointer;
     color: white;
     text-align: center;
 }
 
+#btn-register-contact,
+#btn-register-citizen,
 .btn-submit {
     border-radius: 3px;
     padding: 5px;
 }
 
 .btn-submit:hover,
-.search-add-btn:hover {
+.search-add-btn:hover,
+#btn-register-contact:hover,
+#btn-register-citizen:hover {
     background-color: #1EAEDB;
 }
 
