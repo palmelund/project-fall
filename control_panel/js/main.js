@@ -1,4 +1,5 @@
 // Global variables
+let baseURL = 'https://prbw36cvje.execute-api.us-east-1.amazonaws.com';
 let user = new Object();
 let container = document.getElementById('container');
 let contactlst = [];
@@ -12,11 +13,13 @@ window.onload = RenderLoginView();
 
 function GetContactList() {
     $.ajax({
-        url: 'https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/contact',
+        url: baseURL + '/dev/contact',
         type: 'GET',
         success: function(response) {
             let fixedResponse = response.body.substring(1, response.body.length - 1);
-            let json = JSON.parse(fixedResponse);
+            console.log(response);
+            console.log(response.body);
+            // let json = JSON.parse(fixedResponse);
 
             for (let i = 0; i < json.length; i++) {
                 contactlst[i] = json[i];
@@ -61,7 +64,6 @@ function AddNewContact (id, name) {
     });
 }
 
-
 function RenderContactList () {
     let contactList = document.getElementById('contact-table');
     let template = JsT.loadById('template-contact-row');
@@ -79,7 +81,7 @@ function RemoveContact (phone) {
 }
 
 function SearchForContact(event) {
-    if (event.key !== "Enter") { return; }
+    if (event.key !== 'Enter') { return; }
 
     let query = document.getElementById('search-contact-box').value;
     let tableOut = document.getElementById('search-result');
@@ -109,6 +111,7 @@ function SearchForContact(event) {
         });
     }
 }
+
 
 function RenderCitizenInfo (phone) {
     // let infoBox = document.getElementById('citizen-info');
@@ -180,14 +183,14 @@ function Login () {
     let form = $('form').serialize();
 
     $.ajax({
-        url: 'https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user',
+        url: baseURL + '/dev/user',
         type: 'GET',
         data: form,
         success: function (response) {
             user = JSON.parse(JSON.stringify(response));
             user.body = (JSON.parse(user.body));
 
-            if (user.statusCode == 200 && user.body.role == "citizen") {
+            if (user.statusCode == 200 && user.body.role == 'citizen') {
                 let container = document.getElementById('container');
                 let template = JsT.loadById('template-citizen-view');
 
@@ -196,14 +199,14 @@ function Login () {
                 container.innerHTML = template.render();
                 GetContactList();
             }
-            else if (user.statusCode == 400 && user.body.role == "citizen") {
-                toastr.error("Forkerte login oplysninger");
+            else if (user.statusCode == 400 && user.body.role == 'citizen') {
+                toastr.error("Email eller kode passer ikke");
             }
-            else if (user.statusCode == 200 && user.body.role == "contact") {
-                toastr.error("Bruger er ikke en borger");
+            else if (user.statusCode == 200 && user.body.role == 'contact') {
+                toastr.error("Bruger er ikke af typen borger");
             }
             else {
-                toastr.error("Login mislykkes");
+                toastr.error("Email eller kodeord passer ikke");
             }
         },
         error: function (response) {
@@ -221,12 +224,12 @@ function RegisterNewUser(role) {
         return;
     }
 
-    let userData= "";
+    let userData= '';
     let name = $('#add-new-user-form').find('input[name=name]').val();
     let email = $('#add-new-user-form').find('input[name=email]').val();
     let password = $('#add-new-user-form').find('input[name=password]').val();
 
-    if (role == "contact") {
+    if (role == 'contact') {
         userData = "{'id': '-1', " + "'name': '" + name + "', 'email': '" + email +
             "', 'role': 'contact', 'devices': []}";
     }
@@ -239,7 +242,7 @@ function RegisterNewUser(role) {
     }
 
     $.ajax({
-    url: 'https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user',
+    url: baseURL + '/dev/user',
     type: 'POST',
         data: userData,
         headers: {'user': userData, 'password': password.toString()},

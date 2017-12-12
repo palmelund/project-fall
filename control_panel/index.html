@@ -3,6 +3,7 @@
 <head>
     <title>Title</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/skeleton.css">
     <link rel="stylesheet" href="css/style.css">
@@ -101,8 +102,34 @@
             Post nr.: {{ postalCode }}<br>
         </address>
         <div class="separator"></div>
-        <input id="search-contact-box" class="u-full-width" type="text" value="" onkeypress="SearchForContact(event)" name="searchforcontactbox" placeholder="Søg efter email.">
-        <div id="device-box box-no-shadow"></div>
+        <strong>Søg efter kontakt personer:</strong>
+        <input id="search-contact-box" class="u-full-width" type="text" value="" onkeypress="SearchForContact(event)" name="searchforcontactbox" placeholder="Email">
+        <div class="separator"></div>
+        <div id="device-box box-no-shadow">
+            <!--<span><strong>Enheder:</strong></span>-->
+            <div class="six columns box-no-shadow">
+
+            </div>
+            <!--<span><strong>Tilføj ny enhed:</strong></span>-->
+            <div class="six columns box-no-shadow">
+                <div style="margin: auto; width: 60%;">
+                    <div class="pretty p-default p-round p-fill p-bigger">
+                        <input type="radio" name="device" value="ifttt">
+                        <div class="state p-primary">
+                            <label>IFTTT</label>
+                        </div>
+                    </div>
+                    <div class="pretty p-default p-round p-fill p-bigger" style="margin-bottom: 15px;">
+                        <input type="radio" name="device" value="alexa">
+                        <div class="state p-primary">
+                            <label>Alexa</label>
+                        </div>
+                    </div>
+                </div>
+                <input class="u-full-width" type="text" placeholder="Token">
+                <div class="btn-submit">Tilføj</div>
+            </div>
+        </div>
     </div>
     <div class="six columns">
         <div class="box-no-shadow search-result-box" >
