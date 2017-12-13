@@ -13,6 +13,8 @@ def lambda_handler(event, context):
     if not all(x is not None for x in [dvc, usr]):
         return respond("400", device.Device(-1, "").serialize())
 
-    dvc.post(usr)
+    id = dvc.post(usr)
+
+    dvc.id = id
 
     return respond("200", dvc.serialize())

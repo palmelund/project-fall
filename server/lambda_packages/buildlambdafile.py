@@ -12,13 +12,11 @@ from pprint import pprint
 # The name of the output directory and zip file should be the last element in the list.
 # The first file in each list must be the main file
 file_folder_lists = [
-    ["notification_endpoint_create.py", "notification_endpoint_create"],
-    ["notification_endpoint_store.py", "notification_endpoint_store"],
-    ["notification_endpoint_update.py", "notification_endpoint_update"],
-
     ["alexa_help.py", "lib:requests", "alexa_help"],
 
     ["device_get_user.py", "device_user"],
+
+    ["device_put_helper.py", "device_put_helper"],
 
     ["alarm_post_helper.py", "alarm_post_helper"],
 
@@ -103,34 +101,32 @@ for file_folder_list in file_folder_lists:
 # Upload zip files to lambdas
 
 arn_map = [
-    ["notification_endpoint_create.zip", "ProjectFallNotificationCreate"],
-    ["notification_endpoint_store.zip", "ProjectFallNotificationStore"],
-    ["notification_endpoint_update.zip", "ProjectFallNotificationUpdate"],
+    # ["alexa_help.zip", "AlexaHelp"],
+    #
+    # ["device_user.zip", "ProjectFallDeviceUser"],
+    #
+    # ["alarm_post_helper.zip", "ProjectFallAlarmCreate"],
 
-    ["alexa_help.zip", "AlexaHelp"],
+    ["device_put_helper.zip", "ProjectFallDevicePutHelper"],
 
-    ["device_user.zip", "ProjectFallDeviceUser"],
-
-    ["alarm_post_helper.zip", "ProjectFallAlarmCreate"],
-
-    ["user_get.zip", "ProjectFallUserGet"],
-    ["citizen_get.zip", "ProjectFallCitizenGet"],
-    ["contact_get.zip", "ProjectFallContactGet"],
-    ["alarm_get.zip", "ProjectFallAlarmGet"],
-
-    ["user_post.zip", "ProjectFallUserPost"],
-    ["alarm_post.zip", "ProjectFallAlarmPost"],
-    ["device_post.zip", "ProjectFallDevicePost"],
-
-    ["user_put.zip", "ProjectFallUserPut"],
-    ["alarm_put.zip", "ProjectFallAlarmPut"],
+    # ["user_get.zip", "ProjectFallUserGet"],
+    # ["citizen_get.zip", "ProjectFallCitizenGet"],
+    # ["contact_get.zip", "ProjectFallContactGet"],
+    # ["alarm_get.zip", "ProjectFallAlarmGet"],
+    #
+    # ["user_post.zip", "ProjectFallUserPost"],
+    # ["alarm_post.zip", "ProjectFallAlarmPost"],
+    # ["device_post.zip", "ProjectFallDevicePost"],
+    #
+    # ["user_put.zip", "ProjectFallUserPut"],
+    # ["alarm_put.zip", "ProjectFallAlarmPut"],
     ["device_put.zip", "ProjectFallDevicePut"],
 
-    ["user_delete.zip", "ProjectFallUserDelete"],
-    ["alarm_delete.zip", "ProjectFallAlarmDelete"],
-    ["device_delete.zip", "ProjectFallDeviceDelete"],
-
-    ["populate_server.zip", "ProjectFallPopulateServer"],
+    # ["user_delete.zip", "ProjectFallUserDelete"],
+    # ["alarm_delete.zip", "ProjectFallAlarmDelete"],
+    # ["device_delete.zip", "ProjectFallDeviceDelete"],
+    #
+    # ["populate_server.zip", "ProjectFallPopulateServer"],
 
     #["authenticator.zip", "ProjectFallAuthenticator"],
 ]

@@ -10,10 +10,10 @@ def lambda_handler(event, context):
         #usr = user.deserialize(event["user"])
         password = event["password"]
     except:
-        return respond("400", user.User(-1, "", "", "").serialize())
+        return respond("400", user.User(-1, "", "", "userAdmin").serialize())
 
     if not all(x is not None for x in [usr, password]):
-        return respond("400", user.User(-1, "", "", "").serialize())
+        return respond("400", user.User(-1, "", "", "userAdmin").serialize())
 
     try:
         if usr.role == "citizen":
@@ -27,7 +27,7 @@ def lambda_handler(event, context):
 
     except Exception as ex:
         raise ex
-        return respond("400", user.User(-1, "", "", "").serialize())
+        return respond("400", user.User(-1, "", "", "userAdmin").serialize())
 
 def get_auth_token(user):
     return jwt.encode({'user_id': user.id, 'user_role': user.role}, 'power123')
