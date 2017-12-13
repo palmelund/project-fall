@@ -4,6 +4,7 @@
     <title>Title</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/skeleton.css">
     <link rel="stylesheet" href="css/style.css">
@@ -60,29 +61,29 @@
 </template>
 <template id="template-citizen-view">
     <div id="add-new-citizen" class="three columns">
-        <div class="box">
-            <form id="citizen-form" class="add-citizen">
-                <h5 style="text-align: center;">Tilføj borger</h5>
-                <input class="u-full-width" type="text" name="name" placeholder="Fulde navn" tabindex="1">
-                <input class="u-full-width" type="email" name="email" placeholder="Email" tabindex="2">
-                <div class="row">
-                    <input class="six columns" type="password" name="password" placeholder="Kodeord" tabindex="3">
-                    <input class="six columns" type="password" name="passwordConfirm" placeholder="Gentag kodeord" tabindex="4">
-                </div>
-                <select class="u-full-width" name="role" tabindex="5">
-                    <option value="citizen">Borger</option>
-                    <option value="contact">Kontakt</option>
-                </select>
-                <div class="row">
-                    <input id="address" class="four columns u-full-width" type="text" name="address" value="" placeholder="Addresse" tabindex="6">
-                    <input id="city" class="four columns u-full-width" type="text" name="city" value="" placeholder="By" tabindex="7">
-                    <input id="post-code" class="four columns u-full-width" type="number" name="postcode" value="" placeholder="Post nr." tabindex="8">
-                </div>
-                <div class="btn-submit u-full-width" onclick="AddNewCitizen()" onkeypress="AddNewCitizen()" tabindex="9">Tilføj</div>
-            </form>
-        </div>
+        <!--<div class="box">-->
+            <!--<form id="citizen-form" class="add-citizen">-->
+                <!--<h5 style="text-align: center;">Tilføj borger</h5>-->
+                <!--<input class="u-full-width" type="text" name="name" placeholder="Fulde navn" tabindex="1">-->
+                <!--<input class="u-full-width" type="email" name="email" placeholder="Email" tabindex="2">-->
+                <!--<div class="row">-->
+                    <!--<input class="six columns" type="password" name="password" placeholder="Kodeord" tabindex="3">-->
+                    <!--<input class="six columns" type="password" name="passwordConfirm" placeholder="Gentag kodeord" tabindex="4">-->
+                <!--</div>-->
+                <!--<select class="u-full-width" name="role" tabindex="5">-->
+                    <!--<option value="citizen">Borger</option>-->
+                    <!--<option value="contact">Kontakt</option>-->
+                <!--</select>-->
+                <!--<div class="row">-->
+                    <!--<input id="address" class="four columns u-full-width" type="text" name="address" value="" placeholder="Addresse" tabindex="6">-->
+                    <!--<input id="city" class="four columns u-full-width" type="text" name="city" value="" placeholder="By" tabindex="7">-->
+                    <!--<input id="post-code" class="four columns u-full-width" type="number" name="postcode" value="" placeholder="Post nr." tabindex="8">-->
+                <!--</div>-->
+                <!--<div class="btn-submit u-full-width" onclick="AddNewCitizen()" onkeypress="AddNewCitizen()" tabindex="9">Tilføj</div>-->
+            <!--</form>-->
+        <!--</div>-->
         <div id="citizen-list" class="box">
-            <h5 style="margin-top: 10px;">Borger liste</h5>
+            <h5 style="margin-top: 10px; margin-bottom: 10px;">Borger liste</h5>
             <div class="separator" style="margin-bottom: 0;"></div>
             <ul class="u-full-width citizen-list">
                 <li onclick="RenderCitizenInfo()">fru jensen</li>
@@ -102,24 +103,32 @@
             Post nr.: {{ postalCode }}<br>
         </address>
         <div class="separator"></div>
-        <strong>Søg efter kontakt personer:</strong>
-        <input id="search-contact-box" class="u-full-width" type="text" value="" onkeypress="SearchForContact(event)" name="searchforcontactbox" placeholder="Email">
-        <div class="separator"></div>
         <div id="device-box box-no-shadow">
             <!--<span><strong>Enheder:</strong></span>-->
-            <div class="six columns box-no-shadow">
-
+            <div class="six columns box-no-shadow" style="padding: 0; height: 62vh;">
+                <h5 style="margin: 0; padding: 10px;">Enheder</h5>
+                <div class="separator" style="margin: 0"></div>
+                <div style="overflow-y: scroll; height: calc(62vh - 59px);">
+                    <table class="u-full-width">
+                        <tbody id="device-table">
+                        <tr>
+                            <td>alexa <i class="material-icons clear-icon">clear</i></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <!--<span><strong>Tilføj ny enhed:</strong></span>-->
             <div class="six columns box-no-shadow">
-                <div style="margin: auto; width: 60%;">
+                <h5>Tilføj enheder</h5>
+                <div style="margin: auto; width: 80%;">
                     <div class="pretty p-default p-round p-fill p-bigger">
                         <input type="radio" name="device" value="ifttt">
                         <div class="state p-primary">
                             <label>IFTTT</label>
                         </div>
                     </div>
-                    <div class="pretty p-default p-round p-fill p-bigger" style="margin-bottom: 15px;">
+                    <div class="pretty p-default p-round p-fill p-bigger" style="margin-bottom: 25px;">
                         <input type="radio" name="device" value="alexa">
                         <div class="state p-primary">
                             <label>Alexa</label>
@@ -132,30 +141,39 @@
         </div>
     </div>
     <div class="six columns">
-        <div class="box-no-shadow search-result-box" >
-            <table class="u-full-width search-result-list">
-                <tbody id="search-result">
-                </tbody>
-            </table>
+        <strong>Søg efter kontakt personer:</strong>
+        <input id="search-contact-box" class="u-full-width" type="text" value="" onkeypress="SearchForContact(event)" name="searchforcontactbox" placeholder="Email">
+        <div class="separator"></div>
+        <div class="box-no-shadow" style="padding: 0;">
+            <h5 style="margin: 10px;">Søge resultater</h5>
+            <div class="separator-no-margin"></div>
+            <div class="search-result-box">
+                <table class="u-full-width search-result-list">
+                    <tbody id="search-result">
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="" style="margin-bottom: 15px; margin-top: 15px;"></div>
-        <div id="contact-list" class="box-no-shadow" >
-            <table class="u-full-width" >
-                <tbody id="contact-table"></tbody>
-            </table>
+        <div id="" class="box-no-shadow" style="padding: 0;">
+            <h5 style="margin: 10px;">Kendte kontakter</h5>
+            <div class="contact-list separator-no-margin"></div>
+            <div id="contact-list">
+                <table class="u-full-width" >
+                    <tbody id="contact-table"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </template>
 <template id="template-search-result-row">
     <tr>
-        <td>{{ name }}</td>
-        <td class="search-add-btn" onclick="AddNewContact('{{ id }}', '{{ name }}')">Tilføj</td>
+        <td>{{ name }} <i class="material-icons checkmark-icon" onclick="AddNewContact('{{ id }}', '{{ name }}')">done</i></td>
     </tr>
 </template>
 <template id="template-contact-row">
     <tr>
-        <td>{{ name }}</td>
-        <td class="contact-list-btn" onclick="RemoveContact('{{ id }}')">Fjern</td>
+        <td>{{ name }} <i class="material-icons clear-icon" onclick="RemoveContact('{{ id }}')">clear</i></td>
     </tr>
 </template>
 <template id="template-device-box">

@@ -16,10 +16,11 @@ function GetContactList() {
         url: baseURL + '/dev/contact',
         type: 'GET',
         success: function(response) {
-            let fixedResponse = response.body.substring(1, response.body.length - 1);
-            console.log(response);
-            console.log(response.body);
-            // let json = JSON.parse(fixedResponse);
+            if (response.statusCode !== "200") {
+                toastr.error("Noget gik galt. Prøv at logge ind igen");
+                return;
+            }
+            let json = JSON.parse(response.body);
 
             for (let i = 0; i < json.length; i++) {
                 contactlst[i] = json[i];
