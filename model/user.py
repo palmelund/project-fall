@@ -107,6 +107,10 @@ class Citizen(User):
     def serialize(self):
         return str(schemas.CitizenSchema().dump(self).data).replace("'", "\"").replace("None", "null")
 
+    @staticmethod
+    def get_all():
+        return database_manager.get_all_citizens()
+
 
 class Contact(User):
     'A specialized user, representing a contact'
@@ -132,7 +136,7 @@ class Contact(User):
 
     @staticmethod
     def get_all():
-        database_manager.get_contact_all()
+        return database_manager.get_contact_all()
 
 
 class UserAdmin(User):

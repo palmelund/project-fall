@@ -19,7 +19,7 @@ h5 {
     list-style-type: none;
     margin-bottom: 0;
     overflow-y: scroll;
-    height: 36vh;
+    height: calc(97vh - 57px);
 }
 
 li, li:last-child {
@@ -77,31 +77,51 @@ td {
 
 #citizen-list {
     padding: 0;
-    height: 45vh;
-    margin-top: 7px;
+    height: 97vh;
 }
 
 .separator {
-    border-bottom: 1px solid #D1D1D1;
     margin-bottom: 20px;
+}
+
+.separator,
+.separator-no-margin {
+    border-bottom: 1px solid #D1D1D1;
 }
 
 .search-result-list {
     margin: 0;
-    list-style-type: none;
+    /*list-style-type: none;*/
 }
 
 .search-result-box {
-    height: 30vh;
+    height: 26.3vh;
     overflow-y: scroll;
     padding: 0;
+}
+
+.checkmark-icon,
+.clear-icon {
+    float: right;
+    padding-right: 5px;
+    padding-top: 5px;
+    font-size: larger;
+}
+
+.clear-icon:hover {
+    color: red;
+}
+
+.checkmark-icon:hover {
+    color: #0FA0CE;
 }
 
 #contact-list {
     padding: 0;
-    height: 50vh;
+    height: 26.3vh;
     overflow-y: scroll;
 }
+
 
 #add-tst:hover {
     background-color: #D1D1D1;
