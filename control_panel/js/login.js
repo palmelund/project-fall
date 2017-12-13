@@ -1,5 +1,7 @@
 window.onload = RenderLoginView();
 
+let user = new Object();
+
 function RenderLoginView() {
     let container = document.getElementById('container');
     let template = JsT.loadById('template-login');
@@ -16,18 +18,17 @@ function RenderRegisterView() {
 
 function Login () {
     let form = $('form').serialize();
-    console.log(form);
 
     $.ajax({
         url: 'https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user',
         type: 'GET',
         data: form,
         success: function (response) {
-            let res = (JSON.parse(response));
-            console.log(res);
+            user = JSON.parse(JSON.stringify(response));
+            window.location.href = "citizenadmin.html";
         },
         error: function (response) {
-            console.log("ajax error");
+            console.log("Login attempt failed");
         }
     });
 }

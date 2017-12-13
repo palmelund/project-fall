@@ -1,17 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Login</title>
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/skeleton.css">
-    <link rel="stylesheet" href="css/style.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-<div id="container" class="container"></div>
-
-<template id="template-login">
+<!--<!DOCTYPE html>-->
+<template id="templateLogin">
     <h5 style="text-align: center">Login</h5>
     <a style="float:right; cursor: pointer;" onclick="RenderRegisterView()">Opret en ny bruger</a>
     <form id="login">
@@ -21,7 +9,7 @@
     </form>
 </template>
 
-<template id="template-register">
+<template id="templateRegister">
     <form id="add-new-user-form">
         <h5 style="text-align: center;">Tilføj bruger</h5>
         <input id="name" class="u-full-width" type="text" name="name" value="" placeholder="Fulde navn" tabindex="1">
@@ -38,8 +26,3 @@
         <div class="btn-submit u-full-width" onclick="RegisterNewUser()" onkeydown="RegisterNewUser()" tabindex="6">Tilføj</div>
     </form>
 </template>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="js/JsTemplates.js"></script>
-<script src="js/login.js"></script>
-</body>
-</html>
