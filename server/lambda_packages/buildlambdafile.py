@@ -19,6 +19,7 @@ file_folder_lists = [
     ["device_put_helper.py", "device_put_helper"],
 
     ["alarm_post_helper.py", "alarm_post_helper"],
+    ["alarm_put_helper.py", "alarm_put_helper"],
 
     ["user_get.py", "authenticate", "user_get"],
     ["citizen_get.py", "citizen_get"],
@@ -36,6 +37,8 @@ file_folder_lists = [
     ["user_delete.py", "user_delete"],
     ["alarm_delete.py", "alarm_delete"],
     ["device_delete.py", "device_delete"],
+
+    ["contact_get_all.py", "contact_get_all"],
 
     ["populate_server.py", "populate_server"],
 
@@ -106,8 +109,9 @@ arn_map = [
     # ["device_user.zip", "ProjectFallDeviceUser"],
     #
     # ["alarm_post_helper.zip", "ProjectFallAlarmCreate"],
+    ["alarm_put_helper.zip", "ProjectFallAlarmPutHelper"],
 
-    ["device_put_helper.zip", "ProjectFallDevicePutHelper"],
+    #["device_put_helper.zip", "ProjectFallDevicePutHelper"],
 
     # ["user_get.zip", "ProjectFallUserGet"],
     # ["citizen_get.zip", "ProjectFallCitizenGet"],
@@ -119,14 +123,16 @@ arn_map = [
     # ["device_post.zip", "ProjectFallDevicePost"],
     #
     # ["user_put.zip", "ProjectFallUserPut"],
-    # ["alarm_put.zip", "ProjectFallAlarmPut"],
-    ["device_put.zip", "ProjectFallDevicePut"],
+      ["alarm_put.zip", "ProjectFallAlarmPut"],
+    # ["device_put.zip", "ProjectFallDevicePut"],
 
     # ["user_delete.zip", "ProjectFallUserDelete"],
     # ["alarm_delete.zip", "ProjectFallAlarmDelete"],
     # ["device_delete.zip", "ProjectFallDeviceDelete"],
     #
     # ["populate_server.zip", "ProjectFallPopulateServer"],
+
+    ["contact_get_all.zip", "ProjectFallContactGetAll"]
 
     #["authenticator.zip", "ProjectFallAuthenticator"],
 ]

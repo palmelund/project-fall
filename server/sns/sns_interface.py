@@ -44,7 +44,7 @@ def push_message(endpoint_arn, message):
     )
 
     return sns_client.publish(
-        PlatformApplicationArn=arn_sns_android_endpoint,
+        TargetArn=endpoint_arn,
         MessageStructure='string',
         Message=message
     )
