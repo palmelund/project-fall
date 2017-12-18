@@ -19,11 +19,6 @@ def get_response(response):
 
 class CitizenTestCase(unittest.TestCase):
     def setUp(self):
-        # Add test users to DB https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/controlpanel/citizen header: citizen citizenAdmin
-        # temp_citizen_admin = user.CitizenAdmin(-1, "Admin von Adminson", "admin@iadminu.org", [])
-        # citizen_admin_header = {"user": temp_citizen_admin.serialize()}
-
-        # admin_id = user.deserialize(get_response(requests.post("https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/", headers=citizen_admin_header))).id
         self._citizen = user.Citizen(-1, "Test Testington", "testington@tester.dk", [user.Contact(-1, "Contactium", "contactium@tester.dk", [])], [], "Teststrasse 10", "Testerup", "1000")
 
         citizen_header = {"user": self._citizen.serialize().replace("\"", "\\\""), "password": "1234"}
@@ -50,11 +45,6 @@ class CitizenTestCase(unittest.TestCase):
 
 class ContactTestCase(unittest.TestCase):
     def setUp(self):
-        # Add test users to DB https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/controlpanel/citizen header: citizen citizenAdmin
-        # temp_citizen_admin = user.CitizenAdmin(-1, "Admin von Adminson", "admin@iadminu.org", [])
-        # citizen_admin_header = {"user": temp_citizen_admin.serialize()}
-
-        # admin_id = user.deserialize(get_response(requests.post("https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/", headers=citizen_admin_header))).id
         self._contact = user.Contact(-1, "Contactium", "contactium@tester.dk", [])
 
         contact_header = {"user": self._contact.serialize().replace("\"", "\\\""), "password": "1234"}
@@ -84,11 +74,11 @@ class UserTestCase(unittest.TestCase):
 
         user_post_header = {"user": _user.serialize().replace("\"", "\\\""), "password": "1234"}
         user_get_header = {"email": "citizen@tester.dk", "password": "1234"}
-        print("Post:")
+
         _user = user.deserialize(get_response(requests.post(user_post_uri, headers=user_post_header)))
 
         user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
-        print("Get:")
+
         _user_response = user.deserialize(get_response(requests.get(user_get_uri, headers=user_get_header)))
         user_delete_header = {"user": _user_response.serialize().replace("\"", "\\\""), "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjM0IiwidXNlcl9yb2xlIjoidXNlckFkbWluIn0._zMvLSI7elh4ebv-1iaE8nXYdbzjyvpBNlDNhNSJMc0"}
 

@@ -36,7 +36,7 @@ class DeviceTestCase(unittest.TestCase):
         def test_device_post(self):
             _device = device.AlexaDevice(-1, "temp_token1234")
             device_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._citizen.id) + "/device"
-            # print(_device.serialize())
+
             device_header = {"device": _device.serialize(), "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjM0IiwidXNlcl9yb2xlIjoidXNlckFkbWluIn0._zMvLSI7elh4ebv-1iaE8nXYdbzjyvpBNlDNhNSJMc0"}
             print("Device: " + _device.serialize())
             _device = device.deserialize(get_response(requests.post(device_uri, headers=device_header)))
@@ -52,8 +52,12 @@ class DeviceTestCase(unittest.TestCase):
         def test_device_delete(self):
             _device = device.AlexaDevice(-1, "temp_token1234")
             device_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen/" + str(self._citizen.id) + "/device"
-            device_header = {"device": _device.serialize(), "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjM0IiwidXNlcl9yb2xlIjoidXNlckFkbWluIn0._zMvLSI7elh4ebv-1iaE8nXYdbzjyvpBNlDNhNSJMc0"}
-            print("Delete" + str(device.deserialize(get_response(requests.delete(device_uri, headers=device_header))).__dict__))
+            device_post_header = {"device": _device.serialize(), "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjM0IiwidXNlcl9yb2xlIjoidXNlckFkbWluIn0._zMvLSI7elh4ebv-1iaE8nXYdbzjyvpBNlDNhNSJMc0"}
+
+            _device = device.deserialize(get_response(requests.post(device_uri, headers=device_post_header)))
+            device_delete_header = {"device": _device.serialize(), "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjM0IiwidXNlcl9yb2xlIjoidXNlckFkbWluIn0._zMvLSI7elh4ebv-1iaE8nXYdbzjyvpBNlDNhNSJMc0"}
+
+            print("Delete" + str(device.deserialize(get_response(requests.delete(device_uri, headers=device_delete_header))).__dict__))
 
             user_get_header = {"email": "testington@tester.dk", "password": "1234"}
             user_get_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/user/"
