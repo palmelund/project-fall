@@ -4,7 +4,7 @@ from server.respond import respond
 from server.sns.sns_credentials import region_name, aws_access_key_id, aws_secret_access_key
 import boto3
 import json
-from server.endpoints import arn_device_put_helper
+from server.endpoints import arn_device_put_endpoint
 from server.sns.sns_interface import create_endpoint, update_endpoint
 
 
@@ -34,7 +34,7 @@ def lambda_handler(event, context):
             arg = bytes(json.dumps({"device": dvc.serialize()}), 'utf-8')
 
             response = lambda_client.invoke(
-                FunctionName=arn_device_put_helper,
+                FunctionName=arn_device_put_endpoint,
                 InvocationType="RequestResponse",
                 Payload=arg)
 

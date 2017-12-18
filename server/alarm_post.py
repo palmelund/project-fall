@@ -8,7 +8,7 @@ from server.sns.sns_interface import push_message
 from model import alarm
 from model.alarm import deserialize as alarm_deserializer
 from model import user
-from server.endpoints import arn_alarm_create_endpoint
+from server.endpoints import arn_alarm_post_endpoint
 from server.respond import respond
 from server.sns.sns_credentials import region_name, aws_access_key_id, aws_secret_access_key
 
@@ -33,7 +33,7 @@ def lambda_handler(event, context):
 
         arg = bytes(json.dumps({"id": ctz_id}), 'utf-8')
         response = lambda_client.invoke(
-            FunctionName=arn_alarm_create_endpoint,
+            FunctionName=arn_alarm_post_endpoint,
             InvocationType="RequestResponse",
             Payload=arg)
 
@@ -52,7 +52,9 @@ def lambda_handler(event, context):
     for c in alm.activatedby.contacts:
         for d in c.devices:
             if d.devicetype == "appdevice":
-                push_message(d.arn, c.activatedby.name + " has had an falling accident, and requests help.")
+                if not d.arn or not d.token:
+                    continue
+                push_message(d.arn, alm.serialize())
             # elif d.devicetype == "smsdevice":
                 # send_sms(d.phone_number, c.activatedby.name + " has had an falling accident, and requests help.")
 
