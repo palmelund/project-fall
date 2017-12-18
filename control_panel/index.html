@@ -34,16 +34,16 @@
 </template>
 <template id="template-register-citizen">
     <form id="add-new-user-form">
-        <input class="u-full-width" type="text" name="name" value="" placeholder="Fulde navn" tabindex="1">
-        <input class="u-full-width" type="email" name="email" value="" placeholder="Email" tabindex="2">
+        <input class="u-full-width" type="text" name="name" placeholder="Fulde navn" tabindex="1">
+        <input class="u-full-width" type="email" name="email" placeholder="Email" tabindex="2">
         <div class="row">
-            <input class="six columns" type="password" name="password" value="" placeholder="Kodeord" tabindex="3">
-            <input class="six columns" type="password" name="passwordConfirm" value="" placeholder="Gentag kodeord" tabindex="4">
+            <input class="six columns" type="password" name="password" placeholder="Kodeord" tabindex="3">
+            <input class="six columns" type="password" name="passwordConfirm" placeholder="Gentag kodeord" tabindex="4">
         </div>
         <div class="row">
-            <input class="four columns" type="text" name="address" value="" placeholder="Addresse" tabindex="5">
-            <input class="four columns" type="text" name="city" value="" placeholder="By" tabindex="6">
-            <input class="four columns" type="number" name="postcode" value="" placeholder="Post nr." tabindex="7">
+            <input class="four columns" type="text" name="address" placeholder="Addresse" tabindex="5">
+            <input class="four columns" type="text" name="city" placeholder="By" tabindex="6">
+            <input class="four columns" type="number" name="postcode" placeholder="Post nr." tabindex="7">
         </div>
         <div class="btn-submit u-full-width" onclick="RegisterNewUser('citizen')" onkeydown="RegisterNewUser('citizen')" tabindex="8">Tilføj</div>
     </form>
@@ -82,11 +82,11 @@
                 <!--<div class="btn-submit u-full-width" onclick="AddNewCitizen()" onkeypress="AddNewCitizen()" tabindex="9">Tilføj</div>-->
             <!--</form>-->
         <!--</div>-->
-        <div id="citizen-list" class="box">
+        <div id="citizen-box" class="box">
             <h5 style="margin-top: 10px; margin-bottom: 10px;">Borger liste</h5>
             <div class="separator" style="margin-bottom: 0;"></div>
-            <ul class="u-full-width citizen-list">
-                <li onclick="RenderCitizenInfo()">fru jensen</li>
+            <ul id="citizen-list" class="u-full-width citizen-list">
+                <!--<li onclick="RenderCitizenInfo()">fru jensen</li>-->
             </ul>
         </div>
     </div>
@@ -94,49 +94,51 @@
 </template>
 <template id="template-citizen-info">
     <h5>{{ citizenName }}</h5>
-    <div class="separator" style="margin-bottom: 20px;"></div>
+    <div class="separator"></div>
     <div class="six columns" style="margin-left: 0">
-        <p>Email: {{ email }}</p>
-        <address style="margin-bottom: 20px">
-            Addresse: {{ address }}<br>
-            By: {{ city }}<br>
-            Post nr.: {{ postalCode }}<br>
-        </address>
+        <div class="row">
+            <div class="nine columns">
+                <p>Email: {{ email }}</p>
+                <address style="margin-bottom: 20px">
+                    Addresse: {{ address }}<br>
+                    By: {{ city }}<br>
+                    Post nr.: {{ postalCode }}<br>
+                </address>
+            </div>
+            <div class="three columns">
+                <div class="btn-submit" onclick="UpdateCitizenToServer()">Gem</div>
+            </div>
+        </div>
         <div class="separator"></div>
         <div id="device-box box-no-shadow">
-            <!--<span><strong>Enheder:</strong></span>-->
             <div class="six columns box-no-shadow" style="padding: 0; height: 62vh;">
                 <h5 style="margin: 0; padding: 10px;">Enheder</h5>
                 <div class="separator" style="margin: 0"></div>
                 <div style="overflow-y: scroll; height: calc(62vh - 59px);">
                     <table class="u-full-width">
                         <tbody id="device-table">
-                        <tr>
-                            <td>alexa <i class="material-icons clear-icon">clear</i></td>
-                        </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <!--<span><strong>Tilføj ny enhed:</strong></span>-->
-            <div class="six columns box-no-shadow">
+            <div id="add-device" class="six columns box-no-shadow">
                 <h5>Tilføj enheder</h5>
                 <div style="margin: auto; width: 80%;">
                     <div class="pretty p-default p-round p-fill p-bigger">
-                        <input type="radio" name="device" value="ifttt">
+                        <input id="radio-ifttt" type="radio" name="device" value="ifttt" checked="checked" onclick="RadioButton('ifttt')">
                         <div class="state p-primary">
                             <label>IFTTT</label>
                         </div>
                     </div>
                     <div class="pretty p-default p-round p-fill p-bigger" style="margin-bottom: 25px;">
-                        <input type="radio" name="device" value="alexa">
+                        <input id="radio-alexa" type="radio" name="device" value="alexa" onclick="RadioButton('alexa')">
                         <div class="state p-primary">
                             <label>Alexa</label>
                         </div>
                     </div>
                 </div>
-                <input class="u-full-width" type="text" placeholder="Token">
-                <div class="btn-submit">Tilføj</div>
+                <input class="u-full-width" type="text" name="token" placeholder="Token">
+                <div class="btn-submit" onclick="AddDevice()" onkeypress="AddDevice()">Tilføj</div>
             </div>
         </div>
     </div>
@@ -176,8 +178,13 @@
         <td>{{ name }} <i class="material-icons clear-icon" onclick="RemoveContact('{{ id }}')">clear</i></td>
     </tr>
 </template>
-<template id="template-device-box">
-
+<template id="template-citizen-item">
+    <li onclick="RenderCitizenInfo('{{ id }}')">{{ name }}</li>
+</template>
+<template id="template-device-row">
+    <tr>
+        <td>{{ devicetype }} <i class="material-icons clear-icon" onclick="RemoveDevice('{{ id }}')">clear</i></td>
+    </tr>
 </template>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
