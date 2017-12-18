@@ -353,36 +353,54 @@ function Login() {
 
 
 function RegisterNewUser(role) {
-    let pass1 = $('#add-new-user-form').find('input[name=password]').val();
-    let pass2 = $('#add-new-user-form').find('input[name=passwordConfirm]').val();
+    let obj = new Object();
+    let arr = [];
 
-    if (pass1 != pass2) {
+    obj.pass1 = $('#add-new-user-form').find('input[name=password]').val();
+    obj.pass2 = $('#add-new-user-form').find('input[name=passwordConfirm]').val();
+
+    if (obj.pass1 != obj.pass2) {
         toastr.error("Kodeord er ikke ens");
         return;
     }
 
     let userData= '';
-    let name = $('#add-new-user-form').find('input[name=name]').val();
-    let email = $('#add-new-user-form').find('input[name=email]').val();
-    let password = $('#add-new-user-form').find('input[name=password]').val();
+    obj.name = $('#add-new-user-form').find('input[name=name]').val();
+    obj.email = $('#add-new-user-form').find('input[name=email]').val();
 
     if (role == 'contact') {
-        userData = "{'id': '-1', " + "'name': '" + name + "', 'email': '" + email +
+        userData = "{'id': '-1', " + "'name': '" + obj.name + "', 'email': '" + obj.email +
             "', 'role': 'contact', 'devices': []}";
     }
     else {
-        let add = $('#add-new-user-form').find('input[name=address]').val();
-        let city = $('#add-new-user-form').find('input[name=city]').val();
-        let zip = $('#add-new-user-form').find('input[name=postcode]').val();
-        userData = "{'id': '-1', " + "'name': '" + name + "', 'email': '" + email +
-            "', 'role': 'citizen', 'address': '" + add + "', 'city': '" + city + "', 'postnr': '"+ zip + "', 'devices': [], 'contacts': []}";
+        obj.add = $('#add-new-user-form').find('input[name=address]').val();
+        obj.city = $('#add-new-user-form').find('input[name=city]').val();
+        obj.zip = $('#add-new-user-form').find('input[name=postcode]').val();
+        userData = "{'id': '-1', " + "'name': '" + obj.name + "', 'email': '" + obj.email +
+            "', 'role': 'citizen', 'address': '" + obj.add + "', 'city': '" + obj.city + "', 'postnr': '"+
+            obj.zip + "', 'devices': [], 'contacts': []}";
+    }
+
+    arr.push(obj.pass1);
+    arr.push(obj.name);
+    arr.push(obj.email);
+    arr.push(obj.add);
+    arr.push(obj.zip);
+    arr.push(obj.city);
+
+    for (let i = 0; i < arr.length; i++) {
+        console.log(arr[i]);
+        if (arr[i] == "") {
+            toastr.error("Nogle felter er ikke udfyldt");
+            return;
+        }
     }
 
     $.ajax({
     url: baseURL + '/dev/user',
     type: 'POST',
         data: userData,
-        headers: {'user': userData, 'password': password.toString()},
+        headers: {'user': userData, 'password': obj.pass1.toString()},
         contentType: 'application/json',
         success: function (response) {
             RenderLoginView();
