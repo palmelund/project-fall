@@ -1,8 +1,8 @@
 from __future__ import print_function
 from model import device
+from model import user
 import requests
 import json
-from json_serializer import JsonSerializer
 
 
 # --------------- Helpers that build all of the responses ----------------------
@@ -49,16 +49,16 @@ def confirm_help(userid):
     json_string = json.dumps({"devicetype": "alexa", "messagetype": "input", "userid": userid})
 
     temp_device = device.Device(-1, json_string)
-    print(json.dumps(temp_device.working_serializer(), cls=JsonSerializer))
-    alarm_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/alarm"
+
     citizen_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/device/user"
 
-    headers_citizen = {"device": json.dumps(temp_device.working_serializer(), cls=JsonSerializer)}
-    ctz_json = requests.get(citizen_uri).text#, headers=headers_citizen).text
-    print("Citizen? " + ctz_json)
-    headers_alarm = {"citizen": ctz_json}
-    print("FEJL: " + requests.post(alarm_uri).text)#, headers=headers_alarm).text)
+    # headers_citizen = {"device": json.dumps(temp_device.working_serializer(), cls=JsonSerializer)}
+    ctz = user.User.serialize(requests.get(citizen_uri).text)#, headers=headers_citizen).text
+    print("Citizen? " + ctz)
+    # headers_alarm = {"citizen": ctz_json}
 
+    alarm_uri = "https://prbw36cvje.execute-api.us-east-1.amazonaws.com/dev/citizen//alarm"
+    print("Post Alarm: " + requests.post(alarm_uri).text)
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
@@ -134,11 +134,6 @@ def on_intent(intent_request, session):
     intent = intent_request['intent']
     intent_name = intent_request['intent']['name']
 
-    # Dispatch to your skill's intent handlers
-    # if intent_name == "MyColorIsIntent":
-    #     return set_color_in_session(intent, session)
-    # elif intent_name == "WhatsMyColorIntent":
-    #     return get_color_from_session(intent, session)
     if intent_name == "ConfirmAlarm":
         return confirm_help(session["user"]["userId"])
     elif intent_name == "CancelAlarm":

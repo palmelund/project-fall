@@ -105,14 +105,14 @@ for file_folder_list in file_folder_lists:
 # Upload zip files to lambdas
 
 arn_map = [
-    # ["alexa_help.zip", "AlexaHelp"],
+    ["alexa_help.zip", "AlexaHelp"],
     #
     # ["device_user.zip", "ProjectFallDeviceUser"],
     #
     # ["alarm_post_helper.zip", "ProjectFallAlarmCreate"],
     # ["alarm_put_helper.zip", "ProjectFallAlarmPutHelper"],
 
-    #["device_put_helper.zip", "ProjectFallDevicePutHelper"],
+    # ["device_put_helper.zip", "ProjectFallDevicePutHelper"],
 
     # ["user_get.zip", "ProjectFallUserGet"],
     # ["citizen_get.zip", "ProjectFallCitizenGet"],
@@ -133,7 +133,7 @@ arn_map = [
     #
     # ["populate_server.zip", "ProjectFallPopulateServer"],
 
-    ["citizen_get_all.zip", "ProjectFallCitizenGetAll"],
+    # ["citizen_get_all.zip", "ProjectFallCitizenGetAll"],
     # ["contact_get_all.zip", "ProjectFallContactGetAll"],
 
     # ["authenticator.zip", "ProjectFallAuthenticator"],
